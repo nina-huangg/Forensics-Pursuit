@@ -5,4 +5,4 @@ Forensics Pursuit is a collection of forensics games, developed to educate foren
 The games are developed using Ren'Py, a visual novel engine that runs on the programming language Python. 
 
 ## About the team
-The team is composed of Computer Science and Forensics students.
+The team is composed of University of Toronto Computer Science and Forensics students.
