@@ -17,7 +17,7 @@ Concepts evaluated in this level include
 
 ## Flow Chart
 
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fboard%2FQQpJIremRdos72OhPNIKGy%2FForensics-Game-Level-Flow-Chart%3Fnode-id%3D0-1%26t%3DAFm8SnRRrgaLx6vt-1" allowfullscreen></iframe>
+https://www.figma.com/board/QQpJIremRdos72OhPNIKGy/Forensics-Game-Level-Flow-Chart?node-id=0-1&t=AFm8SnRRrgaLx6vt-1
 
 ## Notes
 
