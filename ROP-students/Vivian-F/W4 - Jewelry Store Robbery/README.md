@@ -12,6 +12,9 @@ The scenario is a mall store robbery, and forensics support is needed for in and
   * 2D non-porous fingerprint development (tabletop)
   * Contextual clues (jewel - fingerprint)
 
+## Flowchart
+https://www.canva.com/design/DAGGtwH9U2I/lt68HDaaf4Tu0JLxr6QfHw/view?utm_content=DAGGtwH9U2I&utm_campaign=designshare&utm_medium=link&utm_source=editor
+
 
 ## Images
 Loose images are main scene background images, and each folder contains screen specific images. Out of which, contents in “casefile”, “footprints”, “icons”, “mouse”, and “toolbox” were directly from Nina’s Level 1 prototype assets. Folders “tabletop” and “footprints” contain related images for demo-ed fingerprint and footprint developed under this demo scenario, respectively. 
