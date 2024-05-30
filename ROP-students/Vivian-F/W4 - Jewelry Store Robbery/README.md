@@ -1,6 +1,16 @@
 # Vivian F. (W4) Game: Jewlery Store Robbery
 
-This folder contains code to the second level demo presented in Week 4. The scenario is a mall store robbery, and forensics support is needed for in and out of store evidence development (fingerprint and footprint). The code and setup is based on Nina’s Level 1 Prototype. All code contained in the “game” folder, in which all folders and its contents except “images” and RenPy codes out of folders were default RenPy data.
+This folder contains code to the second level demo presented in Week 4.  All code contained in the “game” folder, in which all folders and its contents except “images” and RenPy codes out of folders were default RenPy data.
+
+## Scenario
+The scenario is a mall store robbery, and forensics support is needed for in and out of store evidence development (fingerprint and footprint). The code and setup is based on Nina’s Level 1 Prototype.
+Concepts tests:
+  * Path of contamination
+  * Finding latent evidence
+  * Oblique lighting
+  * 2D footprint development (inside and outside footprint)
+  * 2D non-porous fingerprint development (tabletop)
+  * Contextual clues (jewel - fingerprint)
 
 
 ## Images
@@ -15,5 +25,11 @@ Loose images are main scene background images, and each folder contains screen s
 
 
 ## Note: 
-current script and screens code only contains implementation for marking in-store evidences and exploring the tabletop (with fingerprints) and floor (with footprints) only. Further functionalities were pictured in the original idea for also exploring jewels in-store for fingerprints and others (the jewel itself should go straight to evidence bag and be filed), and the outside scene of the storefront should also be made interactive for developing at least footprint evidence.
+### Currently Implmented:
+  * marking in-store evidences
+  * tabletop (with fingerprints)
+  * floor (with footprints)
+### Features to be implemented:
+  * exploring jewels in-store for fingerprints and others (the jewel itself should go straight to evidence bag and be filed)
+  * outside scene of the storefront should also be made interactive for developing at least footprint evidence
 
