@@ -4,7 +4,7 @@ This folder contains code to the second level demo presented in Week 4.  All cod
 
 ## Scenario
 The scenario is a mall store robbery, and forensics support is needed for in and out of store evidence development (fingerprint and footprint). The code and setup is based on Nina’s Level 1 Prototype.
-Concepts tests:
+### Concepts tests:
   * Path of contamination
   * Finding latent evidence
   * Oblique lighting
@@ -30,6 +30,6 @@ Loose images are main scene background images, and each folder contains screen s
   * tabletop (with fingerprints)
   * floor (with footprints)
 ### Features to be implemented:
-  * exploring jewels in-store for fingerprints and others (the jewel itself should go straight to evidence bag and be filed)
+  * exploring jewels in-store for fingerprints and others (jewel itself goes straight to evidence bag and filed)
   * outside scene of the storefront should also be made interactive for developing at least footprint evidence
 
