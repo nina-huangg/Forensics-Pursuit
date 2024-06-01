@@ -88,11 +88,20 @@ label inside_library:
     scene robarts_exterior
     show supervisor
     s "Time to go inside!"
+    scene task1
+    pause
     scene thomas_fisher
     call screen task_1()
 
 label tape:
     call screen tape()
+
+label footprints:
+    call screen footprints()
+
+label footprint_collection:
+    scene footprints_closeup
+    call screen toolbox
 
 label taped:
     if front_directions['left']:
@@ -152,8 +161,11 @@ label enter_scene:
     hide screen opening
     #show screen move_on
     "Great job! Let's move onto the next task! \n\n\n>>hit space to continue"
+    scene task2
+    pause
     #hide screen move_on
-    call screen entering_screen
+    scene manuscript_loc
+    call screen task_2()
     
 label hallway:
     hide screen entering_screen
@@ -204,7 +216,7 @@ label stove_directions:
         $ middle = False
         call screen stove_screen
     else:
-        scene stove_center
+        scene footprints_closeup
         python:
             middle = True
             for c_d in stove_directions:
@@ -222,7 +234,7 @@ label examination_kitchen:
 
 label examination_stove:
     hide screen kitchen_screen
-    scene stove_center
+    scene footprints_closeup
     show screen toolbox
     with Dissolve(.8)
     #show screen move_on
@@ -235,7 +247,7 @@ label examination_stove:
 label tool_expand:
     $ default_mouse = ''
 
-    scene stove_center
+    scene footprints_closeup
     hide screen uv_light_stove
     show screen toolbox
     if toolbox_show:
@@ -243,14 +255,15 @@ label tool_expand:
         show screen toolbox
         $ toolbox_show = False
     else:
-        scene stove_center
+        scene footprints_closeup
         show screen expand_tools
         $ toolbox_show = True
         if first_time_toolbox:
             $ first_time_toolbox = False
             #show screen move_on
+            show screen arrow
+            "You found some muddy footprints. Great job!"
             "The toolbox holds the various tools you may need to collect evidence in this stage.\n\n>>hit space to continue"
-            "Let's start the tutorial by using the flashlight.\n\n\n>>hit space to continue"
             show screen arrow
     if finish_collection:
         #hide screen move_on
@@ -397,7 +410,7 @@ label stick_backing:
 label finish_lifting_tape:
     $ default_mouse = ''
     $ tools['lifting_tape'] = False
-    scene stove_center
+    scene footprints_closeup
     hide screen lifting_tape_stove
     show screen toolbox
     show screen expand_tools
@@ -413,7 +426,7 @@ label evidence_bags:
     $ default_mouse = 'evidence_bags'
     $ toolbox_show = False
     hide screen arrow
-    scene stove_center
+    scene footprints_closeup
     hide screen toolbox
     hide screen expand_tools
     hide screen evidence_marker_stove
@@ -438,7 +451,7 @@ label evidence_bags_finished:
     $ default_mouse = ''
     $ tools['bag'] = False
     $ tools['tape'] = True
-    scene stove_center
+    scene footprints_closeup
     hide screen current_evidence
     show screen toolbox
     show screen expand_tools
@@ -472,7 +485,7 @@ label tamper_tape:
 label  tutorial_finished:
     $ default_mouse = ''
     $ tools['bag'] = False
-    scene stove_center
+    scene footprints_closeup
     hide screen current_evidence
     show screen toolbox
     show screen expand_tools

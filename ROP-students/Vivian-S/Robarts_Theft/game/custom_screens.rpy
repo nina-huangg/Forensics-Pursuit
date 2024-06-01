@@ -66,6 +66,18 @@ screen file_folder():
                     xpos 0.25
                     ypos 0.25
                     draggable True
+                drag:
+                    drag_name "suspect"
+                    child "suspect.png"
+                    xpos 0.25
+                    ypos 0.25
+                    draggable True
+                drag:
+                    drag_name "suspect2"
+                    child "suspect2.png"
+                    xpos 0.25
+                    ypos 0.25
+                    draggable True
         text "\n\n\n>>hit space to continue"
     key "K_SPACE" action Jump("inside_library")
 
@@ -75,7 +87,7 @@ screen task_1():
         hbox:
             spacing 30
             xsize 800
-            text "Your first task is to secure the crime scene. Using your arrow keys, navigate to different sections of the floor and use virtual tape to cordon off the room and restrict access to prevent contamination. \n\n\n>>hit space to continue"
+            text "Your first task is to secure the crime scene. Using your arrow keys, navigate to different sections of the floor and use virtual tape to cordon off the room and restrict access to prevent contamination. \n\n\n>> use your left and right arrow keys to navigate to different locations"
     if middle:
         key "K_UP" action [ToggleDict(front_directions, 'up'), Jump("jump_directions")]
         key "K_DOWN" action [ToggleDict(front_directions, 'down'), Jump("jump_directions")]
@@ -91,6 +103,28 @@ screen task_1():
         elif curr_directions['left']:
             key "K_RIGHT" action Jump("jump_directions")
 
+screen task_2():
+    frame:
+        xcenter 0.5 ycenter 0.5
+        hbox:
+            spacing 30
+            xsize 800
+            text "The manuscript was located at this display of our prized Shakespeare collection. Take a look around and look for fingerprints and evidence. \n\n\n>> click on different regions and look for fingerprints."
+    key "K_SPACE" action Jump("footprints")
+
+screen footprints():
+    imagebutton:
+        xalign 0.08
+        yalign 0.951
+        idle "footprints"
+        hover "footprints_hover"
+        action Jump("footprint_collection")
+    imagebutton:
+        xalign 0.8
+        yalign 0.7
+        idle "manuscript"
+        hover "manuscript_hover"
+        action Jump("coffee")
 
 screen exposition_click():
     imagebutton:
