@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/custom_screens.rpy", line 62: 'scene' is not a keyword argument or valid child of the hbox statement.
+    scene "folder.png"
+         ^
+
+Ren'Py Version: Ren'Py 8.2.1.24030407
+Thu May 30 02:30:47 2024
