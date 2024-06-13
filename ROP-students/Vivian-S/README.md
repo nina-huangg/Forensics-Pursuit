@@ -1,3 +1,35 @@
+# Kidnapping at Robarts Game Level - Vivian Song
+
+## Description
+
+The files contained within this folder contain code for a Forensics Pursuit level based on the below scenario. The code structure itself is based on Nina's Level 1 Prototype. This level aims to evaluate the following forensics science concepts:
+
+* Securing path of contamination 
+* Finding latent evidence 
+* Polyvinylsiloxane for pry/tool marks
+* 2D Non-porous fingerprint development using TapeGlo
+* 2D Non-porous fingerprint development using Camphor Smoke
+
+## Scenario
+A female student went missing a couple days ago and was last seen at Robarts Library, specifically in the Robarts Commons. Witnesses close to the student were asked to come in for questioning and sources close to the student claim the student was staying late studying for a chemistry exam and never returned home nor showed up for their exam.
+
+## Flow Chart
+
+https://www.figma.com/board/A8s7v3do4gvRunEFQkZ77T/Forensics-Game-Level-Flow-Chart---Introductory-Evidence-Collection-V2?node-id=2-216&t=1grGFREcYkSinmEl-1
+
+## Current Implementations
+
+* Debrief
+* Inventory toolbar
+* Basic navigation
+* Path of contamination taping procedure
+
+## Feedback/Game Fixes
+
+
+
+# ------------------------------------------------------------
+
 # Robarts Theft Game Level - Vivian Song
 
 ## Description
