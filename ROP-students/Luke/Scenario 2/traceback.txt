@@ -1,0 +1,34 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 157, in script
+    call screen overlay_imagemap
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+Exception: Screen overlay_imagemap is not known.
+
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 157, in script
+    call screen overlay_imagemap
+  File "C:\Users\Luke\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 1968, in execute
+    self.call("execute")
+  File "C:\Users\Luke\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 1950, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+  File "C:\Users\Luke\Downloads\renpy-8.2.1-sdk\renpy\statements.py", line 349, in call
+    return method(parsed, *args, **kwargs)
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "C:\Users\Luke\Downloads\renpy-8.2.1-sdk\renpy\exports.py", line 3399, in call_screen
+    show_screen(_screen_name, *args, _transient=True, **kwargs)
+  File "C:\Users\Luke\Downloads\renpy-8.2.1-sdk\renpy\display\screen.py", line 1322, in show_screen
+    raise Exception("Screen %s is not known.\n" % (name[0],))
+Exception: Screen overlay_imagemap is not known.
+
+
+Windows-10-10.0.22631 AMD64
+Ren'Py 8.2.1.24030407
+Scenario 2 1.0
+Thu Jun 13 11:19:11 2024
