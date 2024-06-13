@@ -1,0 +1,28 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 355, in script
+    call screen glass_collection
+ScriptError: could not find label 'toggle_tweezer'.
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\bootstrap.py", line 359, in bootstrap
+    renpy.main.main()
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\main.py", line 635, in main
+    run(restart)
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\main.py", line 145, in run
+    renpy.execution.run_context(True)
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\execution.py", line 955, in run_context
+    context.run()
+  File "game/script.rpy", line 355, in script
+    call screen glass_collection
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\script.py", line 1103, in lookup
+    raise ScriptError("could not find label '%s'." % str(original))
+ScriptError: could not find label 'toggle_tweezer'.
+
+Windows-10-10.0.22631 AMD64
+Ren'Py 8.2.1.24030407
+fp intro level 3 1.0
+Thu Jun 13 12:05:42 2024
