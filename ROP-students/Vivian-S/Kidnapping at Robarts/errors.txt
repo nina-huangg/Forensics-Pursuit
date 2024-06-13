@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/script.rpy", line 458: expected statement.
+    addToInventory(["tape"])
+                            ^
+
+Ren'Py Version: Ren'Py 8.2.1.24030407
+Thu Jun 13 03:13:49 2024
