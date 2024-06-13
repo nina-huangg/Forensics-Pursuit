@@ -19,13 +19,28 @@ https://www.figma.com/board/A8s7v3do4gvRunEFQkZ77T/Forensics-Game-Level-Flow-Cha
 
 ## Current Implementations
 
-* Debrief
-* Inventory toolbar
-* Basic navigation
-* Path of contamination taping procedure
+- Debrief with supervisor
+  - Implemented basic dialogue containing debrief of the scenario and of tasks for the player.
+  - Added preliminary evidence with draggable objects including the student's t-card, suspect file and student's planner (evidence will be updated to match the intended evidence pieces from flowchart depending on story).
+- Implemented inventory toolbar
+  - Designed a new toolbox/inventory system with new UI and look. Toolbox is now located in the corner of the player's screen at all times so they can pull it up whenever necessary.
+  - When toolbox is clicked once, the user can open up their "inventory" and view their items and can also be closed/hidden.
+  - Implemented 2 buttons for each hotbar item:
+    - Inspect item - allows user to closely examine the item using a pop-up.
+    - Pick-up item - allows user to pick-up the item from their inventory and use it to interact with other environment objects or with other inventory items.
+- Basic navigation between scenes for path of contamination scene
+  - Designed a navigation system that allows the user to click arrows on the ground to navigate to different locations rather than using arrow keys. 
+- Path of contamination taping procedure completed
+  - Player starts off with police tape in their inventory which they can use to tape off different areas.
+  - Player can navigate left and right to corden off entrances into commons area.
+  - Player can use the police tape and drag it to the dotted lines to tape off sections.
 
 ## Feedback/Game Fixes
 
+- Try to narrow scope - combine objects to single forensics technique
+- Simplify navigation and user interactions
+
+## Future Development
 
 
 # ------------------------------------------------------------
