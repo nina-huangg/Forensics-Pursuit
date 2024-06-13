@@ -42,6 +42,15 @@ https://www.figma.com/board/A8s7v3do4gvRunEFQkZ77T/Forensics-Game-Level-Flow-Cha
 
 ## Future Development
 
+- Add gloves interaction - player puts on gloves
+- Redesign UI to make it more visually appealing and cleaner
+- Take photos and replace current placeholder assets with actual asset
+- Implement study room selection 
+- Implement polyvinylsiloxane technique on study room door
+- Fix inventory mechanics
+- Implement lab procedures
+  - TapeGlo
+  - Camphor Smoke 
 
 # ------------------------------------------------------------
 
