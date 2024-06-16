@@ -3,12 +3,13 @@ style custom_button:
     idle_background Frame("button glossy idle", 12, 12)
     hover_background Frame("button glossy hover", 12, 12)
     insensitive_background Frame("button glossy idle", 12, 12)
-    xpadding 8
+    xpadding 5
     ypadding 10
     xmargin 0
     ymargin 5
     xalign 0.5
     size_group "custom_button"
+    xfill False
 
 style custom_button_text:
     idle_color "#c0c0c0"

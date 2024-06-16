@@ -13,32 +13,24 @@
 ## The _() surrounding the string marks it as eligible for translation.
 
 define config.name = _("Office Murder")
-define config.layers = ['master', 'transient', 'screens', 'over_screens', 'over_toolbox', 'overlay']
+define config.layers = ['master', 'transient', 'screens', 'over_screens', 'over_camera', 'over_toolbox', 'overlay']
 
 
 
 define config.mouse = { }
-define config.mouse['light'] = [('/images/mouse/uv_light_resized.png', 0, 0)]
 define config.mouse['magnify'] = [('/images/mouse/magnify_mouse.png', 0, 0)]
-define config.mouse['marker'] = [('/images/mouse/evidence_markers_resized.png', 0, 0)]
-define config.mouse['magnetic']= [('/images/mouse/magnetic_powder_resized.png', 0, 0)]
-define config.mouse['bucket'] = [('/images/mouse/bucket_mouse.png', 0, 0)]
+define config.mouse['magnetic_white']= [('/images/mouse/magnetic_white_mouse.png', 0, 0)]
+define config.mouse['magnetic_black']= [('/images/mouse/magnetic_black_mouse.png', 0, 0)]
+define config.mouse['ziplock'] = [('/images/mouse/ziplock_mouse.png', 0, 0)]
 define config.mouse['stone'] = [('/images/mouse/stone_mouse.png', 0, 0)]
 define config.mouse['water'] = [('/images/mouse/water_mouse.png', 0, 0)]
-define config.mouse['ruler_tag'] = [('/images/mouse/ruler_tag_mouse.png', 0, 0)]
-define config.mouse['bag'] = [('/images/mouse/evidence_bags_resized.png', 0, 0)]
+define config.mouse['ruler'] = [('/images/mouse/ruler_mouse.png', 0, 0)]
+# define config.mouse['tag'] = [('/images/mouse/tag_mouse.png', 0, 0)]
+define config.mouse['bag'] = [('/images/mouse/evidence_bag_mouse.png', 0, 0)]
 define config.mouse['hungarian_red'] = [('/images/mouse/hungarian_red_mouse.png', 0, 0)]
 define config.mouse['knife'] = [('/images/mouse/knife_mouse.png', 0, 0)]
-
-
-
-# define config.mouse['deskfoot_cast'] = [('/images/mouse/deskfoot_cast.jpg', 0, 0)]
-# define config.mouse['cheque'] = [('/images/mouse/cheque.jpg', 0, 0)]
-# define config.mouse['bullet'] = [('/images/mouse/bullet.jpg', 0, 0)]
-# define config.mouse['carpet'] = [('/images/mouse/carpet.jpg', 0, 0)]
-
-# define config.mouse['mix'] = [('/images/mouse/mix_bucket.jpg', 0, 0)]
-# define config.mouse['cast'] = [('/images/mouse/cast.jpg', 0, 0)]
+define config.mouse['glove'] = [('/images/mouse/glove_mouse.png', 0, 0)]
+define config.mouse['applicator'] = [('/images/mouse/applicator_mouse.png', 0, 0)]
 
 
 
