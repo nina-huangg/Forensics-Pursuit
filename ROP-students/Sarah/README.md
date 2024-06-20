@@ -6,26 +6,47 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
 
 ## What is Currently Completed:
 - Navigation between the main scenes:
-  - Implemented navigation between the view of the entire kitchen, the stove, inside the oven, viewing the dish towel, a closeup of the floor and the closeup of the wall
-  - Visual elements included a white outline around the object when hovered over and the mouse cursor changes into a magnifying glass
+  - Implemented navigation between the view of the entire kitchen, the stove, viewing the dish towel, and a closeup of the floor
+  - Visual elements include the mouse cursor changeing into a magnifying glass or an exclamation point
   - How the player can navigate through the scenes:
     - Player can select the floor where there is cleaned up blood only after they discovered it with ALS
-    - Player can select the wall where there is cleaned up blood only after they discovered it with ALS
     - Player can select the stove to investigate it further
-      - Player can then select the dish towel to get a closer view or the oven door to look inside the oven
+      - Player can look down and then select the dish towel to get a closer view
 - Added the button for ALS flashlights (the picture for the button is temporary)
   - When the player selects the button, a panel with each available ALS flashlight appears for the player to choose which one to use. So far only the UVA and 415nm flashlights have been implemented for the main kitchen scene.
+  - Implemented collecting the knife, including:
+    - Placing the evidence marker
+    - Putting the knife in an evidence bag
+    - Sealing the evidence bag with tape
+  - Implemented collecting the dish towel, including:
+    - Placing te evidence marker
+    - Putting the dish towel in an evidence bag
+    - Sealing the evidence bag with tape
+  - Implemented the pool of blood, including:
+    - The kastle-meyer test, selecting the cotton swab, wetting it, swabbing the floor, applying ethanol, phenolphthalein and hydrogen peroxide. Also allowed for some mistakes (if ot done in the correct order, will not get the correct result)
+    - Collecting the blood, selecting the cotton swab, wetting the swab, swabbing the floor, putting it in the tube (the rest needs to be further implemented
+    - Making the luminol and spraying it, selecting the spray bottle, adding distilled water, adding the luminol tablet, and spraying the floor 3 times, then seeing the fluorescing blood
+  - Started implementing the fingerprint:
+    - Can select the uv flashlight and find the fingerprint, when the fingerprint is selected, the evidence marker is placed
 
 ## Feedback Received:
 - Limit the scenario to one room/seciton (completed, the scenario now only takes place in the kitchen near the stove)
-- Limit things that the player is able to click on
+- Limit things that the player is able to click on (completed)
+- Remove the wall spatter, remove the knife from the oven and instead have it on top of the stove, add a fingerprint on the stovetop (completed)
+- Make the flashlight effect match what Luke's
 
 ## What Needs to be Developed/Bug Fixes:
 - Need to replace the temporary pictures (most of which are temporary) with the actual pictures once they are taken and change the hotspot locations to match the new pictures
-- Need to implement the forensic tools and how they can be used (if they can be) for each object
-- Need to implement the mistakes the player can make
+- Need to finish implementing the fingerprint collection
+- Need to fully implement the mistakes the player can make (only somewhat implemented so far)
+- Still need to implement the flashlight effect for the ALS flashlights and the uv flashlight
 - Bug Fixes:
   - Sometimes toolbox disappears after using the ALS flashlight
+  - Tools disappear after selecting the spray bottle and the distilled water when the spray bottle has been selected
+  - Tools disappear when switching between different areas (I think the toolbox might still be open but the tools are not showing so need to click on the toolbox twice to see the tools)
+  - Evidence marker for fingerprint disappears
+  - After selecting the cotton swab the first time, all the tools disappear but can still be clicked on
+  - After selecting the cotton swab a second time, the distilled water, ethanol and cotton swab buttons are visible but cannot be clicked on/selected
 
 ___
 
