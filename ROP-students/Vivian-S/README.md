@@ -19,17 +19,17 @@ https://www.figma.com/board/A8s7v3do4gvRunEFQkZ77T/Forensics-Game-Level-Flow-Cha
 
 ## Update Log #2 - June 20, 2024
 
-# Current Implementations
+### Current Implementations
 
 [to be filled out]
 
-# Feedback/Game Fixes
+### Feedback/Game Fixes
 
 [to be filled out]
 
 ## Update Log #1 - June 12, 2024
 
-# Current Implementations
+### Current Implementations
 
 - Debrief with supervisor
   - Implemented basic dialogue containing debrief of the scenario and of tasks for the player.
@@ -47,7 +47,7 @@ https://www.figma.com/board/A8s7v3do4gvRunEFQkZ77T/Forensics-Game-Level-Flow-Cha
   - Player can navigate left and right to corden off entrances into commons area.
   - Player can use the police tape and drag it to the dotted lines to tape off sections.
 
-# Feedback/Game Fixes
+### Feedback/Game Fixes
 
 - Try to narrow scope - combine objects to single forensics technique
 - Simplify navigation and user interactions
