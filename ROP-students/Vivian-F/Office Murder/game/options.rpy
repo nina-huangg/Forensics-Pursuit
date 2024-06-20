@@ -18,6 +18,7 @@ define config.layers = ['master', 'transient', 'screens', 'over_screens', 'over_
 
 
 define config.mouse = { }
+define config.mouse['marker'] = [('/images/mouse/marker_mouse.png', 0, 0)]
 define config.mouse['magnify'] = [('/images/mouse/magnify_mouse.png', 0, 0)]
 define config.mouse['magnetic_white']= [('/images/mouse/magnetic_white_mouse.png', 0, 0)]
 define config.mouse['magnetic_black']= [('/images/mouse/magnetic_black_mouse.png', 0, 0)]
@@ -30,7 +31,7 @@ define config.mouse['bag'] = [('/images/mouse/evidence_bag_mouse.png', 0, 0)]
 define config.mouse['hungarian_red'] = [('/images/mouse/hungarian_red_mouse.png', 0, 0)]
 define config.mouse['knife'] = [('/images/mouse/knife_mouse.png', 0, 0)]
 define config.mouse['glove'] = [('/images/mouse/glove_mouse.png', 0, 0)]
-define config.mouse['applicator'] = [('/images/mouse/applicator_mouse.png', 0, 0)]
+define config.mouse['brush'] = [('/images/mouse/brush_mouse.png', 0, 0)]
 
 
 
