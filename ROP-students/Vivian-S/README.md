@@ -27,6 +27,10 @@ https://www.figma.com/board/A8s7v3do4gvRunEFQkZ77T/Forensics-Game-Level-Flow-Cha
 
 [to be filled out]
 
+### Future Development
+
+[to be filled out]
+
 ## Update Log #1 - June 12, 2024
 
 ### Current Implementations
@@ -52,7 +56,7 @@ https://www.figma.com/board/A8s7v3do4gvRunEFQkZ77T/Forensics-Game-Level-Flow-Cha
 - Try to narrow scope - combine objects to single forensics technique
 - Simplify navigation and user interactions
 
-## Future Development
+### Future Development
 
 - Add gloves interaction - player puts on gloves
 - Redesign UI to make it more visually appealing and cleaner
