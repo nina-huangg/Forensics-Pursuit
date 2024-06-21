@@ -44,9 +44,8 @@ Loose images are main scene background images, and each folder contains screen/l
   * Camera (shows photos of evidences taken with scale, tag, and/or evidence marker, in gallery-style)
   * Added more custom cursors (magnifying glass for analyzing, gloves for picking tools, and mouse for each tool)
 ### Features to be implemented:
-  * New toolbox (bar)
   * Dental stone mixture tweaking (until pancake consistency)
   * Automate textbutton sizing and placement
-  * Evidence/Photo descriptions when clicked
-
+  * Evidence & Tool descriptions when clicked
+  * 2D Markers
 

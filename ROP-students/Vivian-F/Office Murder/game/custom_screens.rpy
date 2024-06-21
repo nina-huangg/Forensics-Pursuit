@@ -221,14 +221,14 @@ screen scene_deskfoot():
                 hover "deskfoot_stone"
                 hotspot(130,100,1230,880) action [SetLocalVariable('ziplock_water', True), Function(set_cursor, '')] sensitive tools['water']     
         showif ziplock_water:
-            image 'deskfoot_water'
+            image 'good_water'
             hbox:
                 xpos 0.15 ypos 0.85
                 textbutton('Mix together'):
                     style 'custom_button'
                     action SetLocalVariable('ziplock_mixed', True)
         showif ziplock_mixed:
-            image 'deskfoot_mix'
+            image 'good_mix'
             hbox:
                 xpos 0.15 ypos 0.85
                 textbutton('Pour mix on footprint'):
@@ -374,7 +374,7 @@ screen scene_blood():
             image 'blood_spray_good'
             hbox:
                 xpos 0.25 ypos 0.85
-                textbutton('Wait a few minutes for latent blood to appear'):
+                textbutton('Take a pause for latent blood to appear'):
                     style 'custom_button'
                     action [SetLocalVariable('appeared', True), Function(set_cursor, '')]        
         showif appeared:
@@ -479,9 +479,10 @@ screen back_button_screen(location, curr_screen):
 
 # Toolbox
 transform tools_small():
-    zoom 0.2
+    zoom 0.17
 
 screen toolbox_screen():
+    default mag_powder_ypos = 0
     # Toolbox icon (always show)
     hbox:
         xpos 0.015 ypos 0.09
@@ -496,10 +497,34 @@ screen toolbox_screen():
                     ToggleScreen("case_files_screen", _layer="over_screens"), ToggleScreen("camera_screen", _layer="over_camera")]
     # Toolbox contents
     showif toolbox_show:
+        hbox:
+            xalign 0.0 yalign 0.3
+            image "toolbox_bg" at Transform(zoom=0.55, alpha=0.9)
+        # hbox:
+        #     xalign 0.5 yalign 0.003
+        #     text title
+        # Tools will display in gallery (show one at a time and press arrow to change)
+        # Left arrow
+        hbox:   
+            xpos 0.038 ypos 0.24
+            imagebutton:
+                idle 'tools_prev'at Transform(zoom=0.2)
+                hover 'tools_prev_hover'
+                
+                action [Function(tools_switch, 'prev')]
+        # Right arrow
+        hbox:   
+            xpos 0.038 ypos 0.815
+            imagebutton:
+                idle 'tools_next' at Transform(zoom=0.2)
+                hover 'tools_next_hover' 
+
+                action [Function(tools_switch, 'next')]
+            
         # When not all markers are placed, only tool avaiable is marker
         if not all(evidence_marker_set[evidence] for evidence in evidence_marker_set):
             hbox:
-                xpos 0.025 ypos 0.24
+                xpos 0.017 ypos 0.275
                 imagebutton:
                     insensitive "evidence_markers" at Transform(zoom=0.04) 
                     idle "evidence_markers"
@@ -517,141 +542,102 @@ screen toolbox_screen():
             $ set_cursor('')
             $ tools['marker'] = False        
         
-        # Normal analyzation after markers placed, show all tools to use on sides
+        # Normal analyzation after markers placed, show all tools to use top bar
         # Cursor changes to gloves when hover over tools' icon
         # Tool + cursor changes to tool selected after clicked icon (set_tool)
         elif not on_main_screen:
-            # left_side
-            hbox:
-                xpos 0.03 ypos 0.26
-                imagebutton:
-                    insensitive "evidence_bags" at tools_small
-                    idle "evidence_bags"
-                    hover "evidence_bags_hover"
+            if tools_name_list[tools_counter] == 'applicator':
+                $ (mag_powder_ypos) = 0.285
+            elif tools_name_list[tools_counter + 1] == 'applicator':
+                $ (mag_powder_ypos) = 0.43
+            elif tools_name_list[tools_counter + 2] == 'applicator':
+                $ (mag_powder_ypos) = 0.57
+            elif tools_name_list[tools_counter + 3] == 'applicator':
+                $ (mag_powder_ypos) = 0.7
+            else:
+                $ (mag_powder_ypos) = 0
 
-                    hovered Notify("evidence bags")
+            hbox:
+                xpos 0.018 ypos 0.285
+                imagebutton:
+                    insensitive tools_image_list[tools_counter] at tools_small
+                    idle tools_image_list[tools_counter] 
+                    hover tools_image_list[tools_counter]
+
+                    hovered Notify(tools_name_list[tools_counter])
                     unhovered Notify('')
 
-                    action[Function(set_tool, 'bag')]
+                    action[Function(set_tool, tools_name_list[tools_counter])]
+                    mouse "glove"
+
+            hbox:
+                xpos 0.018 ypos 0.43
+                imagebutton:
+                    insensitive tools_image_list[tools_counter + 1] at tools_small
+                    idle tools_image_list[tools_counter + 1] 
+                    hover tools_image_list[tools_counter + 1]
+
+                    hovered Notify(tools_name_list[tools_counter + 1])
+                    unhovered Notify('')
+
+                    action[Function(set_tool, tools_name_list[tools_counter + 1])]
+                    mouse "glove"
+            hbox:
+                xpos 0.018 ypos 0.57
+                imagebutton:
+                    insensitive tools_image_list[tools_counter + 2] at tools_small
+                    idle tools_image_list[tools_counter + 2] 
+                    hover tools_image_list[tools_counter + 2]
+
+                    hovered Notify(tools_name_list[tools_counter + 2])
+                    unhovered Notify('')
+
+                    action[Function(set_tool, tools_name_list[tools_counter + 2])]
+                    mouse "glove"
+
+            hbox:
+                xpos 0.018 ypos 0.7
+                imagebutton:
+                    insensitive tools_image_list[tools_counter + 3] at tools_small
+                    idle tools_image_list[tools_counter + 3] 
+                    hover tools_image_list[tools_counter + 3]
+
+                    hovered Notify(tools_name_list[tools_counter + 3])
+                    unhovered Notify('')
+
+                    action[Function(set_tool, tools_name_list[tools_counter + 3])]
                     mouse "glove"
             
-            hbox:
-                xpos 0.03 ypos 0.41
-                imagebutton:
-                    insensitive "ruler_idle" at tools_small
-                    idle "ruler_idle" 
-                    hover "ruler_idle"
+            showif tools["applicator"]:
+                hbox:
+                    xpos 0.0885 ypos (mag_powder_ypos - 0.024)
+                    image "toolbox_snd_bg" at Transform(zoom=0.55, alpha=0.9)
+                hbox:
+                    xpos 0.095 ypos (mag_powder_ypos)
+                    imagebutton:
+                        insensitive "magnetic_black_idle" at tools_small
+                        idle "magnetic_black_idle" 
+                        hover "magnetic_black_idle"
 
-                    hovered Notify("ruler")
-                    unhovered Notify('')
+                        hovered Notify("black magnetic powder")
+                        unhovered Notify('')
 
-                    action[Function(set_tool, 'ruler')]
-                    mouse "glove"
-                
-            hbox:
-                xpos 0.03 ypos 0.53
-                imagebutton:
-                    insensitive "knife_idle" at tools_small
-                    idle "knife_idle"
-                    hover "knife_idle"
+                        action[Function(set_tool, "magnetic_black")]
+                        mouse "glove"
 
-                    hovered Notify("exacto knife")
-                    unhovered Notify('')
+                hbox:
+                    xpos 0.095 ypos (mag_powder_ypos + 0.14)
+                    imagebutton:
+                        insensitive "magnetic_white_idle" at tools_small
+                        idle "magnetic_white_idle" 
+                        hover "magnetic_white_idle"
 
-                    action[Function(set_tool, 'knife')]
-                    mouse "glove"
+                        hovered Notify("white magnetic powder")
+                        unhovered Notify('')
 
-            hbox:
-                xpos 0.03 ypos 0.66
-                imagebutton:
-                    insensitive "hungarian_red_idle" at tools_small
-                    idle "hungarian_red_idle" 
-                    hover "hungarian_red_idle"
+                        action[Function(set_tool, "magnetic_white")]
+                        mouse "glove"
 
-                    hovered Notify("hungarian red dye")
-                    unhovered Notify('')
-
-                    action[Function(set_tool, 'hungarian_red')]
-                    mouse "glove"
-            
-            # right side
-            hbox:
-                xpos 0.9 ypos 0.07
-                imagebutton:
-                    insensitive "brush_idle" at Transform(zoom=0.15)
-                    idle "brush_idle" 
-                    hover "brush_idle"
-
-                    hovered Notify("camel hair brush")
-                    unhovered Notify('')
-
-                    action[Function(set_tool, 'brush')]
-                    mouse "glove"
-
-            hbox:
-                xpos 0.89 ypos 0.2
-                imagebutton:   
-                    insensitive "magnetic_black_idle" at tools_small
-                    idle "magnetic_black_idle"
-                    hover "magnetic_black_idle"
-
-                    hovered Notify("black magnetic powder")
-                    unhovered Notify('')
-
-                    action[Function(set_tool, 'magnetic_black')]
-                    mouse "glove"
-                    
-            hbox:
-                xpos 0.89 ypos 0.36
-                imagebutton:   
-                    insensitive "magnetic_white_idle" at tools_small
-                    idle "magnetic_white_idle"
-                    hover "magnetic_white_idle"
-
-                    hovered Notify("white magnetic powder")
-                    unhovered Notify('')
-
-                    action[Function(set_tool, 'magnetic_white')]
-                    mouse "glove"
-            
-            hbox:
-                xpos 0.89 ypos 0.52
-                imagebutton:
-                    insensitive "ziplock_idle" at tools_small
-                    idle "ziplock_idle"
-                    hover "ziplock_idle"
-
-                    hovered Notify("empty zip lock bag")
-                    unhovered Notify('')
-
-                    action[Function(set_tool, 'ziplock')] 
-                    mouse "glove"
-
-            hbox:
-                xpos 0.89 ypos 0.68
-                imagebutton:
-                    insensitive "stone_idle" at tools_small
-                    idle "stone_idle"
-                    hover "stone_idle"
-
-                    hovered Notify("dental stone powder")
-                    unhovered Notify('')
-
-                    action[Function(set_tool, 'stone')]
-                    mouse "glove"
-
-            hbox:
-                xpos 0.9 ypos 0.84
-                imagebutton:
-                    insensitive "water_idle" at tools_small
-                    idle "water_idle"
-                    hover "water_idle"
-
-                    hovered Notify("distilled water")
-                    unhovered Notify('')
-
-                    action[Function(set_tool, 'water')]
-                    mouse "glove"
 
 
 # Casefile Evidences
@@ -748,22 +734,3 @@ screen camera_screen():
             hbox:
                 xalign 0.5 ypos 0.42
                 text "no photos taken yet"
-
-
-    # code for displaying camera photos just like casefile evidence images
-        # showif 'deskfoot' in processed:
-        #     hbox:
-        #         xpos 0.25 ypos 0.5
-        #         image 'camera_deskfoot' at casefile_small
-        # showif 'blood' in processed:
-        #     hbox:
-        #         xpos 0.55 ypos 0.2
-        #         image 'camera_blood' at casefile_small
-        # showif 'bullet' in processed:
-        #     hbox:
-        #         xpos 0.25 ypos 0.2
-        #         image 'camera_bullet' at casefile_small
-        # showif 'cheque' in processed:
-        #     hbox:
-        #         xpos 0.55 ypos 0.5
-        #         image 'camera_cheque' at casefile_small

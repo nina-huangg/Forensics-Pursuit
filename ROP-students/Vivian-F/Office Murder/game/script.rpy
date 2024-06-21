@@ -17,8 +17,10 @@ default current_cursor = ''
 define flash = Fade(.25, 0, .75, color="#fff")
 
 # which tool is currently enabled (shown on screen)
-default tools = {"brush": False, "bag" : False, "hungarian_red": False, "knife": False, "magnetic_black": False, "magnetic_white": False, "marker": False, "ruler": False, "stone": False, "water": False, "ziplock": False}
-# , "tag": False (not used yet but could, now only tag goes to deskfoot, with ruler)
+default tools = {"magnetic_black": False, "magnetic_white": False, "marker": False, "bag" : False, "tape": False, "tag": False, "ruler": False, "knife": False, "hungarian_red": False, "brush": False, "applicator": False, "ziplock": False, "stone": False, "water": False}
+default tools_image_list = ["magnetic_black_idle", "magnetic_white_idle", "marker_idle", "bag_idle", "tape_idle", "tag_idle", "ruler_idle", "knife_idle", "hungarian_red_idle", "brush_idle", "applicator_idle", "ziplock_idle", "stone_idle", "water_idle"]
+default tools_name_list = ["magnetic_black", "magnetic_white", "marker", "bag", "tape", "tag", "ruler", "knife", "hungarian_red", "brush", "applicator", "ziplock", "stone", "water"]
+default tools_counter = 3
 
 # whether the item should be examined
 default should_be_examined = {'deskfoot': False, 'blood': False, "bullet": False, "cheque": False}
@@ -32,6 +34,9 @@ default processed = []
 # evidence photos list (add once processed), evidence photos counter (to flip through camera)
 default evidence_photos = []
 default evidence_photos_counter = 0
+
+# whether second level toolbox shows for different magnetic powder choices
+default mag_powder_show = False
 
 
 # Python helper functions
@@ -88,14 +93,26 @@ init python:
                 evidence_photos_counter -= 1
         else:
             evidence_photos_counter = 0
+    
+    # Add/subtract to counter to change current displaying photo index
+    def tools_switch(cmd):
+        global tools_counter
+        if cmd == 'next':
+            if tools_counter + 4 < len(tools):
+                tools_counter += 1
+        elif cmd == 'prev':
+            if tools_counter - 1 >= 3:
+                tools_counter -= 1
+        else:
+            tools_counter = 3
 
 
 
 # Labels of scenes, calls screens in custom_screens
 label start: 
     scene bahen
-    "Yesterday midnight, the Bahen Centre security guard was murdered in an office room."
-    "Your job now is to analyze the scene and collect evidence to find the murderer."
+    "Yesterday midnight, the Bahen Centre security guard's body was found in an office room in the building."
+    "Your job now is to analyze the scene and collect evidences."
 
 # Main screen, comes back after each evidence collection
 # Every time back, change cursor to default and turn off all layovers, only icon
@@ -120,7 +137,7 @@ label show_deskfoot:
     hide screen camera_screen onlayer over_camera
     show screen back_button_screen('office_start', 'scene_deskfoot') onlayer over_screens
     # Show background prompt first before analyze
-    if 'tabletop' not in processed:
+    if 'deskfoot' not in processed:
         scene deskfoot_zoom
         "Looks like there is a waxy footprint on the desk, you heard from a professor that there 
         had been a popcorn spill in the kitchen next door last night. (click to start development)"

@@ -12,7 +12,7 @@
 ##
 ## The _() surrounding the string marks it as eligible for translation.
 
-define config.name = _("Office Murder")
+define config.name = _("Office Incident 1103")
 define config.layers = ['master', 'transient', 'screens', 'over_screens', 'over_camera', 'over_toolbox', 'overlay']
 
 
@@ -26,12 +26,13 @@ define config.mouse['ziplock'] = [('/images/mouse/ziplock_mouse.png', 0, 0)]
 define config.mouse['stone'] = [('/images/mouse/stone_mouse.png', 0, 0)]
 define config.mouse['water'] = [('/images/mouse/water_mouse.png', 0, 0)]
 define config.mouse['ruler'] = [('/images/mouse/ruler_mouse.png', 0, 0)]
-# define config.mouse['tag'] = [('/images/mouse/tag_mouse.png', 0, 0)]
-define config.mouse['bag'] = [('/images/mouse/evidence_bag_mouse.png', 0, 0)]
+define config.mouse['tag'] = [('/images/mouse/tag_mouse.png', 0, 0)]
+define config.mouse['bag'] = [('/images/mouse/bag_mouse.png', 0, 0)]
 define config.mouse['hungarian_red'] = [('/images/mouse/hungarian_red_mouse.png', 0, 0)]
 define config.mouse['knife'] = [('/images/mouse/knife_mouse.png', 0, 0)]
 define config.mouse['glove'] = [('/images/mouse/glove_mouse.png', 0, 0)]
 define config.mouse['brush'] = [('/images/mouse/brush_mouse.png', 0, 0)]
+define config.mouse['tape'] = [('/images/mouse/tape_mouse.png', 0, 0)]
 
 
 
