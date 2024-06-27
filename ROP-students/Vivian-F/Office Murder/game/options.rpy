@@ -13,7 +13,7 @@
 ## The _() surrounding the string marks it as eligible for translation.
 
 define config.name = _("Office Incident 1103")
-define config.layers = ['master', 'transient', 'screens', 'over_screens', 'over_camera', 'over_toolbox', 'overlay']
+define config.layers = ['master', 'transient', 'screens', 'over_screens', 'over_camera', 'over_toolbox', 'over_markers', 'overlay']
 
 
 
