@@ -17,7 +17,23 @@ A female student went missing a couple days ago and was last seen at Robarts Lib
 
 https://www.figma.com/board/A8s7v3do4gvRunEFQkZ77T/Forensics-Game-Level-Flow-Chart---Introductory-Evidence-Collection-V2?node-id=2-216&t=1grGFREcYkSinmEl-1
 
-## Current Implementations
+## Update Log #2 - June 20, 2024
+
+### Current Implementations
+
+[to be filled out]
+
+### Feedback/Game Fixes
+
+[to be filled out]
+
+### Future Development
+
+[to be filled out]
+
+## Update Log #1 - June 12, 2024
+
+### Current Implementations
 
 - Debrief with supervisor
   - Implemented basic dialogue containing debrief of the scenario and of tasks for the player.
@@ -35,12 +51,12 @@ https://www.figma.com/board/A8s7v3do4gvRunEFQkZ77T/Forensics-Game-Level-Flow-Cha
   - Player can navigate left and right to corden off entrances into commons area.
   - Player can use the police tape and drag it to the dotted lines to tape off sections.
 
-## Feedback/Game Fixes
+### Feedback/Game Fixes
 
 - Try to narrow scope - combine objects to single forensics technique
 - Simplify navigation and user interactions
 
-## Future Development
+### Future Development
 
 - Add gloves interaction - player puts on gloves
 - Redesign UI to make it more visually appealing and cleaner

@@ -1,27 +1,27 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
-While loading <renpy.display.im.Image object ('Items Pop Up/tape-pop-up.png') at 0x0000000006922700>:
-  File "game/script.rpy", line 957, in script
-    call screen scene1
-  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
-    store._return = renpy.call_screen(name, *args, **kwargs)
-OSError: Couldn't find file 'Items Pop Up/tape-pop-up.png'.
+While loading <renpy.display.im.Image object ('Items Pop Up/pvs_in_bag-pop-up.png') at 0x0000000005a37820>:
+  File "game/script.rpy", line 534, in script
+    pause
+  File "renpy/common/000statements.rpy", line 462, in execute_pause
+    renpy.pause()
+OSError: Couldn't find file 'Items Pop Up/pvs_in_bag-pop-up.png'.
 
 -- Full Traceback ------------------------------------------------------------
 
 Full traceback:
-  File "game/script.rpy", line 957, in script
-    call screen scene1
+  File "game/script.rpy", line 534, in script
+    pause
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 1968, in execute
     self.call("execute")
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 1950, in call
     return renpy.statements.call(method, parsed, *args, **kwargs)
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\statements.py", line 349, in call
     return method(parsed, *args, **kwargs)
-  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
-    store._return = renpy.call_screen(name, *args, **kwargs)
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\exports.py", line 3413, in call_screen
-    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
+  File "renpy/common/000statements.rpy", line 462, in execute_pause
+    renpy.pause()
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\exports.py", line 1661, in pause
+    rv = renpy.ui.interact(mouse='pause', type='pause', roll_forward=roll_forward, pause=delay, pause_modal=modal)
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ui.py", line 301, in interact
     rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\core.py", line 2165, in interact
@@ -82,9 +82,9 @@ Full traceback:
     filelike = renpy.loader.load(self.filename, directory="images")
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\loader.py", line 672, in load
     raise IOError("Couldn't find file '%s'." % name)
-OSError: Couldn't find file 'Items Pop Up/tape-pop-up.png'.
+OSError: Couldn't find file 'Items Pop Up/pvs_in_bag-pop-up.png'.
 
 Windows-10-10.0.19045 AMD64
 Ren'Py 8.2.1.24030407
 Forensics 1.0
-Thu Jun 13 03:03:29 2024
+Thu Jun 20 01:41:20 2024
