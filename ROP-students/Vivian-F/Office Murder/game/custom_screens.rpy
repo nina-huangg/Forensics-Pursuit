@@ -259,7 +259,7 @@ screen scene_deskfoot():
                 hotspot(130,100,1230,880) action [SetLocalVariable('good_water', True)] sensitive tools['water']     
                 hbox:
                     xpos 0.15 ypos 0.85
-                    textbutton('Click to mix: current ratio will result in a gooey-dry mixture'):
+                    textbutton('Click to mix: current ratio will result in a dry mixture'):
                         style 'custom_button'
                         action [SetLocalVariable('under_mix', True), Function(set_miss, 'mix_miss_solid'), Function(set_cursor, '')]
         showif under_mix:
@@ -268,7 +268,7 @@ screen scene_deskfoot():
                 hover "deskfoot_under_mix"
                 hbox:
                     xpos 0.15 ypos 0.85
-                    textbutton('A gooey-dry mixture is not what you want! Click here to add more water'):
+                    textbutton('A dry mixture is not what you want! Click here to add more water'):
                         style 'custom_button'
                         action [SetLocalVariable('under_add_water', True), Function(set_cursor, '')]
         showif under_add_water:
