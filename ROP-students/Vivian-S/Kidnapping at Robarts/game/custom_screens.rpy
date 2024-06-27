@@ -9,7 +9,7 @@ screen opening_screen():
         hotspot (1491, 198, 356, 102) action Jump("enter_splash_screen")
 
 screen splash_screen():
-    key "K_SPACE" action Jump("robarts_exterior")
+    key "K_SPACE" action Jump("study_room1")
 
 screen move_on():
     frame:
@@ -80,6 +80,160 @@ screen file_folder():
                     draggable True
         text "\n\n\n>>hit space to continue"
     key "K_SPACE" action Jump("inside_library")
+
+screen outside_study1():
+    frame:
+        xcenter 0.5 ycenter 0.5
+        hbox:
+            spacing 30
+            xsize 800
+            text "You found the correct study room, great job! Now, let's go inside and investigate. Before we do that, let's first put on our gloves! \n\n\n>> press space to continue"
+    key "K_SPACE" action Jump("gloves1")
+
+screen outside_study2():
+    imagebutton:
+        xalign 0.63
+        yalign 0.6
+        idle "doorknob_idle"
+        hover "doorknob_hover"
+        action Jump("study_room3")
+
+screen gloves():
+    imagebutton:
+        xalign 0.5
+        yalign 0.5
+        idle "gloves_box_idle"
+        hover "gloves_box_hover"
+        action Jump("gloves2")
+
+# -------- testing
+
+init python:
+    import pygame
+    import math
+ 
+ 
+    class TrackCursor(renpy.Displayable):
+ 
+        def __init__(self, child, paramod, **kwargs):
+ 
+            super(TrackCursor, self).__init__()
+ 
+            self.child = renpy.displayable(child)
+            self.x = 0
+            self.y = 0
+            self.actual_x = 0
+            self.actual_y = 0
+ 
+            self.paramod = paramod
+            self.last_st = 0
+ 
+ 
+ 
+        def render(self, width, height, st, at):
+ 
+            rv = renpy.Render(width, height)
+            minimum_speed = 0.5
+            maximum_speed = 3
+            speed = 1 + minimum_speed
+            mouse_distance_x = min(maximum_speed, max(minimum_speed, (self.x - self.actual_x)))
+            mouse_distance_y = (self.y - self.actual_y)
+            if self.x is not None:
+                st_change = st - self.last_st
+ 
+                self.last_st = st
+                self.actual_x = math.floor(self.actual_x + ((self.x - self.actual_x) * speed * (st_change )) * self.paramod)
+                self.actual_y = math.floor(self.actual_y + ((self.y - self.actual_y) * speed * (st_change)) * self.paramod)
+ 
+ 
+                if mouse_distance_y <= minimum_speed:
+                    mouse_distance_y = minimum_speed
+                elif mouse_distance_y >= maximum_speed:
+                    mouse_distance_y = maximum_speed
+ 
+                cr = renpy.render(self.child, width, height, st, at)
+                cw, ch = cr.get_size()
+                rv.blit(cr, (self.actual_x, self.actual_y))
+ 
+ 
+ 
+            renpy.redraw(self, 0)
+            return rv
+ 
+        def event(self, ev, x, y, st):
+            hover = ev.type == pygame.MOUSEMOTION
+            click = ev.type == pygame.MOUSEBUTTONDOWN
+            mousefocus = pygame.mouse.get_focused()
+            if hover:
+ 
+                if (x != self.x) or (y != self.y) or click:
+                    self.x = -x /self.paramod
+                    self.y = -y /self.paramod
+
+screen inside_study1():
+
+    # add TrackCursor("inside_study.png", 20)
+    add TrackCursor("inside_study.png", 70)
+
+    # door scratches
+    imagebutton:
+        xalign 0.9
+        yalign 0.45
+        idle "click1_idle"
+        hover "click1_hover"
+        action Jump("scratches")
+    
+    # under table
+    imagebutton:
+        xalign 0.01
+        yalign 0.8
+        idle "click2_idle"
+        hover "click2_hover"
+        action Jump("under_table")
+
+    # chair
+    imagebutton:
+        xalign 0.5
+        yalign 0.6
+        idle "click3_idle"
+        hover "click3_hover"
+        action Jump("chair")
+
+screen back_button1():
+    imagebutton:
+        xalign 0.05
+        yalign 0.8
+        idle "back_button_idle"
+        hover "back_button_hover"
+        action Jump("study_room3")
+
+screen gun_insert:
+    key "K_SPACE" action Jump("gun_front")
+
+screen gun_insert_tip:
+    key "K_SPACE" action Jump("gun_side")
+
+screen impression:
+    key "K_SPACE" action Jump("impression")
+
+screen impression_dry:
+    imagebutton:
+        xalign 0.65
+        yalign 0.5
+        idle "pvs_idle"
+        hover "pvs_hover"
+        action Jump("collect_impression")
+
+screen end:
+    frame:
+        xcenter 0.5 ycenter 0.5
+        hbox:
+            spacing 30
+            xsize 800
+            text "That's it, you're done!"
+    key "K_SPACE" action Jump("choose_location")
+
+# -------- testing
 
 screen task_1():
     frame:

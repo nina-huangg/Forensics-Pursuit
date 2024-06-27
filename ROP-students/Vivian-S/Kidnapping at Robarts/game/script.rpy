@@ -24,8 +24,9 @@ init python:
     config.keymap['dismiss'].append('K_LEFT')
     config.keymap['dismiss'].append('K_RIGHT')
 
-    # inventory -------------------------
+    # INVENTORY FUNCTIONS -------------------------
 
+    # updates inventory
     def inventoryUpdate(st):
         if inventory_drag == True:
             for item in inventory_sprites:
@@ -35,7 +36,8 @@ init python:
                     item.zorder = 99
             return 0
         return None
-    
+
+    # inventory events
     def inventoryEvents(event, x, y, at):
         global mousepos
         global dialogue
@@ -45,77 +47,140 @@ init python:
         if event.type == renpy.pygame_sdl2.MOUSEBUTTONUP:
             if event.button == 1:
                 for item1 in inventory_sprites:
-                    if item1.x <= x <= item1.x + item1.width and item1.y <= y <= item1.y + item1.height:
-                        inventory_drag = False
-                        i_combine = False
-                        ie_combine = False
-                        for item2 in inventory_sprites:
-                            items_overlap = checkItemsOverlap(item1, item2)
-                            if items_overlap == True:
-                                i_overlap = True
+                    if item1.visible == True:
+                        if item1.x <= x <= item1.x + item1.width and item1.y <= y <= item1.y + item1.height:
+                            inventory_drag = False
+                            i_combine = False
+                            ie_combine = False
+                            for item2 in inventory_sprites:
+                                items_overlap = checkItemsOverlap(item1, item2)
+                                if items_overlap == True:
+                                    i_overlap = True
 
-                                # if I need to use items on stuff, add those interactions here
-                                # item1 = object being dragged, item2 = object being itneracted with from 
-                                # feel free to combine with nina's drag and drop code
-                                if (item1.type == "matches" or item1.type == "lantern") and (item2.type == "matches" or item2.type == "lantern"):
-                                    i_combine = True
-                                    if item1.type == "matches":
-                                        removeInventoryItem(item1)
-                                    else:
-                                        removeInventoryItem(item2)
-                                    lantern_image = Image("Inventory Items/inventory-lantern-lit.png")
-                                    t = Transform(child = lantern_image, zoom = 0.5)
-                                    inventory_sprites[inventory_items.index("lantern")].set_child(t)
-                                    inventory_sprites[inventory_items.index("lantern")].item_image = lantern_image
-                                    inventory_sprites[inventory_items.index("lantern")].state = "lit"
-                                    renpy.show_screen("inspectItem", ["lantern"])
-                                    characterSay(who = "Claire", what = ["The lantern is now lit!"], inspectItem = True)
-                                    inventory_SM.redraw(0)
-                                    renpy.restart_interaction()
-                                    break
-                                else:
-                                    item1.x = item1.original_x
-                                    item1.y = item1.original_y
-                                    item1.zorder = 0
-                                    characterSay(who = "Claire", what = ["Hmm, that doesn't seem to work.", "Try something else."])
-                                    break
-                        if i_combine == False:
-                                for item3 in environment_sprites:
-                                    items_overlap = checkItemsOverlap(item1, item3)
-                                    if items_overlap == True:
-                                        ie_overlap = True
-                                        if item1.type == "tape" and item3.type == "box":
-                                            ie_combine = True
+                                    # if I need to use items on stuff, add those interactions here
+                                    # item1 = object being dragged, item2 = object being interacted with from 
+                                    # feel free to combine with nina's drag and drop code
+                                    if (item1.type == "matches" or item1.type == "lantern") and (item2.type == "matches" or item2.type == "lantern"):
+                                        i_combine = True
+                                        if item1.type == "matches":
                                             removeInventoryItem(item1)
-                                            removeEnvironmentItem(item3)
-                                            addToInventory(["secateur", "matches"])
-                                            renpy.show_screen("inspectItem", ["secateur", "matches"])
-                                            characterSay(who = "Claire", what = ["This tool might come in handy.", "But for what?"], inspectItem = True)
-                                            inventory_SM.redraw(0)
-                                            environment_SM.redraw(0)
-                                            renpy.restart_interaction()
-                                            break
-                                        elif item1.type == "tape" and item3.type == "door-vines":
-                                            ie_combine = True
-                                            removeInventoryItem(item1)
-                                            removeEnvironmentItem(item3)
-
-                                            characterSay(who = "", what = ["Great job!"], jump_to = "setupScene2") # jump to setupScene2 with dialogue first.
-                                            addToInventory(["tape"])
-                                            inventory_SM.redraw(0)
-                                            environment_SM.redraw(0)
-                                            renpy.restart_interaction()
-                                            break
                                         else:
-                                            item1.x = item1.original_x
-                                            item1.y = item1.original_y
-                                            item1.zorder = 0
-                                            characterSay(who = "Claire", what = ["Hmm, that doesn't seem to work.", "Try something else."])
-                                            break
-                        if i_combine == False and ie_combine == False:
-                            item1.x = item1.original_x
-                            item1.y = item1.original_y
-                            item1.zorder = 0
+                                            removeInventoryItem(item2)
+                                        lantern_image = Image("Inventory Items/inventory-lantern-lit.png")
+                                        t = Transform(child = lantern_image, zoom = 0.5)
+                                        inventory_sprites[inventory_items.index("lantern")].set_child(t)
+                                        inventory_sprites[inventory_items.index("lantern")].item_image = lantern_image
+                                        inventory_sprites[inventory_items.index("lantern")].state = "lit"
+                                        renpy.show_screen("inspectItem", ["lantern"])
+                                        characterSay(who = "Claire", what = ["The lantern is now lit!"], inspectItem = True)
+                                        inventory_SM.redraw(0)
+                                        renpy.restart_interaction()
+                                        break
+                                    else:
+                                        item1.x = item1.original_x
+                                        item1.y = item1.original_y
+                                        item1.zorder = 0
+                                        characterSay(who = "Claire", what = ["Hmm, that doesn't seem to work.", "Try something else."])
+                                        break
+                            if i_combine == False:
+                                    for item3 in environment_sprites:
+                                        items_overlap = checkItemsOverlap(item1, item3)
+                                        if items_overlap == True:
+                                            ie_overlap = True
+                                            if item1.type == "tape" and item3.type == "box":
+                                                ie_combine = True
+                                                removeInventoryItem(item1)
+                                                removeEnvironmentItem(item3)
+                                                addToInventory(["secateur", "matches"])
+                                                renpy.show_screen("inspectItem", ["secateur", "matches"])
+                                                characterSay(who = "Claire", what = ["This tool might come in handy.", "But for what?"], inspectItem = True)
+                                                inventory_SM.redraw(0)
+                                                environment_SM.redraw(0)
+                                                renpy.restart_interaction()
+                                                break
+                                            elif item1.type == "gun_none" and item3.type == "box":
+                                                ie_combine = True
+                                                removeInventoryItem(item1)
+                                                # removeEnvironmentItem(item3
+                                                renpy.show_screen("gun_insert")
+                                                inventory_SM.redraw(0)
+                                                environment_SM.redraw(0)
+                                                renpy.restart_interaction()
+                                                break
+                                            elif (item1.type == "cartridges" and item3.type == "gun_front") or (item1.type == "cartridges" and item3.type == "box"):
+                                                ie_combine = True
+                                                removeInventoryItem(item1)
+                                                # removeEnvironmentItem(item3)
+                                                addToInventory(["gun_cart"])
+                                                renpy.show_screen("inspectItem", ["gun_cart"])
+                                                inventory_SM.redraw(0)
+                                                environment_SM.redraw(0)
+                                                renpy.restart_interaction()
+                                                break
+                                            elif item1.type == "gun_cart" and item3.type == "box":
+                                                ie_combine = True
+                                                removeInventoryItem(item1)
+                                                # removeEnvironmentItem(item3
+                                                renpy.show_screen("gun_insert_tip")
+                                                inventory_SM.redraw(0)
+                                                environment_SM.redraw(0)
+                                                renpy.restart_interaction()
+                                                break
+                                            elif (item1.type == "tip" and item3.type == "gun_cart") or (item1.type == "tip" and item3.type == "box"):
+                                                ie_combine = True
+                                                removeInventoryItem(item1)
+                                                removeEnvironmentItem(item3)
+                                                addToInventory(["gun_all"])
+                                                renpy.show_screen("inspectItem", ["gun_all"])
+                                                renpy.show_screen("impression")
+                                                inventory_SM.redraw(0)
+                                                environment_SM.redraw(0)
+                                                renpy.restart_interaction()
+                                                break
+                                            elif item1.type == "tape" and item3.type == "door-vines":
+                                                ie_combine = True
+                                                removeInventoryItem(item1)
+                                                removeEnvironmentItem(item3)
+                                                characterSay(who = "", what = ["Great job!"], jump_to = "setupScene2") # jump to setupScene2 with dialogue first.
+                                                addToInventory(["tape"])
+                                                inventory_SM.redraw(0)
+                                                environment_SM.redraw(0)
+                                                renpy.restart_interaction()
+                                                break
+                                            elif item1.type == "ziploc_bag" and item3.type == "lantern":
+                                                ie_combine = True
+                                                removeInventoryItem(item1)
+                                                removeEnvironmentItem(item3)
+                                                addToInventory(["jar_in_bag"])
+                                                renpy.show_screen("inspectItem", ["jar_in_bag"])
+                                                # characterSay(who = "", what = ["Great job!"], jump_to = "setupScene2") # jump to setupScene2 with dialogue first.
+                                                # addToInventory(["tape"])
+                                                inventory_SM.redraw(0)
+                                                environment_SM.redraw(0)
+                                                renpy.restart_interaction()
+                                                break
+                                            elif item1.type == "ziploc_bag" and item3.type == "duct_tape":
+                                                ie_combine = True
+                                                removeInventoryItem(item1)
+                                                removeEnvironmentItem(item3)
+                                                addToInventory(["tape_in_bag"])
+                                                renpy.show_screen("inspectItem", ["tape_in_bag"])
+                                                # characterSay(who = "", what = ["Great job!"], jump_to = "setupScene2") # jump to setupScene2 with dialogue first.
+                                                # addToInventory(["tape"])
+                                                inventory_SM.redraw(0)
+                                                environment_SM.redraw(0)
+                                                renpy.restart_interaction()
+                                                break
+                                            else:
+                                                item1.x = item1.original_x
+                                                item1.y = item1.original_y
+                                                item1.zorder = 0
+                                                characterSay(who = "Claire", what = ["Hmm, that doesn't seem to work.", "Try something else."])
+                                                break
+                            if i_combine == False and ie_combine == False:
+                                item1.x = item1.original_x
+                                item1.y = item1.original_y
+                                item1.zorder = 0
 
         if event.type == renpy.pygame_sdl2.MOUSEMOTION:
             mousepos = (x, y)
@@ -153,9 +218,10 @@ init python:
                             addToInventory(["tape"])
                         elif item.type == "lantern":
                             addToInventory(["lantern"])
-                        elif item.type == "box":
-                            # dialogue box pop-up
-                            characterSay(who = "Vivian", what = ["Hmm, this box is locked. I think it needs a key."])
+                        elif item.type == "gun_front":
+                            removeEnvironmentItem(item)
+                        elif item.type == "gun_cart":
+                            removeEnvironmentItem(item)
                         elif item.type == "door-vines":
                             pass
     
@@ -183,32 +249,35 @@ init python:
                 renpy.restart_interaction()
 
     def repositionInventoryItems():
-        global inventory_lb_enabled
-        global inventory_rb_enabled
+        global inventory_ub_enabled
+        global inventory_db_enabled
 
         for i, item in enumerate(inventory_sprites):
             if i == 0:
                 item.x = inventory_first_slot_x
+                item.y = inventory_first_slot_y
                 item.original_x = item.x
+                item.original_y = item.y
             else:
-                item.x = (inventory_first_slot_x + inventory_slot_size[0] * i) + (inventory_slot_padding * i)
+                item.x = inventory_first_slot_x
                 item.original_x = item.x
-            # if item.x < inventory_first_slot_x or item.x > (inventory_first_slot_x + (item.width * 7)) + (inventory_slot_padding * 5):
-            #     setItemVisibility(item = item, visible = False)
-            # elif item != "":
-            #     setItemVisibility(item = item, visible = True)
+                item.y = (inventory_first_slot_y + inventory_slot_size[0] * i) + (inventory_slot_padding * i)
+                # (inventory_first_slot_x + inventory_slot_size[0] * i) + (inventory_slot_padding * i)
+                item.original_y = item.y
+            if item.y < inventory_first_slot_y or item.y > (inventory_first_slot_y + (item.height * 5)) + (inventory_slot_padding * 3):
+                setItemVisibility(item = item, visible = False)
+            elif item != "": # prevent errors
+                setItemVisibility(item = item, visible = True)
 
-        # if len(inventory_sprites) > 0:
-        #     if inventory_sprites[-1].visible == True:
-        #         inventory_rb_enabled = False
-        #     else:
-        #         inventory_rb_enabled = True
-        #     if inventory_sprites[0].visible == True:
-        #         inventory_lb_enabled = False
-        #     else:
-        #         inventory_lb_enabled = True
-
-        # renpy.retain_after_load()
+        if len(inventory_sprites) > 0:
+            if inventory_sprites[-1].visible == True:
+                inventory_db_enabled = False
+            else:
+                inventory_db_enabled = True
+            if inventory_sprites[0].visible == True:
+                inventory_ub_enabled = False
+            else:
+                inventory_ub_enabled = True
 
 
     def addToInventory(items):
@@ -227,9 +296,9 @@ init python:
             inventory_sprites[-1].height = inventory_slot_size[1]
             inventory_sprites[-1].type = item
             inventory_sprites[-1].item_image = item_image
-            inventory_sprites[-1].y = 940
-            inventory_sprites[-1].original_y = 940
-            inventory_sprites[-1].original_x = 0
+            inventory_sprites[-1].y = 500
+            inventory_sprites[-1].original_y = 500
+            inventory_sprites[-1].original_x = 1000
             inventory_sprites[-1].visible = True
 
             if item == "lantern":
@@ -261,88 +330,109 @@ init python:
         inventory_items.pop(inventory_items.index(item.type))
         repositionInventoryItems()
 
-
     def inventoryArrows(button):
-        pass
 
-     # inventory -------------------------
+        # determines if arrow buttons should be enabled or disabled - might change to up and down
+        global inventory_ub_enabled
+        global inventory_db_enabled
+
+        # check if we have more than 5 items in inventory (5 is max)
+        if len(inventory_sprites) > 5:
+            citem = "" # current item
+
+            # iterate through inventory items
+            for i, item in enumerate(inventory_sprites):
+                # up button 
+                if button == "down" and inventory_db_enabled == True:
+                    # if last item not visible meaning we have at least 1 extra item
+                    if inventory_sprites[-1].visible == False:
+                        # shift inventory items up
+                        item.y -= item.height + inventory_slot_padding
+                        citem = item
+                elif button == "up" and inventory_ub_enabled == True:
+                    if inventory_sprites[0].visible == False:
+                        reversed_index = (len(inventory_sprites) - 1) - i
+                        inventory_sprites[reversed_index].y += item.height + inventory_slot_padding
+                        citem = inventory_sprites[reversed_index]
+                # checks if item was moved beyond first or beyond last item in inventory slots
+                if citem != "" and (citem.y < inventory_first_slot_y or citem.y > (inventory_first_slot_y + (citem.height * 5)) + (inventory_slot_padding * 3)):
+                    setItemVisibility(item = citem, visible = False)
+
+                elif citem != "": # prevent errors
+                    setItemVisibility(item = citem, visible = True)
+
+            if inventory_sprites[-1].visible == True:
+                inventory_db_enabled = False
+            else:
+                inventory_db_enabled = True
+            if inventory_sprites[0].visible == True:
+                inventory_ub_enabled = False
+            else:
+                inventory_ub_enabled = True
+                
+            if citem != "":
+                inventory_SM.redraw(0)
+                renpy.restart_interaction
+
+    def setItemVisibility(item, visible):
+        if visible == False:
+            item.visible = False
+            t = Transform(child = item.item_image, zoom = 0.5, alpha = 0)
+            item.set_child(t)
+        else:
+            item.visible = True
+            t = Transform(child = item.item_image, zoom = 0.5, alpha = 100)
+            item.set_child(t)
+        inventory_SM.redraw(0)
+
+# DEFINITIONS -------------------------
 
 image string_tape_left = "string_tape_left.png"
 define s = Character("Supervisor")
 
+# LABELS -------------------------
+
 ### The game starts here.
 label start:
-    # $ = global variable
+    # global variables
     $config.rollback_enabled = False
     $quick_menu = False
     $environment_SM = SpriteManager(event = environmentEvents)
     $inventory_SM = SpriteManager(update = inventoryUpdate, event = inventoryEvents)
     $environment_sprites = []
     $inventory_sprites = []
+    $tool_sprites = []
     $environment_items = []
     $inventory_items = []
     $environment_item_names = []
-    # objects
-    $inventory_item_names = ["Tape", "Lantern", "Matches", "Secateur"] 
+    $inventory_item_names = ["Tape", "Lantern", "Matches", "Secateur"] # objects
     $current_scene = "scene1"
-    $inventory_rb_enabled = False
-    $inventory_lb_enabled = False
+    $inventory_db_enabled = False
+    $inventory_ub_enabled = False
     $inventory_slot_size = (int(215 / 2), int(196 / 2))
     $inventory_slot_padding = 120 / 2
-    # 22
-    $inventory_first_slot_x = 550
-    # 350
+    $inventory_first_slot_x = 1740
+    $inventory_first_slot_y = 200
     $dialogue = {}
     $inventory_drag = False
     $item_dragged = ""
     $mousepos = (0.0, 0.0)
     $i_overlap = False
     $ie_overlap = False
+    # $my_drawing = 
+    # call opening screen
     call screen opening_screen
     
-
-
+# starting screen 
 label enter_splash_screen:
     scene entering_splash_screen
     with Dissolve(.8)
     call screen splash_screen
 
-# label instructions_text:
-#     scene instructions_bg
-#     with Dissolve(.8)
-#     call screen instructions_text_screen
-
-# label exposition:
-#     play music "ambient.mp3" volume 0.5
-#     hide screen instructions_text_screen
-#     jump robarts_exterior
-
-# label coffee:
-#     call screen coffee_bitter
-
-# label newspaper:
-#     call screen newspaper_close_up
-
-# label phone:
-#     scene instructions_bg_idle
-#     play sound "phone.mp3"
-#     pause
-#     call screen phone_ring()
-
-
-# label supervisor_call:
-#     "Supervisor: Apologies for calling you in on a weekend but we need you on site ASAP! \n\n\n>>hit space to continue"
-#     "Supervisor: Come to Robarts Library. There's been a robbery! \n\n\n>>hit space to continue"
-#     "You quickly get up and head to Robarts. \n\n\n>>hit space to continue"
-#     scene black
-#     play sound "driving.mp3"
-#     "10 minutes later... \n\n\n>>hit space to continue"
-#     jump robarts_exterior
-
+# debrief
 label robarts_exterior:
     stop music fadeout 1.0
     scene robarts_exterior
-
     "You finally arrive at Robarts and spot your supervisor. \n\n\n>>hit space to continue"
     
     show supervisor
@@ -350,34 +440,392 @@ label robarts_exterior:
     s "You're lucky I haven't fired you."
     s "Anyways, a female student went missing a couple days ago and was last seen at Robarts Library, specifically in the Robarts Commons."
     s "Witnesses close to the student were asked to come in for questioning and sources close to the student claim the student was staying late studying for a chemistry exam and never returned home nor showed up for their exam."
+    s "Our team already secured the area and identified the location where the victim was kidnapped."
     s "Our forensics team also retrieved some critical information about the student that you might want to look at."
     s "Here, take a look."
     scene folder
     call screen file_folder()
 
+# INSIDE STUDY ROOM -------------------------
+
+label study_room1:
+    scene outside_study
+    call screen outside_study1
+
+label gloves1:
+    show hands
+    call screen gloves
+
+label gloves2:
+    hide hands
+    show gloved_hands
+    pause
+    "Great job, now click the doorknob to head inside!"
+    hide gloved_hands
+    
+label study_room2:
+    call screen outside_study2
+
+label study_room3:
+    scene inside_study
+    call screen inside_study1
+
+label under_table:
+    scene underneath_table
+    show screen study_room3_inventory
+    show screen back_button1
+    jump setupScene1
+
+label chair:
+    scene chair_closeup
+    show screen back_button1
+    jump setupScene2
+
+label scratches:
+    scene door_closeup
+    show screen back_button1
+    jump setupScene3 
+    # show expression my_drawing
+    hide expression my_drawing
+    # show screen study_room3_inventory
+   
+label gun_front:
+    jump setupScene4
+
+label gun_side:
+    jump setupScene5
+
+label impression:
+    $my_drawing = draw_logic.Draw.main(background = "door_closeup.png", start_color = "#ffc157", start_width = 50)
+
+
+image timer:
+    "timer1.png"
+    0.5
+    "timer2.png"
+    0.5
+    "timer3.png"
+    0.5
+    "timer4.png"
+    0.5
+    "timer5.png"
+    0.5
+    "timer6.png"
+    0.5
+    "timer7.png"
+    0.5
+    "timer8.png"
+    0.5
+    "timer9.png"
+    0.5
+    "timer10.png"
+    # repeat
+
+label timer:
+    show screen impression_dry
+    show timer at left
+    pause
+    
+
+label collect_impression:
+    python:
+        addToInventory(["pvs_in_bag"])
+    
+    pause
+
+# label added_cartridges:
+#     jump setupScene3 
+#     python:
+#         addToInventory(["gun_cart"])
+#     pause
+    
+
+# INVENTORY SCREENS ------------------------- (might move to custom_screens)
+
+# this the real one
+screen study_room3_inventory:
+    zorder 1
+    # image "taped_left.png" xpos 0 ypos 0.8 at half_size
+    imagebutton auto "UI/inventory-icon-%s.png" action If(renpy.get_screen("inventory") == None, true= Show("inventory"), false= Hide("inventory")) xpos 0.03 ypos 0.3 at half_size
+    imagebutton auto "UI/tool-inventory-icon-%s.png" action If(renpy.get_screen("toolbox") == None, true= Show("toolbox"), false= Hide("toolbox")) xpos 0.03 ypos 0.1 at half_size
+
+
+screen UI:
+    zorder 1
+    image "UI/inventory-icon-bg.png" xpos 0 ypos 0.8 at half_size
+    imagebutton auto "UI/inventory-icon-%s.png" action If(renpy.get_screen("inventory") == None, true= Show("inventory"), false= Hide("inventory")) xpos 0.03 ypos 0.5 at half_size
+
+# evidence:
+screen inventory:
+    zorder 3
+    image "UI/inventory-bg.png" xpos 0.87 ypos 0.01 at half_size
+    image "UI/inventory-slots.png" xpos 0.897 ypos 0.15 at half_size
+    imagebutton idle If(inventory_db_enabled == True, true= "UI/inventory-arrow-down-enabled-idle.png", false= "UI/inventory-arrow-down-disabled.png") hover If(inventory_db_enabled == True, true= "UI/inventory-arrow-down-enabled-hover.png", false= "UI/inventory-arrow-down-disabled.png") action Function(inventoryArrows, button = "down") xpos 0.914 ypos 0.92 at half_size
+    imagebutton idle If(inventory_ub_enabled == True, true= "UI/inventory-arrow-up-enabled-idle.png", false= "UI/inventory-arrow-up-disabled.png") hover If(inventory_ub_enabled == True, true= "UI/inventory-arrow-up-enabled-hover.png", false= "UI/inventory-arrow-up-disabled.png") action Function(inventoryArrows, button = "up") xpos 0.914 ypos 0.06 at half_size
+
+    add inventory_SM
+
+# toolbox:
+screen toolbox:
+    zorder 3
+    image "UI/tools-bg.png" xpos 0.87 ypos 0.01 at half_size
+    image "UI/inventory-slots.png" xpos 0.897 ypos 0.15 at half_size
+    imagebutton idle If(inventory_db_enabled == True, true= "UI/inventory-arrow-down-enabled-idle.png", false= "UI/inventory-arrow-down-disabled.png") hover If(inventory_db_enabled == True, true= "UI/inventory-arrow-down-enabled-hover.png", false= "UI/inventory-arrow-down-disabled.png") action Function(inventoryArrows, button = "down") xpos 0.914 ypos 0.92 at half_size
+    imagebutton idle If(inventory_ub_enabled == True, true= "UI/inventory-arrow-up-enabled-idle.png", false= "UI/inventory-arrow-up-disabled.png") hover If(inventory_ub_enabled == True, true= "UI/inventory-arrow-up-enabled-hover.png", false= "UI/inventory-arrow-up-disabled.png") action Function(inventoryArrows, button = "up") xpos 0.914 ypos 0.06 at half_size
+    add inventory_SM
+
+# inventory item menu
+screen inventoryItemMenu(item):
+    zorder 7
+    frame:
+        xysize (inventory_slot_size[0], inventory_slot_size[1])
+        background "#FFFFFF30"
+        xpos int(item.x)
+        ypos int(item.y)
+        imagebutton auto "UI/view-inventory-item-%s.png" align (0.0, 0.5) at half_size action [Show("inspectItem", items = [item.type]), Hide("inventoryItemMenu")]
+        imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [Function(startDrag, item = item), Hide("inventoryItemMenu")]
+
+screen inspectItem(items):
+    modal True
+    zorder 4
+    button:
+        xfill True
+        yfill True
+        action If(len(items) > 1, true = RemoveFromSet(items, items[0]), false= [Hide("inspectItem"), If(len(dialogue) > 0, true= Show("characterSay"), false= NullAction())])
+        image "Items Pop Up/items-pop-up-bg.png" align (0.5, 0.5) at half_size
+
+        python:
+            item_name = ""
+            item_desc = ""
+            for name in inventory_item_names:
+                temp_name = name.replace(" ", "-")
+                if temp_name.lower() == items[0]:
+                    item_name = name
+
+        text "{}".format(item_name) size 50 align (0.5, 0.6) color "#000000"
+        if items[0] == "lantern":
+            $lantern_state = inventory_sprites[inventory_items.index("lantern")].state
+            image "Items Pop Up/{}-{}-pop-up.png".format("lantern", lantern_state) align (0.5, 0.5) at half_size
+        else:
+            image "Items Pop Up/{}-pop-up.png".format(items[0]) align (0.5, 0.5) at half_size
+
+
+screen characterSay(who = None, what = None, jump_to = None):
+    modal True
+    zorder 6
+    style_prefix "say"
+
+    window:
+        id "window"
+        window:
+            padding (20, 20)
+            id "namebox"
+            style "namebox"
+            if who is not None:
+                text who id "who"
+            else:
+                text dialogue["who"]
+
+        if what is not None:
+            text what id "what" xpos 0.25 ypos 0.4 xanchor 0.0
+        else:
+            text dialogue["what"][0] xpos 0.25 ypos 0.4 xanchor 0.0
+
+    button:
+        xfill True
+        yfill True
+        if what is None:
+            action If(len(dialogue["what"]) > 1, true= RemoveFromSet(dialogue["what"], dialogue["what"][0]), false= [Hide("characterSay"), SetVariable("dialogue", {}), If(jump_to is not None, true = Jump("{}".format(jump_to)), false = NullAction())])
+        else:
+            action [Return(True), If(jump_to is not None, true = Jump("{}".format(jump_to)), false = NullAction())]
+
+
+    ## If there's a side image, display it above the text. Do not display on the
+    ## phone variant - there's no room.
+    if not renpy.variant("small"):
+        add SideImage() xalign 0.0 yalign 1.0
+
+screen scene1:
+    add environment_SM
+
+label setupScene1:
+    # environment items to interact with
+    $environment_items = ["box", "door-vines", "tape","lantern"]
+
+    python:
+        for item in environment_items:
+            idle_image = Image("Environment Items/{}-idle.png".format(item))
+            hover_image = Image("Environment Items/{}-hover.png".format(item))
+            t = Transform(child= idle_image, zoom = 0.5)
+            environment_sprites.append(environment_SM.create(t))
+            environment_sprites[-1].type = item
+            environment_sprites[-1].idle_image = idle_image
+            environment_sprites[-1].hover_image = hover_image
+
+            if item == "box":
+                environment_sprites[-1].width = 1293 / 2
+                environment_sprites[-1].height = 360 / 2
+                environment_sprites[-1].x = 598
+                environment_sprites[-1].y = 3000
+            elif item == "door-vines":
+                environment_sprites[-1].width = 2500 / 2
+                environment_sprites[-1].height = 696 / 2
+                environment_sprites[-1].x = 2000
+                environment_sprites[-1].y = 550
+            elif item == "tape":
+                environment_sprites[-1].width = 101 / 2
+                environment_sprites[-1].height = 55 / 2
+                environment_sprites[-1].x = 1020
+                environment_sprites[-1].y = 430
+            elif item == "lantern":
+                environment_sprites[-1].width = 123 / 2
+                environment_sprites[-1].height = 181 / 2
+                environment_sprites[-1].x = 1200
+                environment_sprites[-1].y = 355
+        addToInventory(["tape"])
+        addToInventory(["ziploc_bag"])
+
+    # scene scene-1-bg at half_size # change as necessary
+    call screen scene1
+
+label setupScene2:
+    # environment items to interact with
+    $environment_items = ["box", "door-vines", "lantern", "duct_tape"]
+
+    python:
+        for item in environment_items:
+            idle_image = Image("Environment Items/{}-idle.png".format(item))
+            hover_image = Image("Environment Items/{}-hover.png".format(item))
+            t = Transform(child= idle_image, zoom = 0.5)
+            environment_sprites.append(environment_SM.create(t))
+            environment_sprites[-1].type = item
+            environment_sprites[-1].idle_image = idle_image
+            environment_sprites[-1].hover_image = hover_image
+
+            if item == "box":
+                environment_sprites[-1].width = 1293 / 2
+                environment_sprites[-1].height = 360 / 2
+                environment_sprites[-1].x = 598
+                environment_sprites[-1].y = 3000
+            elif item == "door-vines":
+                environment_sprites[-1].width = 2500 / 2
+                environment_sprites[-1].height = 696 / 2
+                environment_sprites[-1].x = 2000
+                environment_sprites[-1].y = 550
+            elif item == "duct_tape":
+                environment_sprites[-1].width = 376 / 2
+                environment_sprites[-1].height = 540 / 2
+                environment_sprites[-1].x = 1000
+                environment_sprites[-1].y = 500
+            elif item == "lantern":
+                environment_sprites[-1].width = 123 / 2
+                environment_sprites[-1].height = 181 / 2
+                environment_sprites[-1].x = 5000
+                environment_sprites[-1].y = 355
+        addToInventory(["ziploc_bag"])
+
+    # scene scene-1-bg at half_size # change as necessary
+    call screen scene1
+
+label setupScene3:
+    # environment items to interact with
+    $environment_items = ["box", "cartridges", "gun_none", "tip"]
+
+    python:
+        for item in environment_items:
+            idle_image = Image("Environment Items/{}-idle.png".format(item))
+            hover_image = Image("Environment Items/{}-hover.png".format(item))
+            t = Transform(child= idle_image, zoom = 0.5)
+            environment_sprites.append(environment_SM.create(t))
+            environment_sprites[-1].type = item
+            environment_sprites[-1].idle_image = idle_image
+            environment_sprites[-1].hover_image = hover_image
+
+            if item == "box":
+                environment_sprites[-1].width = 2500 / 2
+                environment_sprites[-1].height = 2037 / 2
+                environment_sprites[-1].x = 400
+                environment_sprites[-1].y = 50
+        addToInventory(["gun_none"])
+        addToInventory(["cartridges"])
+        addToInventory(["tip"])
+
+    # scene scene-1-bg at half_size # change as necessary
+    call screen scene1
+
+label setupScene4:
+    # environment items to interact with
+    $environment_items = ["gun_front"]
+
+    python:
+        for item in environment_items:
+            idle_image = Image("Environment Items/{}-idle.png".format(item))
+            hover_image = Image("Environment Items/{}-hover.png".format(item))
+            t = Transform(child= idle_image, zoom = 0.5)
+            environment_sprites.append(environment_SM.create(t))
+            environment_sprites[-1].type = item
+            environment_sprites[-1].idle_image = idle_image
+            environment_sprites[-1].hover_image = hover_image
+
+            if item == "gun_front":
+                environment_sprites[-1].width = 2500 / 2
+                environment_sprites[-1].height = 2037 / 2
+                environment_sprites[-1].x = 1000
+                environment_sprites[-1].y = 400
+
+    # scene scene-1-bg at half_size # change as necessary
+    call screen scene1
+
+
+label setupScene5:
+    # environment items to interact with
+    $environment_items = ["box", "gun_cart"]
+
+    python:
+        for item in environment_items:
+            idle_image = Image("Environment Items/{}-idle.png".format(item))
+            hover_image = Image("Environment Items/{}-hover.png".format(item))
+            t = Transform(child= idle_image, zoom = 0.5)
+            environment_sprites.append(environment_SM.create(t))
+            environment_sprites[-1].type = item
+            environment_sprites[-1].idle_image = idle_image
+            environment_sprites[-1].hover_image = hover_image
+            if item == "box":
+                environment_sprites[-1].width = 2500 / 2
+                environment_sprites[-1].height = 2037 / 2
+                environment_sprites[-1].x = 4000
+                environment_sprites[-1].y = 50
+            elif item == "gun_cart":
+                environment_sprites[-1].width = 2500 / 2
+                environment_sprites[-1].height = 2037 / 2
+                environment_sprites[-1].x = 800
+                environment_sprites[-1].y = 400
+
+    # scene scene-1-bg at half_size # change as necessary
+    call screen scene1
+
+transform half_size:
+    zoom 0.5
+
+
+# NOT USED RN ------------------------------------------------------------------------------------------------
+
+# end debrief, go inside library - not used rn
 label inside_library:
     scene robarts_exterior
     show supervisor
-    s "Let's have a look and secure the area."
+    s "Hopefully that information should be sufficient to identify the location of the crime."
+    s "Let's head inside."
     scene task1
     pause
     hide string_tape_left
     scene main_lib_interior
     call screen task_1()
 
+# tape - not used rn
 label tape:
     call screen tape()
-
-label footprints:
-    call screen footprints()
-
-label taped:
-    if front_directions['left']:
-        play sound "tape.mp3"
-        scene left_taped
-    elif front_directions['right']:
-        play sound "tape.mp3"
-        scene right_taped
+    # remember to use tape.mp3
 
 label instructions_key_arrows:
     #show screen move_on
@@ -386,56 +834,45 @@ label instructions_key_arrows:
     #hide screen move_on
     call screen instructions_key_screen()
 
-label choose_location:
-    menu:
-        "Explore outside": 
-            call screen robarts_exterior_3()
-        "Explore inside":
-            scene interior
-            call screen robarts_interior()
+# label jump_directions:
+#     hide screen opening
+#     if middle:
+#         if front_directions['up']:
+#             $ curr_directions['up'] = True
+#             scene front_up
+#             show screen opening('looking up')
+#         elif front_directions['down']:
+#             $ curr_directions['down'] = True
+#             scene front_down
+#             show screen opening('looking down')
+#             show screen toolbox
+#         elif front_directions['right']:
+#             $ curr_directions['right'] = True
+#             scene right
+#             show screen opening('looking to the right')
+#         elif front_directions['left']:
+#             $ curr_directions['left'] = True
+#             scene left
+#             show screen opening('looking to the left')
+#         $ middle = False
+#         call screen instructions_key_screen()
 
-label look_around:
-    
-
-label jump_directions:
-    hide screen opening
-    if middle:
-        if front_directions['up']:
-            $ curr_directions['up'] = True
-            scene front_up
-            show screen opening('looking up')
-        elif front_directions['down']:
-            $ curr_directions['down'] = True
-            scene front_down
-            show screen opening('looking down')
-            show screen toolbox
-        elif front_directions['right']:
-            $ curr_directions['right'] = True
-            scene right
-            show screen opening('looking to the right')
-        elif front_directions['left']:
-            $ curr_directions['left'] = True
-            scene left
-            show screen opening('looking to the left')
-        $ middle = False
-        call screen instructions_key_screen()
-
-    else:
-        scene robarts_outside_2
-        show screen opening('back in center')
-        python:
-            middle = True
-            for c_d in front_directions:
-                front_directions[c_d] = False
-            for c_d in curr_directions:
-                curr_directions[c_d] = False
-        call screen instructions_move_on_screen
-        call screen instructions_key_screen()
+#     else:
+#         scene robarts_outside_2
+#         show screen opening('back in center')
+#         python:
+#             middle = True
+#             for c_d in front_directions:
+#                 front_directions[c_d] = False
+#             for c_d in curr_directions:
+#                 curr_directions[c_d] = False
+#         call screen instructions_move_on_screen
+#         call screen instructions_key_screen()
 
 label keep_exploring:
     call screen instructions_key_screen()
 
-# ---------------------
+# TAPE + NAVIGATION ---------------------
 label interior_scene2:
     scene interior_2
     show screen taped_left
@@ -457,19 +894,19 @@ label r4:
     scene right_4
     pause
 
-label setupScene2:
-    # show screen tape_left
-    show string_tape_left:
-        xalign 0.3
-        yalign 0.5
+# label setupScene2:
+#     # show screen tape_left
+#     show string_tape_left:
+#         xalign 0.3
+#         yalign 0.5
     #xpos 200 ypos 550 at half_size
 
 screen taped_left:
     zorder 1
     # image "taped_left.png" xpos 0 ypos 0.8 at half_size
-    imagebutton auto "UI/inventory-icon-%s.png" action If(renpy.get_screen("inventory") == None, true= Show("inventory"), false= Hide("inventory")) xpos 0.03 ypos 0.825 at half_size
+    imagebutton auto "UI/inventory-icon-%s.png" action If(renpy.get_screen("inventory") == None, true= Show("inventory"), false= Hide("inventory")) xpos 0.03 ypos 0.5 at half_size
 
-# ---------------------
+# NINA'S CODE ---------------------
 
 ### entering scene 
 label enter_scene:
@@ -827,134 +1264,3 @@ label enter_scene:
 #     return
 
 
-# ------------ inventory
-
-screen UI:
-    zorder 1
-    image "UI/inventory-icon-bg.png" xpos 0 ypos 0.8 at half_size
-    imagebutton auto "UI/inventory-icon-%s.png" action If(renpy.get_screen("inventory") == None, true= Show("inventory"), false= Hide("inventory")) xpos 0.03 ypos 0.825 at half_size
-
-screen inventory:
-    zorder 3
-    image "UI/inventory-bg.png" xpos 0.17 ypos 0.8 at half_size
-    image "UI/inventory-slots.png" xpos 0.274 ypos 0.845 at half_size
-    imagebutton idle If(inventory_rb_enabled == True, true= "UI/inventory-arrow-right-enabled-idle.png", false= "UI/inventory-arrow-right-disabled.png") hover If(inventory_rb_enabled == True, true= "UI/inventory-arrow-right-enabled-hover.png", false= "UI/inventory-arrow-right-disabled.png") action Function(inventoryArrows, button = "right") xpos 0.89 ypos 0.88 at half_size
-    imagebutton idle If(inventory_lb_enabled == True, true= "UI/inventory-arrow-left-enabled-idle.png", false= "UI/inventory-arrow-left-disabled.png") hover If(inventory_lb_enabled == True, true= "UI/inventory-arrow-left-enabled-hover.png", false= "UI/inventory-arrow-left-disabled.png") action Function(inventoryArrows, button = "left") xpos 0.21 ypos 0.88 at half_size
-
-    add inventory_SM
-
-# inventory item menu
-screen inventoryItemMenu(item):
-    zorder 7
-    frame:
-        xysize (inventory_slot_size[0], inventory_slot_size[1])
-        background "#FFFFFF30"
-        xpos int(item.x)
-        ypos int(item.y)
-        imagebutton auto "UI/view-inventory-item-%s.png" align (0.0, 0.5) at half_size action [Show("inspectItem", items = [item.type]), Hide("inventoryItemMenu")]
-        imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [Function(startDrag, item = item), Hide("inventoryItemMenu")]
-
-screen inspectItem(items):
-    modal True
-    zorder 4
-    button:
-        xfill True
-        yfill True
-        action If(len(items) > 1, true = RemoveFromSet(items, items[0]), false= [Hide("inspectItem"), If(len(dialogue) > 0, true= Show("characterSay"), false= NullAction())])
-        image "Items Pop Up/items-pop-up-bg.png" align (0.5, 0.5) at half_size
-
-        python:
-            item_name = ""
-            item_desc = ""
-            for name in inventory_item_names:
-                temp_name = name.replace(" ", "-")
-                if temp_name.lower() == items[0]:
-                    item_name = name
-
-        text "{}".format(item_name) size 50 align (0.5, 0.6) color "#000000"
-        if items[0] == "lantern":
-            $lantern_state = inventory_sprites[inventory_items.index("lantern")].state
-            image "Items Pop Up/{}-{}-pop-up.png".format("lantern", lantern_state) align (0.5, 0.5) at half_size
-        else:
-            image "Items Pop Up/{}-pop-up.png".format(items[0]) align (0.5, 0.5) at half_size
-
-
-screen characterSay(who = None, what = None, jump_to = None):
-    modal True
-    zorder 6
-    style_prefix "say"
-
-    window:
-        id "window"
-        window:
-            padding (20, 20)
-            id "namebox"
-            style "namebox"
-            if who is not None:
-                text who id "who"
-            else:
-                text dialogue["who"]
-
-        if what is not None:
-            text what id "what" xpos 0.25 ypos 0.4 xanchor 0.0
-        else:
-            text dialogue["what"][0] xpos 0.25 ypos 0.4 xanchor 0.0
-
-    button:
-        xfill True
-        yfill True
-        if what is None:
-            action If(len(dialogue["what"]) > 1, true= RemoveFromSet(dialogue["what"], dialogue["what"][0]), false= [Hide("characterSay"), SetVariable("dialogue", {}), If(jump_to is not None, true = Jump("{}".format(jump_to)), false = NullAction())])
-        else:
-            action [Return(True), If(jump_to is not None, true = Jump("{}".format(jump_to)), false = NullAction())]
-
-
-    ## If there's a side image, display it above the text. Do not display on the
-    ## phone variant - there's no room.
-    if not renpy.variant("small"):
-        add SideImage() xalign 0.0 yalign 1.0
-
-screen scene1:
-    add environment_SM
-
-label setupScene1:
-    # environment items to interact with
-    $environment_items = ["box", "door-vines", "tape", "lantern"]
-
-    python:
-        for item in environment_items:
-            idle_image = Image("Environment Items/{}-idle.png".format(item))
-            hover_image = Image("Environment Items/{}-hover.png".format(item))
-            t = Transform(child= idle_image, zoom = 0.5)
-            environment_sprites.append(environment_SM.create(t))
-            environment_sprites[-1].type = item
-            environment_sprites[-1].idle_image = idle_image
-            environment_sprites[-1].hover_image = hover_image
-
-            if item == "box":
-                environment_sprites[-1].width = 1293 / 2
-                environment_sprites[-1].height = 360 / 2
-                environment_sprites[-1].x = 598
-                environment_sprites[-1].y = 3000
-            elif item == "door-vines":
-                environment_sprites[-1].width = 2500 / 2
-                environment_sprites[-1].height = 696 / 2
-                environment_sprites[-1].x = 200
-                environment_sprites[-1].y = 550
-            elif item == "tape":
-                environment_sprites[-1].width = 101 / 2
-                environment_sprites[-1].height = 55 / 2
-                environment_sprites[-1].x = 1020
-                environment_sprites[-1].y = 430
-            elif item == "lantern":
-                environment_sprites[-1].width = 123 / 2
-                environment_sprites[-1].height = 181 / 2
-                environment_sprites[-1].x = 1200
-                environment_sprites[-1].y = 355
-        addToInventory(["tape"])
-
-    # scene scene-1-bg at half_size # change as necessary
-    call screen scene1
-
-transform half_size:
-    zoom 0.5
