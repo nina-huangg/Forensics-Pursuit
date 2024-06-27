@@ -17,8 +17,10 @@ default current_cursor = ''
 define flash = Fade(.25, 0, .75, color="#fff")
 
 # which tool is currently enabled (shown on screen)
-default tools = {"brush": False, "bag" : False, "hungarian_red": False, "knife": False, "magnetic_black": False, "magnetic_white": False, "marker": False, "ruler": False, "stone": False, "water": False, "ziplock": False}
-# , "tag": False (not used yet but could, now only tag goes to deskfoot, with ruler)
+default tools = {"magnetic_black": False, "magnetic_white": False, "marker": False, "bag" : False, "tape": False, "tag": False, "ruler": False, "knife": False, "hungarian_red": False, "brush": False, "applicator": False, "ziplock": False, "stone": False, "water": False}
+default tools_image_list = ["magnetic_black_idle", "magnetic_white_idle", "marker_idle", "bag_idle", "tape_idle", "tag_idle", "ruler_idle", "knife_idle", "hungarian_red_idle", "brush_idle", "applicator_idle", "ziplock_idle", "stone_idle", "water_idle"]
+default tools_name_list = ["magnetic_black", "magnetic_white", "marker", "bag", "tape", "tag", "ruler", "knife", "hungarian_red", "brush", "applicator", "ziplock", "stone", "water"]
+default tools_counter = 3
 
 # whether the item should be examined
 default should_be_examined = {'deskfoot': False, 'blood': False, "bullet": False, "cheque": False}
@@ -32,6 +34,13 @@ default processed = []
 # evidence photos list (add once processed), evidence photos counter (to flip through camera)
 default evidence_photos = []
 default evidence_photos_counter = 0
+
+# whether second level toolbox shows for different magnetic powder choices
+default mag_powder_show = False
+
+# trackers of mistakes made
+default num_miss = 0
+default misses = {'spray_miss_under': False, 'spray_miss_over': False, 'powder_miss_wrong': False, 'powder_miss_under': False, 'powder_miss_over': False, 'dust_miss': False, 'mix_miss_liquid': False, 'mix_miss_solid': False, 'cast_miss_wait': False}
 
 
 # Python helper functions
@@ -88,14 +97,50 @@ init python:
                 evidence_photos_counter -= 1
         else:
             evidence_photos_counter = 0
+    
+    # Add/subtract to counter to change current displaying photo index
+    def tools_switch(cmd):
+        global tools_counter
+        if cmd == 'next':
+            if tools_counter + 4 < len(tools):
+                tools_counter += 1
+        elif cmd == 'prev':
+            if tools_counter - 1 >= 3:
+                tools_counter -= 1
+        else:
+            tools_counter = 3
+    
+    # Add to number of mistakes made and record which error
+    def set_miss(miss):
+        global num_miss
+        global misses
 
+        num_miss += 1
+        misses[miss] = True
+    
 
 
 # Labels of scenes, calls screens in custom_screens
+# Start scenes: bahen and gloves
 label start: 
     scene bahen
-    "Yesterday midnight, the Bahen Centre security guard was murdered in an office room."
-    "Your job now is to analyze the scene and collect evidence to find the murderer."
+    "Yesterday midnight, the Bahen Centre security guard's body was found in an office room in the building."
+    "Your job now is to analyze the scene and collect evidences."
+    jump gloves_start
+
+label gloves_start:
+    scene office_bg
+    "First, put on your gloves!"
+    show hands
+    call screen gloves
+
+label gloves2:
+    hide hands
+    show gloved_hands
+    "Now let's proceed to analyze the scene!"
+    hide gloved_hands
+    jump office_start
+
 
 # Main screen, comes back after each evidence collection
 # Every time back, change cursor to default and turn off all layovers, only icon
@@ -116,11 +161,12 @@ label show_deskfoot:
     hide screen scene_office
     $ on_main_screen = False
     $ toolbox_show = True
+    hide screen markers_screen onlayer over_markers
     hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
     show screen back_button_screen('office_start', 'scene_deskfoot') onlayer over_screens
     # Show background prompt first before analyze
-    if 'tabletop' not in processed:
+    if 'deskfoot' not in processed:
         scene deskfoot_zoom
         "Looks like there is a waxy footprint on the desk, you heard from a professor that there 
         had been a popcorn spill in the kitchen next door last night. (click to start development)"
@@ -137,6 +183,8 @@ label show_blood:
     hide screen scene_office
     $ on_main_screen = False
     $ toolbox_show = True
+    if 'blood' not in processed:
+        show screen markers_screen onlayer over_markers
     hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
     show screen back_button_screen('office_start', 'scene_blood') onlayer over_screens
@@ -144,7 +192,7 @@ label show_blood:
 
 # From screen scene_blood to flash, back to screen to bag
 label take_blood:
-    scene blood_ruler
+    scene camera_blood
     with flash
     call screen scene_blood_tobag
 
@@ -153,17 +201,18 @@ label show_bullet:
     hide screen scene_office
     $ on_main_screen = False
     $ toolbox_show = True
+    hide screen markers_screen onlayer over_markers
     hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
     show screen back_button_screen('office_start', 'scene_bullet') onlayer over_screens
     if 'bullet' not in processed:
         scene bullet_zoom
-        "An evidence marker with ruler is conveniently placed already!\nNow send bullet to lab for further investigation. (click anywhere to start bagging)"
+        "Send bullet to lab for further investigation. (click anywhere to start recording)"
     call screen scene_bullet
 
 # From screen scene_bullet to flash, back to screen to bag
 label take_bullet:
-    scene bullet_zoom
+    scene camera_bullet
     with flash
     call screen scene_bullet_tobag
 
@@ -172,17 +221,18 @@ label show_cheque:
     hide screen scene_office
     $ on_main_screen = False
     $ toolbox_show = True
+    hide screen markers_screen onlayer over_markers
     hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
     show screen back_button_screen('office_start', 'scene_cheque') onlayer over_screens
     if 'cheque' not in processed:
         scene cheque_zoom
-        "Send cheque to lab for further investigation. (click anywhere to start bagging)"
+        "Send cheque to lab for further investigation. (click anywhere to start recording)"
     call screen scene_cheque
 
 # From screen scene_cheque to flash, back to screen to bag
 label take_cheque:
-    scene cheque_zoom
+    scene camera_cheque
     with flash
     call screen scene_cheque_tobag
 
