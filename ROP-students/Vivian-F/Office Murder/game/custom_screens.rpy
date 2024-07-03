@@ -18,6 +18,8 @@ screen gloves():
 
 # Main Screen
 screen scene_office():
+    default missing = False
+    default curr_num = ''
     image "office_bg"   # default background
 
     # All imagemaps should show when casefile and camera are both not open
@@ -25,40 +27,62 @@ screen scene_office():
     
     # Before markers are set, tool can be marker, allow hotspot to place
     if tools['marker']:
-        showif not case_file_evidence_show and not camera_photo_show:
+        if num_deskfoot == 'numthree' or num_blood == 'numthree' or num_bullet == 'numthree' or num_cheque == 'numthree':
+            $ curr_num = 'numfour'
+        
+        elif num_deskfoot == 'numtwo' or num_blood == 'numtwo' or num_bullet == 'numtwo' or num_cheque == 'numtwo':
+            $ curr_num = 'numthree'
+        
+        elif num_deskfoot == 'numone' or num_blood == 'numone' or num_bullet == 'numone' or num_cheque == 'numone':
+            $ curr_num = 'numtwo'
+        
+        else:
+            $ curr_num = 'numone'
+        
+        showif not case_file_show and not camera_photo_show:
             imagemap:
                 idle "office_bg"
                 hover "office_bg"
 
-                hotspot(0,460,480,420) action [SetDict(evidence_marker_set,'deskfoot', True)] sensitive tools['marker']
-                hotspot(500,280,820,320) action [SetDict(evidence_marker_set,'blood', True)] sensitive tools['marker']
-                hotspot(520,720,330,250) action [SetDict(evidence_marker_set,'bullet', True)] sensitive tools['marker']
-                hotspot(1530,740,350,260) action [SetDict(evidence_marker_set,'cheque', True)] sensitive tools['marker']
+                if evidence_marker_set['deskfoot'] == False:
+                    hotspot(130,500,400,240) action [SetDict(evidence_marker_set,'deskfoot', True), SetVariable('num_deskfoot', curr_num)] sensitive tools['marker']
+                if evidence_marker_set['blood'] == False:
+                    hotspot(640,280,440,310) action [SetDict(evidence_marker_set,'blood', True), SetVariable('num_blood', curr_num)] sensitive tools['marker']
+                if evidence_marker_set['bullet'] == False:
+                    hotspot(550,825,200,145) action [SetDict(evidence_marker_set,'bullet', True), SetVariable('num_bullet', curr_num)] sensitive tools['marker']
+                if evidence_marker_set['cheque'] == False:
+                    hotspot(1530,700,250,200) action [SetDict(evidence_marker_set,'cheque', True), SetVariable('num_cheque', curr_num)] sensitive tools['marker']
 
     # When tool not marker but markers not all placed
     # Show magnify hovering but clicking has no actions so markers are forced
     elif not all(evidence_marker_set[evidence] for evidence in evidence_marker_set):
-        showif not case_file_evidence_show and not camera_photo_show:
+        showif not case_file_show and not camera_photo_show:
             imagemap:
                 idle "office_bg"
                 hover "office_bg"
 
-                hotspot(0,460,420,420) action NullAction() mouse "magnify"
-                hotspot(500,280,820,320) action NullAction() mouse "magnify"
-                hotspot(520,720,330,250) action NullAction() mouse "magnify"
-                hotspot(1530,740,350,260) action NullAction() mouse "magnify"
+                hotspot(130,500,400,240) action [SetLocalVariable('missing', True)] mouse "exclamation"
+                hotspot(640,280,440,310) action [SetLocalVariable('missing', True)] mouse "exclamation"
+                hotspot(550,825,200,145) action [SetLocalVariable('missing', True)] mouse "exclamation"
+                hotspot(1530,700,250,200) action [SetLocalVariable('missing', True)] mouse "exclamation"
+
+            showif missing:
+                hbox:
+                    xpos 0.35 ypos 0.1        
+                    text "You have not yet marked all evidence \nlocations! Do so before analyzing them"
+                $ missing = False
     
     # When all markers placed, hover with magnify and clicking jumps to detail scene
     else:
-        showif not case_file_evidence_show and not camera_photo_show:
+        showif not case_file_show and not camera_photo_show:
             imagemap:
                 idle "office_bg"
                 hover "office_bg"
 
-                hotspot(0,460,420,420) action [Jump("show_deskfoot")] mouse "magnify"
-                hotspot(500,280,820,320) action [Jump("show_blood")] mouse "magnify"
-                hotspot(520,720,330,250) action [Jump("show_bullet")] mouse "magnify"
-                hotspot(1530,740,350,260) action [Jump("show_cheque")] mouse "magnify"
+                hotspot(130,500,400,240) action [Jump("show_deskfoot")] mouse "magnify"
+                hotspot(640,280,440,400) action [Jump("show_blood")] mouse "magnify"
+                hotspot(550,825,200,200) action [Jump("show_bullet")] mouse "magnify"
+                hotspot(1530,700,250,260) action [Jump("show_cheque")] mouse "magnify"
     
     # Place images of post-evidence collection (evidence not in place)
     # Note: office_deskfoot/blood has pixel overlap, blood must appear after
@@ -85,43 +109,40 @@ screen scene_office():
     # Place evidence markers on top of all previous images layers
     if evidence_marker_set['deskfoot']:
         hbox:
-            pos(250, 410)
+            pos(260, 350)
             image "marker_blank" at Transform(zoom=0.9)
+        hbox:
+            pos(275, 370)
+            image '[num_deskfoot]' at Transform(zoom=0.6)
     if evidence_marker_set['blood']:
         hbox:
             pos(1070, 360)
             image "marker_blank" at Transform(zoom=0.7)
+        hbox:
+            pos(1083, 371)
+            image '[num_blood]' at Transform(zoom=0.5)
     if evidence_marker_set['bullet']:
         hbox:
             pos(790, 840)
             image "marker_blank" at Transform(zoom=0.7)
+        hbox:
+            pos(803, 855)
+            image '[num_bullet]' at Transform(zoom=0.5)
     if evidence_marker_set['cheque']:
         hbox:
             pos(1775, 815)
             image "marker_blank" at Transform(zoom=0.7)
+        hbox:
+            pos(1786, 831)
+            image '[num_cheque]' at Transform(zoom=0.5)
         
     # # When all evidence collected and prompt to proceed to lab
     if all(evidence in processed for evidence in should_be_examined):
         hbox:
-            xpos 0.2 ypos 0.8
+            xpos 0.2 ypos 0.6
             textbutton('All 4 pieces of evidence have been collected, click to proceed to lab'):
                 style "custom_button"
                 action [Jump("end")]
-
-
-screen markers_screen():
-    hbox:
-        pos(250, 410)
-        image "marker_blank" at Transform(zoom=0.9)
-    hbox:
-        pos(1070, 360)
-        image "marker_blank" at Transform(zoom=0.7)
-    hbox:
-        pos(790, 840)
-        image "marker_blank" at Transform(zoom=0.7)
-    hbox:
-        pos(1775, 815)
-        image "marker_blank" at Transform(zoom=0.7)
 
 
 # Post evidence bag 
@@ -193,34 +214,33 @@ screen scene_deskfoot():
                 xpos 0.15 ypos 0.8
                 textbutton('Using white magnetic powder against dental stone would not show clear result!\n(click to go back)'):
                     style 'custom_button'
-                    action [SetLocalVariable('wrong_dusted', False), Function(set_miss, 'powder_miss_wrong')]
+                    action [SetLocalVariable('wrong_dusted', False)]
         # Once powdered is not enough: good_dusted if powder more
-        # proceed_under if proceed to dust or mix cast
+        # proceed_under if proceed to dust or mix cast, reset tool to re-choose manetic_black
         showif under_dusted:
             imagemap:
                 idle "deskfoot_dust_under"
                 hover "deskfoot_dust_under"
                 hotspot(130,100,1230,880) action [SetLocalVariable('good_dusted', True)] sensitive tools['magnetic_black']
-                hotspot(130,100,1230,880) action [SetLocalVariable('proceeded_under', True), Function(set_cursor, '')] sensitive tools['brush']
-                hotspot(130,100,1230,880) action [SetLocalVariable('proceeded_under', True), Function(set_cursor, '')] sensitive tools['ziplock']
-        # Proceeded with once powder (mistake) and forward to good_dusted
+                hotspot(130,100,1230,880) action [SetLocalVariable('proceeded_under', True), Function(set_tool, 'brush')] sensitive tools['brush']
+                hotspot(130,100,1230,880) action [SetLocalVariable('proceeded_under', True), Function(set_tool, 'ziplock')] sensitive tools['ziplock']
+        # Proceeded with once powder (mistake) and forward to good_dusted after powder once more
         showif proceeded_under:
-            image 'deskfoot_dust_under'
-            hbox:
-                xpos 0.15 ypos 0.85
-                textbutton('That was not enough powder to show clear result! (click to dust more)'):
-                    style 'custom_button'
-                    action [SetLocalVariable('good_dusted', True), SetLocalVariable('proceeded_under', False), Function(set_miss, 'powder_miss_under')]
+            imagemap:
+                idle 'deskfoot_dust_under'
+                hbox:
+                    xpos 0.2 ypos 0.83
+                    text 'That was not enough powder to show clear result!\n(you need to dust more)'
+                hotspot(130,100,1230,800) action [SetLocalVariable('good_dusted', True), SetLocalVariable('proceeded_under', False)] sensitive tools['magnetic_black']
         # With enough powder (twice powder or from proceeded_under)
-        # More powder is over_dusted, brushing excess is correctly clearly_dusted
-        # Skip dusting to mix cast is no_dust
+        # More powder is over_dusted, skip dusting to mix cast is no_dust, both reset tool in prep for button press
         showif good_dusted:
             imagemap:
                 idle "deskfoot_dust_good"
                 hover "deskfoot_dust_good"
-                hotspot(130,100,1230,880) action [SetLocalVariable('over_dusted', True), Function(set_cursor, '')] sensitive tools['magnetic_black']
+                hotspot(130,100,1230,880) action [SetLocalVariable('over_dusted', True), Function(set_tool, 'magnetic_black')] sensitive tools['magnetic_black']
                 hotspot(130,100,1230,880) action [SetLocalVariable('cleared_dust', True)] sensitive tools['brush']
-                hotspot(130,100,1230,880) action [SetLocalVariable('no_dust', True)] sensitive tools['ziplock']
+                hotspot(130,100,1230,880) action [SetLocalVariable('no_dust', True), Function(set_tool, 'ziplock')] sensitive tools['ziplock']
         # Over/No dusting (mistake) sends back to good_dusted by False local
         showif over_dusted:
             image 'deskfoot_dust_over'
@@ -228,14 +248,14 @@ screen scene_deskfoot():
                 xpos 0.15 ypos 0.85
                 textbutton('That is too much magnetic powder! (click to go back)'):
                     style 'custom_button'
-                    action [SetLocalVariable('over_dusted', False), Function(set_miss, 'powder_miss_over')]
+                    action [SetLocalVariable('over_dusted', False)]
         showif no_dust:
             image 'deskfoot_dust_good'
             hbox:
                 xpos 0.15 ypos 0.85
                 textbutton('You must dust off excess powder before casting it! (click to go back)'):
                     style 'custom_button'
-                    action [SetLocalVariable('no_dust', False), Function(set_miss, 'dust_miss')]
+                    action [SetLocalVariable('no_dust', False)]
         # Correctly dusting allows to proceed to mixing cast mixture
         showif cleared_dust:
             imagemap:
@@ -261,16 +281,16 @@ screen scene_deskfoot():
                     xpos 0.15 ypos 0.85
                     textbutton('Click to mix: current ratio will result in a dry mixture'):
                         style 'custom_button'
-                        action [SetLocalVariable('under_mix', True), Function(set_miss, 'mix_miss_solid'), Function(set_cursor, '')]
+                        action [SetLocalVariable('under_mix', True)]
         showif under_mix:
             imagemap:
                 idle "deskfoot_under_mix"
                 hover "deskfoot_under_mix"
                 hbox:
-                    xpos 0.15 ypos 0.85
-                    textbutton('A dry mixture is not what you want! Click here to add more water'):
-                        style 'custom_button'
-                        action [SetLocalVariable('under_add_water', True), Function(set_cursor, '')]
+                    xpos 0.15 ypos 0.84
+                    text 'A dry mixture is not what you want!\n(You should add more water)'
+                hotspot(130,100,1230,800) action [SetLocalVariable('under_add_water', True), Function(set_tool, 'water')] sensitive tools['water']
+                # Reset tool from water in prep of button press
         showif under_add_water:
             imagemap:
                 idle "deskfoot_under_add_water"
@@ -279,12 +299,13 @@ screen scene_deskfoot():
                     xpos 0.15 ypos 0.85
                     textbutton('Click to mix to a pancake batter consistency'):
                         style 'custom_button'
-                        action [SetLocalVariable('good_mix', True), Function(set_cursor, '')]
+                        action [SetLocalVariable('good_mix', True)]
+        # Mix here is good, if more water, reset tool from water to re-choose for stone
         showif good_water:
             imagemap:
                 idle "deskfoot_good_water"
                 hover "deskfoot_good_water"
-                hotspot(130,100,1230,880) action [SetLocalVariable('over_water', True)] sensitive tools['water']     
+                hotspot(130,100,1230,880) action [SetLocalVariable('over_water', True), Function(set_tool, 'water')] sensitive tools['water']     
                 hbox:
                     xpos 0.15 ypos 0.85
                     textbutton('Click to mix: current ratio will result in a pancake batter consistency'):
@@ -295,10 +316,10 @@ screen scene_deskfoot():
                 idle "deskfoot_over_water"
                 hover "deskfoot_over_water"
                 hbox:
-                    xpos 0.15 ypos 0.8
-                    textbutton('That results in a watery mixture, that is not what you want!\nClick to add more dental stone powder'):
-                        style 'custom_button'
-                        action [SetLocalVariable('over_add_stone', True), Function(set_miss, 'mix_miss_liquid'), Function(set_cursor, '')]
+                    xpos 0.15 ypos 0.84
+                    text 'That results in a watery mixture, that is not what you want!\n(You should add more dental stone powder)'
+                hotspot(130,100,1230,800) action [SetLocalVariable('over_add_stone', True), Function(set_tool, 'stone')] sensitive tools['stone']
+                # Re-set tool from stone in prep for simple button-clicking
         showif over_add_stone:
             imagemap:
                 idle "deskfoot_over_add_stone"
@@ -346,12 +367,12 @@ screen scene_deskfoot():
                 xpos 0.15 ypos 0.5
                 textbutton('The cast has not cured! wait longer!\n(click to jump another 30 minutes)'):
                     style 'custom_button'
-                    action [SetLocalVariable('solid', True), Function(set_miss, 'cast_miss_wait')]
+                    action [SetLocalVariable('solid', True)]
         showif hour:
             image 'deskfoot_solid'
             hbox:
                 xpos 0.15 ypos 0.5
-                textbutton('It solidified a long time ago... but ok\n(click to proceed)'):
+                textbutton('It solidified already in 30 minutes... but ok\n(click to proceed)'):
                     style 'custom_button'
                     action SetLocalVariable('solid', True)
         showif solid:
@@ -366,14 +387,21 @@ screen scene_deskfoot():
                 idle "deskfoot_lift"
                 hover "deskfoot_lift"
                 hotspot(130,10,1230,970) action [SetLocalVariable('rulered', True)] sensitive tools['ruler']
-        showif rulered:
+                hotspot(130,10,1230,970) action [SetLocalVariable('tagged', True)] sensitive tools['tag']
+        showif rulered and not tagged:
             imagemap:
                 idle 'deskfoot_ruler'
                 hover 'deskfoot_ruler'
                 hotspot(130,10,1230,970) action [Function(set_tool, 'tag'), SetLocalVariable('tagged', True)] sensitive tools['tag']  
-                # set_tool toggles to unselect tag tool before take photo button       
+                # set_tool toggles to unselect tag tool before take photo button 
+        showif tagged and not rulered:
+            imagemap:
+                idle 'deskfoot_tag_only'
+                hover 'deskfoot_tag_only'
+                hotspot(130,10,1230,970) action [Function(set_tool, 'ruler'), SetLocalVariable('rulered', True)] sensitive tools['ruler']  
+                # set_tool toggles to unselect ruler tool before take photo button 
         # Once tagged with ruler and tag, display button to take photo and send to label take_deskfoot
-        showif tagged:
+        showif rulered and tagged:
             image 'deskfoot_tagged'
             hbox:
                 xpos 0.15 ypos 0.85
@@ -405,6 +433,10 @@ screen scene_deskfoot_tobag():
         image 'deskfoot_taped'
         
 
+transform blood_markers(): 
+    zoom 2.1
+transform blood_nums(): 
+    zoom 1.8
 
 # Latnet blood on floor: Hungarian Red spray (mistake) - cut - ruler - photo - bag
 screen scene_blood():
@@ -421,25 +453,41 @@ screen scene_blood():
     # Start processed if not done: first hungarian red dye spray
     if 'blood' not in processed:
         imagemap:
-            idle "office_bg"
-            hover "office_bg"
-            hotspot(500,280,820,320) action [SetLocalVariable('under_sprayed', True)] sensitive tools['hungarian_red']
+            idle "blood_zoom"
+            hotspot(232,195,1035,580) action [SetLocalVariable('under_sprayed', True)] sensitive tools['hungarian_red']
+            hbox:
+                xpos 0.781 ypos 0.276
+                image "marker_blank" at blood_markers
+            hbox:
+                xpos 0.791 ypos 0.286
+                image '[num_blood]' at blood_nums
         # Spray once is not enough, good if spray again, proceed_under if clicked enough
         showif under_sprayed:
             imagemap:
                 idle "blood_spray_under"
-                hover "blood_spray_under"
-                hotspot(500,280,820,320) action [SetLocalVariable('good_sprayed', True)] sensitive tools['hungarian_red']
+                hotspot(232,195,1035,580) action [SetLocalVariable('good_sprayed', True)] sensitive tools['hungarian_red']
                 hbox:
-                    xpos 0.25 ypos 0.67
+                    xpos 0.781 ypos 0.276
+                    image "marker_blank" at blood_markers
+                hbox:
+                    xpos 0.791 ypos 0.286
+                    image '[num_blood]' at blood_nums
+                hbox:
+                    xpos 0.25 ypos 0.8
                     textbutton('Click if you think this is enough dye'):
                         style 'custom_button'
-                        action [SetLocalVariable('proceed_under_sprayed', True), Function(set_miss, 'spray_miss_under'), Function(set_cursor, '')]
+                        action [SetLocalVariable('proceed_under_sprayed', True), Function(set_cursor, '')]
         # One layer click enough (mistake) send automatically to good_sprayed
         showif proceed_under_sprayed:
             image 'blood_spray_under'
             hbox:
-                xpos 0.25 ypos 0.67
+                xpos 0.781 ypos 0.276
+                image "marker_blank" at blood_markers
+            hbox:
+                xpos 0.791 ypos 0.286
+                image '[num_blood]' at blood_nums
+            hbox:
+                xpos 0.25 ypos 0.8
                 textbutton('That was not enough! (click here to spray more)'):
                     style 'custom_button'
                     action [SetLocalVariable('good_sprayed', True), Function(set_cursor, '')]       
@@ -447,10 +495,15 @@ screen scene_blood():
         showif good_sprayed:
             imagemap:
                 idle "blood_spray_good"
-                hover "blood_spray_good"
-                hotspot(500,280,820,320) action [SetLocalVariable('over_sprayed', True), Function(set_miss, 'spray_miss_over')] sensitive tools['hungarian_red']
+                hotspot(232,195,1035,580) action [SetLocalVariable('over_sprayed', True)] sensitive tools['hungarian_red']
                 hbox:
-                    xpos 0.25 ypos 0.67
+                    xpos 0.781 ypos 0.276
+                    image "marker_blank" at blood_markers
+                hbox:
+                    xpos 0.791 ypos 0.286
+                    image '[num_blood]' at blood_nums
+                hbox:
+                    xpos 0.25 ypos 0.8
                     textbutton('Click if you think this is enough dye'):
                         style 'custom_button'
                         action [SetLocalVariable('proceed_good_sprayed', True), Function(set_cursor, '')]       
@@ -458,8 +511,14 @@ screen scene_blood():
         showif over_sprayed:
             image 'blood_spray_over'
             hbox:
-                xpos 0.25 ypos 0.67
-                textbutton('That is too much, the bllod stains would not be visible!\n(click to proceede with last dye level)'):
+                xpos 0.781 ypos 0.276
+                image "marker_blank" at blood_markers
+            hbox:
+                xpos 0.791 ypos 0.286
+                image '[num_blood]' at blood_nums
+            hbox:
+                xpos 0.25 ypos 0.8
+                textbutton('That is too much, the blood stains would not be visible!\n(click to proceede with last dye level)'):
                     style 'custom_button'
                     action [SetLocalVariable('proceed_good_sprayed', True), Function(set_cursor, '')]        
         # Hungarian red dye reveals latent blood maybe within few seconds even 
@@ -467,27 +526,46 @@ screen scene_blood():
         showif proceed_good_sprayed:
             image 'blood_spray_good'
             hbox:
-                xpos 0.25 ypos 0.67
+                xpos 0.781 ypos 0.276
+                image "marker_blank" at blood_markers
+            hbox:
+                xpos 0.791 ypos 0.286
+                image '[num_blood]' at blood_nums
+            hbox:
+                xpos 0.25 ypos 0.8
                 textbutton('Take a pause for latent blood to appear'):
                     style 'custom_button'
                     action [SetLocalVariable('appeared', True), Function(set_cursor, '')]        
         showif appeared:
             imagemap:
                 idle 'blood_appear'
-                hover 'blood_appear'
-                hotspot(500,280,820,320) action [SetLocalVariable('cut', True)] sensitive tools['knife']        
+                hotspot(232,195,1035,580) action [SetLocalVariable('cut', True)] sensitive tools['knife']        
+                hbox:
+                    xpos 0.781 ypos 0.276
+                    image "marker_blank" at blood_markers
+                hbox:
+                    xpos 0.791 ypos 0.286
+                    image '[num_blood]' at blood_nums
         showif cut:
             imagemap:
                 idle 'blood_cut'
-                hover 'blood_cut'
-                hotspot(500,280,820,320) action [Function(set_tool, 'ruler'), SetLocalVariable('rulered', True),  Hide('markers_screen', _layer='over_markers')] sensitive tools['ruler']  
+                hotspot(232,195,1035,600) action [Function(set_tool, 'ruler'), SetLocalVariable('rulered', True)] sensitive tools['ruler']  
                 # set_tool toggles to unselect ruler tool before take photo button       
+                hbox:
+                    xpos 0.781 ypos 0.276
+                    image "marker_blank" at blood_markers
+                hbox:
+                    xpos 0.791 ypos 0.286
+                    image '[num_blood]' at blood_nums
         # After place ruler, take photo with evidence marker in scene -- jump to label take_blood 
         showif rulered:
             image 'blood_ruler'
             hbox:
                 xpos 0.781 ypos 0.276
-                image "marker_blank" at Transform(zoom=2.1)
+                image "marker_blank" at blood_markers
+            hbox:
+                xpos 0.791 ypos 0.286
+                image '[num_blood]' at blood_nums
             hbox:
                 xpos 0.15 ypos 0.85
                 textbutton('Take Photo'):
@@ -499,7 +577,10 @@ screen scene_blood():
         image 'blood_gone'
         hbox:
             xpos 0.781 ypos 0.276
-            image "marker_blank" at Transform(zoom=2.1)
+            image "marker_blank" at blood_markers
+        hbox:
+            xpos 0.791 ypos 0.286
+            image '[num_blood]' at blood_nums
 
 # After photo, here from label take_blood -- bag carpet and screen_finished_processing
 screen scene_blood_tobag():
@@ -510,7 +591,10 @@ screen scene_blood_tobag():
         hover "blood_ruler"
         hbox:
             xpos 0.781 ypos 0.276
-            image "marker_blank" at Transform(zoom=2.1)
+            image "marker_blank" at blood_markers
+        hbox:
+            xpos 0.791 ypos 0.286
+            image '[num_blood]' at blood_nums
         hotspot(232,195,1035,580) action [SetLocalVariable('bagged', True)] sensitive tools['bag']
     showif bagged:
         imagemap:
@@ -518,7 +602,10 @@ screen scene_blood_tobag():
             hover 'blood_bagged'
             hbox:
                 xpos 0.781 ypos 0.276
-                image "marker_blank" at Transform(zoom=2.1)
+                image "marker_blank" at blood_markers
+            hbox:
+                xpos 0.791 ypos 0.286
+                image '[num_blood]' at blood_nums
             hotspot(710,210,510,680) action [SetLocalVariable('taped', True), Function(set_tool, 'tape'),
                 Show('screen_finished_processing', evidence='blood',_layer='over_screens')] sensitive tools['tape'] 
             # set_tool toggles to unselect tape tool before return to main screen 
@@ -526,8 +613,16 @@ screen scene_blood_tobag():
         image 'blood_taped'
         hbox:
             xpos 0.781 ypos 0.276
-            image "marker_blank" at Transform(zoom=2.1)
+            image "marker_blank" at blood_markers
+        hbox:
+            xpos 0.791 ypos 0.286
+            image '[num_blood]' at blood_nums
 
+
+transform bullet_markers(): 
+    zoom 4.03
+transform bullet_nums(): 
+    zoom 3.3
 
 # Bullet cartridge: photo by jump to label take_bullet -- bag
 screen scene_bullet():
@@ -538,13 +633,19 @@ screen scene_bullet():
             hover "bullet_zoom"
             hbox:
                 xpos 0.616 ypos 0.145
-                image "marker_blank" at Transform(zoom=4.03)
-            hotspot(300,200,700,700) action [SetLocalVariable('rulered', True)] sensitive tools['ruler']
+                image "marker_blank" at bullet_markers
+            hbox:
+                xpos 0.64 ypos 0.18
+                image '[num_bullet]' at bullet_nums
+            hotspot(300,200,700,700) action [SetLocalVariable('rulered', True), Function(set_tool, 'ruler')] sensitive tools['ruler']
         showif rulered:
             image 'bullet_ruler'
             hbox:
                 xpos 0.616 ypos 0.145
-                image "marker_blank" at Transform(zoom=4.03)
+                image "marker_blank" at bullet_markers
+            hbox:
+                xpos 0.64 ypos 0.18
+                image '[num_bullet]' at bullet_nums
             hbox:
                 xpos 0.15 ypos 0.85
                 textbutton('Take Photo'):
@@ -554,7 +655,10 @@ screen scene_bullet():
         image 'bullet_gone' # bullet taken out of scene after processed
         hbox:
             xpos 0.616 ypos 0.145
-            image "marker_blank" at Transform(zoom=4.03)
+            image "marker_blank" at bullet_markers
+        hbox:
+                xpos 0.64 ypos 0.18
+                image '[num_bullet]' at bullet_nums
 
 # After photo, here from label take_bullet -- bag and screen_finished_processing
 screen scene_bullet_tobag():
@@ -565,7 +669,10 @@ screen scene_bullet_tobag():
         hover "bullet_ruler"
         hbox:
             xpos 0.616 ypos 0.145
-            image "marker_blank" at Transform(zoom=4.03)
+            image "marker_blank" at bullet_markers
+        hbox:
+                xpos 0.64 ypos 0.18
+                image '[num_bullet]' at bullet_nums
         hotspot(240,380,600,400) action [SetLocalVariable('bagged', True)] sensitive tools['bag']
     showif bagged:
         imagemap:
@@ -573,7 +680,10 @@ screen scene_bullet_tobag():
             hover 'bullet_bagged'
             hbox:
                 xpos 0.616 ypos 0.145
-                image "marker_blank" at Transform(zoom=4.03)
+                image "marker_blank" at bullet_markers
+            hbox:
+                xpos 0.64 ypos 0.18
+                image '[num_bullet]' at bullet_nums
             hotspot(410,190,550,710) action [SetLocalVariable('taped', True), Function(set_tool, 'tape'),
                 Show('screen_finished_processing', evidence='bullet',_layer='over_screens')] sensitive tools['tape'] 
             # set_tool toggles to unselect tape tool before return to main screen 
@@ -581,8 +691,16 @@ screen scene_bullet_tobag():
         image 'bullet_taped'
         hbox:
             xpos 0.616 ypos 0.145
-            image "marker_blank" at Transform(zoom=4.03)
-    
+            image "marker_blank" at bullet_markers
+        hbox:
+            xpos 0.64 ypos 0.18
+            image '[num_bullet]' at bullet_nums
+
+
+transform cheque_markers(): 
+    zoom 2.9
+transform cheque_nums(): 
+    zoom 2.5
 
 # Cheque: photo by jump to label take_cheque -- bag
 screen scene_cheque():
@@ -590,7 +708,10 @@ screen scene_cheque():
         image 'cheque_zoom'
         hbox:
             xpos 0.75 ypos 0.45
-            image "marker_blank" at Transform(zoom=2.9)
+            image "marker_blank" at cheque_markers
+        hbox:
+            xpos 0.762 ypos 0.47
+            image '[num_cheque]' at cheque_nums
         hbox:
             xpos 0.15 ypos 0.85
             textbutton('Take Photo'):
@@ -600,7 +721,10 @@ screen scene_cheque():
         image 'cheque_gone'
         hbox:
             xpos 0.75 ypos 0.45
-            image "marker_blank" at Transform(zoom=2.9)
+            image "marker_blank" at cheque_markers
+        hbox:
+            xpos 0.762 ypos 0.47
+            image '[num_cheque]' at cheque_nums
 
 # After photo, here from label take_cheque -- bag and screen_finished_processing
 screen scene_cheque_tobag():
@@ -611,7 +735,10 @@ screen scene_cheque_tobag():
         hover "cheque_zoom"
         hbox:
             xpos 0.75 ypos 0.45
-            image "marker_blank" at Transform(zoom=2.9)
+            image "marker_blank" at cheque_markers
+        hbox:
+            xpos 0.762 ypos 0.47
+            image '[num_cheque]' at cheque_nums
         hotspot(540,290,860,560) action [SetLocalVariable('bagged', True)] sensitive tools['bag']
     showif bagged:
         imagemap:
@@ -619,7 +746,10 @@ screen scene_cheque_tobag():
             hover 'cheque_bagged'
             hbox:
                 xpos 0.75 ypos 0.45
-                image "marker_blank" at Transform(zoom=2.9)
+                image "marker_blank" at cheque_markers
+            hbox:
+                xpos 0.762 ypos 0.47
+                image '[num_cheque]' at cheque_nums
             hotspot(710,210,510,680) action [SetLocalVariable('taped', True), Function(set_tool, 'tape'),
                 Show('screen_finished_processing', evidence='cheque',_layer='over_screens')] sensitive tools['tape'] 
             # set_tool toggles to unselect tape tool before return to main screen 
@@ -627,20 +757,11 @@ screen scene_cheque_tobag():
         image 'cheque_taped'
         hbox:
             xpos 0.75 ypos 0.45
-            image "marker_blank" at Transform(zoom=2.9)
+            image "marker_blank" at cheque_markers
+        hbox:
+            xpos 0.762 ypos 0.47
+            image '[num_cheque]' at cheque_nums
     
-    
-
-# Back Button (only used for returning to main screen for now in script)
-screen back_button_screen(location, curr_screen):
-    hbox:
-        xalign 0.035 yalign 0.96
-        imagebutton:
-            idle "back_button" at Transform(zoom=0.2)
-            hover "back_button_hover"
-            action [Function(set_cursor, ''),
-                    Hide('screen_finished_processing', _layer='over_screens'), 
-                    SetVariable('on_main_screen', True), Jump(location), Hide(curr_screen)]
 
 
 # Toolbox
@@ -659,18 +780,17 @@ screen toolbox_screen():
             hovered Notify("Toolbox")
             unhovered Notify('')
 
-            action [Function(set_cursor, ''), ToggleVariable('toolbox_show'), 
-                    ToggleScreen("case_files_screen", _layer="over_screens"), ToggleScreen("camera_screen", _layer="over_camera")]
+            action [ToggleVariable('toolbox_show'), ToggleScreen("case_files_screen", _layer="over_screens"), 
+                    ToggleScreen("camera_screen", _layer="over_camera"), 
+                    SetVariable('case_file_show', False), SetVariable('camera_photo_show', False)]
+            # Note: if Function(set_cursor, '') here, don't know what tool is selected when box closed
+            #       if also set tool to none (all to false), that doesnt support someone wanting to close the box simply to see bigger screen
     # Toolbox contents
     showif toolbox_show:
         hbox:
             xalign 0.0 yalign 0.3
             image "toolbox_bg" at Transform(zoom=0.55, alpha=0.9)
-        # hbox:
-        #     xalign 0.5 yalign 0.003
-        #     text title
-        # Tools will display in gallery (show one at a time and press arrow to change)
-        # Left arrow
+        # Up arrow
         hbox:   
             xpos 0.038 ypos 0.24
             imagebutton:
@@ -678,7 +798,7 @@ screen toolbox_screen():
                 hover 'tools_prev_hover'
                 
                 action [Function(tools_switch, 'prev')]
-        # Right arrow
+        # Down arrow
         hbox:   
             xpos 0.038 ypos 0.815
             imagebutton:
@@ -712,13 +832,13 @@ screen toolbox_screen():
         # Cursor changes to gloves when hover over tools' icon
         # Tool + cursor changes to tool selected after clicked icon (set_tool)
         elif not on_main_screen:
-            if tools_name_list[tools_counter] == 'applicator':
+            if tools_set_list[tools_counter] == 'applicator':
                 $ (mag_powder_ypos) = 0.285
-            elif tools_name_list[tools_counter + 1] == 'applicator':
+            elif tools_set_list[tools_counter + 1] == 'applicator':
                 $ (mag_powder_ypos) = 0.43
-            elif tools_name_list[tools_counter + 2] == 'applicator':
+            elif tools_set_list[tools_counter + 2] == 'applicator':
                 $ (mag_powder_ypos) = 0.57
-            elif tools_name_list[tools_counter + 3] == 'applicator':
+            elif tools_set_list[tools_counter + 3] == 'applicator':
                 $ (mag_powder_ypos) = 0.7
             else:
                 $ (mag_powder_ypos) = 0
@@ -733,7 +853,7 @@ screen toolbox_screen():
                     hovered Notify(tools_name_list[tools_counter])
                     unhovered Notify('')
 
-                    action[Function(set_tool, tools_name_list[tools_counter])]
+                    action[Function(set_tool, tools_set_list[tools_counter])]
                     mouse "glove"
 
             hbox:
@@ -746,7 +866,7 @@ screen toolbox_screen():
                     hovered Notify(tools_name_list[tools_counter + 1])
                     unhovered Notify('')
 
-                    action[Function(set_tool, tools_name_list[tools_counter + 1])]
+                    action[Function(set_tool, tools_set_list[tools_counter + 1])]
                     mouse "glove"
             hbox:
                 xpos 0.018 ypos 0.57
@@ -758,7 +878,7 @@ screen toolbox_screen():
                     hovered Notify(tools_name_list[tools_counter + 2])
                     unhovered Notify('')
 
-                    action[Function(set_tool, tools_name_list[tools_counter + 2])]
+                    action[Function(set_tool, tools_set_list[tools_counter + 2])]
                     mouse "glove"
 
             hbox:
@@ -771,7 +891,7 @@ screen toolbox_screen():
                     hovered Notify(tools_name_list[tools_counter + 3])
                     unhovered Notify('')
 
-                    action[Function(set_tool, tools_name_list[tools_counter + 3])]
+                    action[Function(set_tool, tools_set_list[tools_counter + 3])]
                     mouse "glove"
             
             showif tools["applicator"]:
@@ -805,7 +925,6 @@ screen toolbox_screen():
                         mouse "glove"
 
 
-
 # Casefile Evidences
 transform casefile_small():
     zoom 0.2
@@ -821,9 +940,9 @@ screen case_files_screen():
             hovered Notify("Evidence Bin")
             unhovered Notify('')
 
-            action [ToggleVariable('case_file_evidence_show'), SetVariable('camera_photo_show', False)]
+            action [ToggleVariable('case_file_show'), SetVariable('camera_photo_show', False)]
     # Evidence bin contents
-    showif case_file_evidence_show:
+    showif case_file_show:
         default title = 'Evidence Collected'
         hbox:
             xalign 0.1 yalign 0.3
@@ -831,6 +950,11 @@ screen case_files_screen():
         hbox:
             xalign 0.5 ypos 0.1
             text title
+        
+        if all(evidence not in processed for evidence in should_be_examined):
+            hbox:
+                xalign 0.5 ypos 0.42
+                text "no evidence collected yet"
         
         # Only display evidence once processed (collected)
         showif 'deskfoot' in processed:
@@ -849,8 +973,8 @@ screen case_files_screen():
             hbox:
                 xpos 0.55 ypos 0.5
                 image 'casefile_cheque' at casefile_small
-
-
+        
+        
 # Camera Screen
 screen camera_screen():
     # Camera icon (always show)
@@ -863,7 +987,7 @@ screen camera_screen():
             hovered Notify("Camera")
             unhovered Notify('')
 
-            action [ToggleVariable('camera_photo_show'), SetVariable('case_file_evidence_show', False)]
+            action [ToggleVariable('camera_photo_show'), SetVariable('case_file_show', False)]
     # Camera contents
     showif camera_photo_show:
         default title = 'Photos Taken'
@@ -885,7 +1009,7 @@ screen camera_screen():
         hbox:   # Right arrow
             xpos 0.17 ypos 0.4
             imagebutton:
-                idle 'casefile_photos_prev'at Transform(zoom=0.3)
+                idle 'casefile_photos_prev' at Transform(zoom=0.3)
                 hover 'casefile_photos_prev_hover'
                 
                 action [Function(photo_switch, 'prev')]
@@ -895,8 +1019,34 @@ screen camera_screen():
             hbox:
                 xalign 0.5 yalign 0.4
                 image evidence_photos[evidence_photos_counter] at Transform(zoom=0.55)
+            # display marker number
+            if evidence_photos[evidence_photos_counter] == 'blood':
+                hbox:
+                    xpos 0.7 ypos 0.5
+                    image '[num_blood]' at Transform(zoom=0.4)
+            if evidence_photos[evidence_photos_counter] == 'bullet':
+                hbox:
+                    xpos 0.7 ypos 0.5
+                    image '[num_bullet]' at Transform(zoom=0.4)
+            if evidence_photos[evidence_photos_counter] == 'cheque':
+                hbox:
+                    xpos 0.7 ypos 0.5
+                    image '[num_cheque]' at Transform(zoom=0.4)
         # Display when no photos taken yet
         else:
             hbox:
                 xalign 0.5 ypos 0.42
                 text "no photos taken yet"
+
+
+
+# Back Button (only used for returning to main screen for now in script)
+screen back_button_screen(location, curr_screen):
+    hbox:
+        xalign 0.035 yalign 0.96
+        imagebutton:
+            idle "back_button" at Transform(zoom=0.2)
+            hover "back_button_hover"
+            action [Function(set_cursor, ''),
+                    Hide('screen_finished_processing', _layer='over_screens'), 
+                    SetVariable('on_main_screen', True), Jump(location), Hide(curr_screen)]

@@ -30,6 +30,7 @@ Loose images are main scene background images, and each folder contains screen/l
 ### Currently Implmented:
   * All evidences in place
   * Evidence marker required before detail scene interaction
+    * markers numbered based on user-clicked order
   * Evidence interactions: 
     * prompt (if applicable)
     * development step by step
@@ -44,5 +45,5 @@ Loose images are main scene background images, and each folder contains screen/l
   * Camera (shows photos of evidences taken with scale, tag, and/or evidence marker, in gallery-style)
   * Added more custom cursors (magnifying glass for analyzing, gloves for picking tools, and mouse for each tool)
 ### Features to be implemented:
-  * Tool descriptions when clicked
-  * Numbers on evidence marker
+  * Vivian S toolbox UI
+  * (photo numbers)
