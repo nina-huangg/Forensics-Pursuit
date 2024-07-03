@@ -4,8 +4,6 @@ default on_main_screen = True
 default toolbox_show = False
 # whether casefiles are currently displayed
 default case_file_show = False
-# whether evidence inside the casefiles are currently displayed
-default case_file_evidence_show = False
 # whether camera is currently displayed
 default camera_show = False
 # whether photos inside the camera is currently displayed
@@ -19,7 +17,8 @@ define flash = Fade(.25, 0, .75, color="#fff")
 # which tool is currently enabled (shown on screen)
 default tools = {"magnetic_black": False, "magnetic_white": False, "marker": False, "bag" : False, "tape": False, "tag": False, "ruler": False, "knife": False, "hungarian_red": False, "brush": False, "applicator": False, "ziplock": False, "stone": False, "water": False}
 default tools_image_list = ["magnetic_black_idle", "magnetic_white_idle", "marker_idle", "bag_idle", "tape_idle", "tag_idle", "ruler_idle", "knife_idle", "hungarian_red_idle", "brush_idle", "applicator_idle", "ziplock_idle", "stone_idle", "water_idle"]
-default tools_name_list = ["magnetic_black", "magnetic_white", "marker", "bag", "tape", "tag", "ruler", "knife", "hungarian_red", "brush", "applicator", "ziplock", "stone", "water"]
+default tools_set_list = ["magnetic_black", "magnetic_white", "marker", "bag", "tape", "tag", "ruler", "knife", "hungarian_red", "brush", "applicator", "ziplock", "stone", "water"]
+default tools_name_list = ["black magntic powder", "white magnetic powder", "marker", "evidence bag", "seal tape", "tag", "ruler", "knife", "hungarian red", "dusting brush", "magnetic powder applicator", "ziplock", "stone", "water"]
 default tools_counter = 3
 
 # whether the item should be examined
@@ -38,9 +37,11 @@ default evidence_photos_counter = 0
 # whether second level toolbox shows for different magnetic powder choices
 default mag_powder_show = False
 
-# trackers of mistakes made
-default num_miss = 0
-default misses = {'spray_miss_under': False, 'spray_miss_over': False, 'powder_miss_wrong': False, 'powder_miss_under': False, 'powder_miss_over': False, 'dust_miss': False, 'mix_miss_liquid': False, 'mix_miss_solid': False, 'cast_miss_wait': False}
+# hold evidence marker number for each evidence
+default num_deskfoot = ''
+default num_blood = ''
+default num_bullet = ''
+default num_cheque = ''
 
 
 # Python helper functions
@@ -110,14 +111,6 @@ init python:
         else:
             tools_counter = 3
     
-    # Add to number of mistakes made and record which error
-    def set_miss(miss):
-        global num_miss
-        global misses
-
-        num_miss += 1
-        misses[miss] = True
-    
 
 
 # Labels of scenes, calls screens in custom_screens
@@ -137,7 +130,7 @@ label gloves_start:
 label gloves2:
     hide hands
     show gloved_hands
-    "Now let's proceed to analyze the scene!"
+    "Now let's enter the scene!"
     hide gloved_hands
     jump office_start
 
@@ -150,6 +143,7 @@ label office_start:
     $ toolbox_show = False
     $ case_file_show = False
     $ camera_photo_show = False
+    hide screen back_button_screen onlayer over_screens
     show screen case_files_screen onlayer over_screens
     show screen camera_screen onlayer over_camera
     show screen toolbox_screen onlayer over_toolbox
@@ -160,16 +154,16 @@ label office_start:
 label show_deskfoot:
     hide screen scene_office
     $ on_main_screen = False
-    $ toolbox_show = True
-    hide screen markers_screen onlayer over_markers
     hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
-    show screen back_button_screen('office_start', 'scene_deskfoot') onlayer over_screens
     # Show background prompt first before analyze
     if 'deskfoot' not in processed:
+        $ toolbox_show = True
         scene deskfoot_zoom
         "Looks like there is a waxy footprint on the desk, you heard from a professor that there 
         had been a popcorn spill in the kitchen next door last night. (click to start development)"
+    else:
+        show screen back_button_screen('office_start', 'scene_deskfoot') onlayer over_screens
     call screen scene_deskfoot
 
 # Called back here from screen scene_deskfoot to flash photo-shoot, back to screen to bag
@@ -182,12 +176,12 @@ label take_deskfoot:
 label show_blood:
     hide screen scene_office
     $ on_main_screen = False
-    $ toolbox_show = True
-    if 'blood' not in processed:
-        show screen markers_screen onlayer over_markers
     hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
-    show screen back_button_screen('office_start', 'scene_blood') onlayer over_screens
+    if 'blood' not in processed:
+        $ toolbox_show = True
+    else:
+        show screen back_button_screen('office_start', 'scene_blood') onlayer over_screens
     call screen scene_blood
 
 # From screen scene_blood to flash, back to screen to bag
@@ -200,14 +194,14 @@ label take_blood:
 label show_bullet:
     hide screen scene_office
     $ on_main_screen = False
-    $ toolbox_show = True
-    hide screen markers_screen onlayer over_markers
     hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
-    show screen back_button_screen('office_start', 'scene_bullet') onlayer over_screens
     if 'bullet' not in processed:
+        $ toolbox_show = True
         scene bullet_zoom
-        "Send bullet to lab for further investigation. (click anywhere to start recording)"
+        "Record this evidence and send it to lab for further investigation. (click anywhere to proceed)"
+    else:
+        show screen back_button_screen('office_start', 'scene_bullet') onlayer over_screens
     call screen scene_bullet
 
 # From screen scene_bullet to flash, back to screen to bag
@@ -220,14 +214,14 @@ label take_bullet:
 label show_cheque:
     hide screen scene_office
     $ on_main_screen = False
-    $ toolbox_show = True
-    hide screen markers_screen onlayer over_markers
     hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
-    show screen back_button_screen('office_start', 'scene_cheque') onlayer over_screens
     if 'cheque' not in processed:
+        $ toolbox_show = True
         scene cheque_zoom
-        "Send cheque to lab for further investigation. (click anywhere to start recording)"
+        "Record this evidence and send it to lab for further investigation. (click anywhere to proceed)"
+    else:
+        show screen back_button_screen('office_start', 'scene_cheque') onlayer over_screens
     call screen scene_cheque
 
 # From screen scene_cheque to flash, back to screen to bag
