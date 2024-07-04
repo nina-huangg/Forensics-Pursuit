@@ -31,6 +31,15 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
     - Can then dust the fingerprint, once that happens the view is zoomed in on the dusted fingerprint
     - The player can then place the scalebar, lifting tape place on a backing card and put in an evidence bag and seal it
   - Implemented the flashlight effect for the ALS flashlights and the UV flashlight
+  - Added outlines to interactable objects
+  - Added the different cursors
+  - Added dialogue messages, for events such as colledcting a piece of evidence, discovering blood or a fingerprint, and warning/guiding messages for the player
+  - Changed the casefile evidence to be two separate screens, one for the collected evidence, one for the pictures
+  - Fixed how the knife is packaged, you now first need to put the knife in a plastic tube, seal it with the tamper tape, then put the tube in the evidence bag and tape it
+  - Changed how water is put on the swab to match how the chemical solutions are put on the swab
+  - Added separate button for the backing card
+  - Added the debrief scene before the player enters the house
+  - Fixed bug that kept leading the player to the fingerprint scene and taping the evidence bag
 
 ## Feedback Received:
 - Limit the scenario to one room/seciton (completed, the scenario now only takes place in the kitchen near the stove)
@@ -41,10 +50,10 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
 - Change the colour of the exclamation point from red to another colour (completed, changed from red to yellow)
 
 ## What Needs to be Developed/Bug Fixes:
-- Ensure all the mistakes the player can make are implemented
 - Bug Fixes:
-  - The casefile frame and photos taken from the crime scene do not show up when viewing the floor
-  - when spam clicking on the next button for the casefile, it goes to the screen of putting the fingerprint card into the evidence bag and then the expanded stove tools are stuck on the screen
+  - Currnetly do not know of any bugs
+- Find a way making the photos appear in the order collected so there are no blank gaps
+- Possible Addition: add a camera button to allow the player to take the picture of what they are currently looking at
 
 ___
 
