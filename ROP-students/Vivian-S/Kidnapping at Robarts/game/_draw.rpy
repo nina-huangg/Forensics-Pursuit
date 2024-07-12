@@ -1,5 +1,4 @@
-﻿
-init -10 python in draw_logic:
+﻿init -10 python in draw_logic:
 
     import os
     import io

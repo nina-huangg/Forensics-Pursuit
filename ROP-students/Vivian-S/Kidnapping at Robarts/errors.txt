@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 530: expected statement.
-    addToInventory("pvs_in_bag")
-                                ^
+File "game/_draw.rpy", line 1: expected statement.
+    ﻿
+     ^
 
 Ren'Py Version: Ren'Py 8.2.1.24030407
-Thu Jun 20 01:01:34 2024
+Wed Jul  3 14:21:12 2024

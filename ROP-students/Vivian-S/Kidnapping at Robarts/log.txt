@@ -1,37 +1,37 @@
-2024-06-20 05:40:03 UTC
+2024-07-12 03:45:38 UTC
 Windows-10-10.0.19045
 Ren'Py 8.2.1.24030407
 
-Early init took 0.09s
-Loading error handling took 0.04s
-Loading script took 0.31s
-Loading save slot metadata took 0.04s
+Early init took 0.16s
+Loading error handling took 0.08s
+Loading script took 0.42s
+Loading save slot metadata took 0.31s
 Loading persistent took 0.00s
 Set script version to: (8, 1, 0)
-Running init code took 0.10s
-Loading analysis data took 0.02s
-Analyze and compile ATL took 0.00s
-Reloading save slot metadata took 0.03s
+Running init code took 0.17s
+Loading analysis data took 0.03s
+Analyze and compile ATL took 0.01s
+Reloading save slot metadata took 0.07s
 Index archives took 0.00s
-Dump and make backups took 0.06s
+Dump and make backups took 0.20s
 Cleaning cache took 0.00s
 Making clean stores took 0.00s
-Initial gc took 0.05s
+Initial gc took 0.06s
 DPI scale factor: 1.500000
 nvdrs: Loaded, about to disable thread optimizations.
 nvdrs: b"Couldn't load nvlib." (can be ignored)
-Creating interface object took 0.00s
+Creating interface object took 0.01s
 Cleaning stores took 0.00s
-Init translation took 0.04s
-Build styles took 0.00s
-Load screen analysis took 0.00s
-Analyze screens took 0.01s
-Save screen analysis took 0.03s
-Prepare screens took 0.10s
-Save pyanalysis. took 0.02s
-Save bytecode. took 0.04s
+Init translation took 0.07s
+Build styles took 0.01s
+Load screen analysis took 0.12s
+Analyze screens took 0.00s
+Save screen analysis took 0.00s
+Prepare screens took 0.20s
+Save pyanalysis. took 0.00s
+Save bytecode. took 0.00s
 Running _start took 0.00s
-Interface start took 0.09s
+Interface start took 0.22s
 
 Initializing gl2 renderer:
 primary display bounds: (0, 0, 1920, 1080)
@@ -47,18 +47,18 @@ Screen sizes: virtual=(1920, 1080) physical=(1920, 986) drawable=(1920, 986)
 Maximum texture size: 4096x4096
 
 Full traceback:
-  File "game/script.rpy", line 534, in script
-    pause
+  File "game/script.rpy", line 149, in script
+    call screen scene1
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 1968, in execute
     self.call("execute")
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 1950, in call
     return renpy.statements.call(method, parsed, *args, **kwargs)
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\statements.py", line 349, in call
     return method(parsed, *args, **kwargs)
-  File "renpy/common/000statements.rpy", line 462, in execute_pause
-    renpy.pause()
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\exports.py", line 1661, in pause
-    rv = renpy.ui.interact(mouse='pause', type='pause', roll_forward=roll_forward, pause=delay, pause_modal=modal)
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\exports.py", line 3413, in call_screen
+    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ui.py", line 301, in interact
     rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\core.py", line 2165, in interact
@@ -89,20 +89,9 @@ Full traceback:
     surf = render(child, width, height, cst, cat)
   File "render.pyx", line 170, in renpy.display.render.render
   File "render.pyx", line 260, in renpy.display.render.render
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\behavior.py", line 968, in render
-    rv = super(Button, self).render(width, height, st, at)
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\layout.py", line 1361, in render
-    surf = render(child,
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\particle.py", line 298, in render
+    cache.render = r = render(cache.child_copy, width, height, cst, cst)
   File "render.pyx", line 170, in renpy.display.render.render
-  File "render.pyx", line 260, in renpy.display.render.render
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\layout.py", line 900, in render
-    surf = render(child, width, height, cst, cat)
-  File "render.pyx", line 170, in renpy.display.render.render
-  File "render.pyx", line 260, in renpy.display.render.render
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\transform.py", line 957, in render
-    return RenderTransform(self).render(width, height, st, at)
-  File "accelerator.pyx", line 978, in renpy.display.accelerator.RenderTransform.render
-  File "accelerator.pyx", line 413, in renpy.display.accelerator.RenderTransform.render_child
   File "render.pyx", line 260, in renpy.display.render.render
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\transform.py", line 957, in render
     return RenderTransform(self).render(width, height, st, at)
@@ -119,11 +108,13 @@ Full traceback:
     filelike = renpy.loader.load(self.filename, directory="images")
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\loader.py", line 672, in load
     raise IOError("Couldn't find file '%s'." % name)
-OSError: Couldn't find file 'Items Pop Up/pvs_in_bag-pop-up.png'.
+OSError: Couldn't find file 'Inventory Items/Inventory-evidence_bag.png'.
 
-While loading <renpy.display.im.Image object ('Items Pop Up/pvs_in_bag-pop-up.png') at 0x0000000005a37820>:
-  File "game/script.rpy", line 534, in script
-    pause
-  File "renpy/common/000statements.rpy", line 462, in execute_pause
-    renpy.pause()
-OSError: Couldn't find file 'Items Pop Up/pvs_in_bag-pop-up.png'.
+While loading <renpy.display.im.Image object ('Inventory Items/Inventory-evidence_bag.png') at 0x0000000005a9c3d0>:
+  File "game/script.rpy", line 149, in script
+    call screen scene1
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+OSError: Couldn't find file 'Inventory Items/Inventory-evidence_bag.png'.
+Screen sizes: virtual=(1920, 1080) physical=(1920, 986) drawable=(1920, 986)
+Maximum texture size: 4096x4096
