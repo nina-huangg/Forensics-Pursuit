@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/renpy/custom_screens.rpy", line 29: expecting name after dot.
+    xpos 0.0.093 ypos 0.115
+             ^
+
+Ren'Py Version: Ren'Py 8.2.1.24030407
+Wed Jun 26 17:16:31 2024

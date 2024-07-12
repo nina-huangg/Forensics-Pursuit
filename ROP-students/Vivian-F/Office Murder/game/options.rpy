@@ -12,33 +12,39 @@
 ##
 ## The _() surrounding the string marks it as eligible for translation.
 
-define config.name = _("Office Murder")
+define config.name = _("Office Incident 1103")
 define config.layers = ['master', 'transient', 'screens', 'over_screens', 'over_camera', 'over_toolbox', 'overlay']
 
 
 
 define config.mouse = { }
 define config.mouse['marker'] = [('/images/mouse/marker_mouse.png', 0, 0)]
-define config.mouse['magnify'] = [('/images/mouse/magnify_mouse.png', 0, 0)]
+define config.mouse['exclamation'] = [('/images/mouse/exclamation_mouse.png', 0, 0)]
+define config.mouse['magnify'] = [('/images/mouse/magnify_orange.png', 0, 0)]
 define config.mouse['magnetic_white']= [('/images/mouse/magnetic_white_mouse.png', 0, 0)]
 define config.mouse['magnetic_black']= [('/images/mouse/magnetic_black_mouse.png', 0, 0)]
 define config.mouse['ziplock'] = [('/images/mouse/ziplock_mouse.png', 0, 0)]
 define config.mouse['stone'] = [('/images/mouse/stone_mouse.png', 0, 0)]
 define config.mouse['water'] = [('/images/mouse/water_mouse.png', 0, 0)]
 define config.mouse['ruler'] = [('/images/mouse/ruler_mouse.png', 0, 0)]
-# define config.mouse['tag'] = [('/images/mouse/tag_mouse.png', 0, 0)]
-define config.mouse['bag'] = [('/images/mouse/evidence_bag_mouse.png', 0, 0)]
+define config.mouse['tag'] = [('/images/mouse/tag_mouse.png', 0, 0)]
+define config.mouse['bag'] = [('/images/mouse/bag_mouse.png', 0, 0)]
 define config.mouse['hungarian_red'] = [('/images/mouse/hungarian_red_mouse.png', 0, 0)]
 define config.mouse['knife'] = [('/images/mouse/knife_mouse.png', 0, 0)]
 define config.mouse['glove'] = [('/images/mouse/glove_mouse.png', 0, 0)]
 define config.mouse['brush'] = [('/images/mouse/brush_mouse.png', 0, 0)]
+define config.mouse['tape'] = [('/images/mouse/tape_mouse.png', 0, 0)]
 
+# Disables mouse scroll for scrolling back/forward
+# define config.rollback_enabled = False
 
 
 ## Determines if the title given above is shown on the main menu screen. Set
 ## this to False to hide the title.
-
 define gui.show_name = True
+
+# Disable right click / ESC to call save
+define _game_menu_screen = None
 
 
 ## The version of the game.

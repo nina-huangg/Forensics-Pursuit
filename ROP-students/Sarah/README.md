@@ -26,27 +26,34 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
     - The kastle-meyer test, selecting the cotton swab, wetting it, swabbing the floor, applying ethanol, phenolphthalein and hydrogen peroxide. Also allowed for some mistakes (if ot done in the correct order, will not get the correct result)
     - Collecting the blood, selecting the cotton swab, wetting the swab, swabbing the floor, putting it in the tube (the rest needs to be further implemented
     - Making the luminol and spraying it, selecting the spray bottle, adding distilled water, adding the luminol tablet, and spraying the floor 3 times, then seeing the fluorescing blood
-  - Started implementing the fingerprint:
+  - Implemented the fingerprint:
     - Can select the uv flashlight and find the fingerprint, when the fingerprint is selected, the evidence marker is placed
+    - Can then dust the fingerprint, once that happens the view is zoomed in on the dusted fingerprint
+    - The player can then place the scalebar, lifting tape place on a backing card and put in an evidence bag and seal it
+  - Implemented the flashlight effect for the ALS flashlights and the UV flashlight
+  - Added outlines to interactable objects
+  - Added the different cursors
+  - Added dialogue messages, for events such as colledcting a piece of evidence, discovering blood or a fingerprint, and warning/guiding messages for the player
+  - Changed the casefile evidence to be two separate screens, one for the collected evidence, one for the pictures
+  - Fixed how the knife is packaged, you now first need to put the knife in a plastic tube, seal it with the tamper tape, then put the tube in the evidence bag and tape it
+  - Changed how water is put on the swab to match how the chemical solutions are put on the swab
+  - Added separate button for the backing card
+  - Added the debrief scene before the player enters the house
+  - Fixed bug that kept leading the player to the fingerprint scene and taping the evidence bag
 
 ## Feedback Received:
 - Limit the scenario to one room/seciton (completed, the scenario now only takes place in the kitchen near the stove)
 - Limit things that the player is able to click on (completed)
 - Remove the wall spatter, remove the knife from the oven and instead have it on top of the stove, add a fingerprint on the stovetop (completed)
-- Make the flashlight effect match what Luke's
+- Make the flashlight effect match Luke's
+- Blur the background for the subcategories of forensic tools (completed)
+- Change the colour of the exclamation point from red to another colour (completed, changed from red to yellow)
 
 ## What Needs to be Developed/Bug Fixes:
-- Need to replace the temporary pictures (most of which are temporary) with the actual pictures once they are taken and change the hotspot locations to match the new pictures
-- Need to finish implementing the fingerprint collection
-- Need to fully implement the mistakes the player can make (only somewhat implemented so far)
-- Still need to implement the flashlight effect for the ALS flashlights and the uv flashlight
 - Bug Fixes:
-  - Sometimes toolbox disappears after using the ALS flashlight
-  - Tools disappear after selecting the spray bottle and the distilled water when the spray bottle has been selected
-  - Tools disappear when switching between different areas (I think the toolbox might still be open but the tools are not showing so need to click on the toolbox twice to see the tools)
-  - Evidence marker for fingerprint disappears
-  - After selecting the cotton swab the first time, all the tools disappear but can still be clicked on
-  - After selecting the cotton swab a second time, the distilled water, ethanol and cotton swab buttons are visible but cannot be clicked on/selected
+  - Currnetly do not know of any bugs
+- Find a way making the photos appear in the order collected so there are no blank gaps
+- Possible Addition: add a camera button to allow the player to take the picture of what they are currently looking at
 
 ___
 
