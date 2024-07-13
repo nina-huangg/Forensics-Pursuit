@@ -24,6 +24,8 @@ init python:
     """
     When the user clicks the "hand" icon, this function updates the item's position in the evidence box to match the cursor so it moves
     wherever the cursor moves (evidence box).
+
+    Takes in "shown time" parameter (don't worry about this)
     """
     def inventoryUpdate(st):
         if inventory_drag == True:
@@ -38,6 +40,8 @@ init python:
     """
     When the user clicks the "hand" icon, this function updates the item's position to match the cursor so it moves
     wherever the cursor moves (toolbox).
+
+    Takes in "shown time" parameter (don't worry about this)
     """
     def toolboxUpdate(st):
         if toolbox_drag == True:
@@ -52,6 +56,8 @@ init python:
     """
     When the user clicks the "hand" icon, this function updates the item's position to match the cursor so it moves
     wherever the cursor moves (pop-up bar).
+
+    Takes in "shown time" parameter (don't worry about this)
     """
     def toolboxPopUpdate(st):
         if toolboxpop_drag == True:
@@ -69,6 +75,9 @@ init python:
     1. When 2 evidence items are combined
     2. When an evidence item is combined with an environment item
     3. What happens when you mouse over an evidence item in its slot - showing the hand and inspect icons
+
+    This function takes in 4 parameters, the event currently occurring, the x and y positions of the mouse cursor as the event is occurring, 
+    and the time since the sprite is shown on screen (at) (don't worry about these)
     """
     # inventory events
     def inventoryEvents(event, x, y, at):
@@ -173,6 +182,9 @@ init python:
     1. When 2 toolbox items are combined
     2. When an toolbox item is combined with an environment item
     3. What happens when you mouse over a toolbox item in its slot - showing the hand and inspect icons
+
+    This function takes in 4 parameters, the event currently occurring, the x and y positions of the mouse cursor as the event is occurring, 
+    and the time since the sprite is shown on screen (at) (don't worry about these)
     """
     # toolbox events
     def toolboxEvents(event, x, y, at):
@@ -274,6 +286,9 @@ init python:
     1. When 2 toolbox pop-up items are combined
     2. When an toolbox pop-up item is combined with an environment item
     3. What happens when you mouse over a toolbox pop-up item in its slot - showing the hand and inspect icons
+
+    This function takes in 4 parameters, the event currently occurring, the x and y positions of the mouse cursor as the event is occurring, 
+    and the time since the sprite is shown on screen (at) (don't worry about these)
     """
     # toolbox popup events
     def toolboxPopupEvents(event, x, y, at):
@@ -402,6 +417,9 @@ init python:
     1. When 2 toolbox pop-up items are combined
     2. When an toolbox pop-up item is combined with an environment item
     3. What happens when you mouse over a toolbox pop-up item in its slot - showing the hand and inspect icons
+
+    This function takes in 4 parameters, the event currently occurring, the x and y positions of the mouse cursor as the event is occurring, 
+    and the time since the sprite is shown on screen (at) (don't worry about these)
     """
     def environmentEvents(event, x, y, at):
         # what happens when cursor hovers over object
@@ -437,6 +455,8 @@ init python:
 
     """
     Controls dragging mechanism for evidence box items.
+
+    Takes in the current item being dragged.
     """
     def startDrag(item):
         global inventory_drag
@@ -447,6 +467,8 @@ init python:
 
     """
     Controls dragging mechanism for toolbox items.
+
+    Takes in the current item being dragged.
     """
     def startDrag2(item):
         global toolbox_drag
@@ -457,6 +479,8 @@ init python:
 
     """
     Controls dragging mechanism for toolbox pop-up items.
+
+    Takes in the current item being dragged.
     """
     def startDrag3(item):
         global toolboxpop_drag
@@ -467,6 +491,8 @@ init python:
 
     """
     Checks if items overlap each other (items are combined together)
+
+    Takes in 2 items being checked.
     """
     def checkItemsOverlap(item1, item2):
         if abs((item1.x + item1.width / 2) - (item2.x + item2.width / 2)) * 2 < item1.width + item2.width and abs((item1.y + item1.height / 2) - (item2.y + item2.height / 2)) * 2 < item1.height + item2.height and item1.type != item2.type:
@@ -474,6 +500,14 @@ init python:
         else:
             return False
 
+    """
+    Controls dialogue in between interactions. You may use this for dialogue pop-ups when interacting with objects in a particular scene.
+
+    Parameters:
+    1. who = name of person saying dialogue
+    2. what = dialogue
+    3. jump_to = label to jump to
+    """
     def characterSay(who, what, inspectItem = False, jump_to = None):
         if isinstance(what, str):
             renpy.call_screen("characterSay", who = who, what = what, jump_to = jump_to) # pass on the jump_to parameter in case one chooses to jump to another scene after dialogue.
@@ -485,7 +519,7 @@ init python:
                 renpy.restart_interaction()
 
     """
-    Reposition inventory items after clicking arrow keys
+    Repositions evidence box items after clicking arrow keys.
     """
     def repositionInventoryItems():
         global inventory_ub_enabled
@@ -518,7 +552,7 @@ init python:
                 inventory_ub_enabled = True
 
     """
-    Reposition inventory items after clicking arrow keys
+    Repositions toolbox items after clicking arrow keys.
     """
     def repositionToolboxItems():
         global toolbox_ub_enabled
@@ -549,6 +583,9 @@ init python:
             else:
                 toolbox_ub_enabled = True
 
+    """
+    Repositions toolbox pop-up items after clicking arrow keys.
+    """
     def repositionToolboxPopItems():
         global toolboxpop_ub_enabled
         global toolboxpop_db_enabled
@@ -578,7 +615,11 @@ init python:
             else:
                 toolboxpop_ub_enabled = True
 
-
+    """
+    Primary function for adding items to the evidence box.
+    
+    Takes in a list of items to add to the evidence box as a single parameter.
+    """
     def addToInventory(items):
         for item in items:
             inventory_items.append(item)
@@ -617,6 +658,11 @@ init python:
             environment_SM.redraw(0)
             renpy.restart_interaction()
     
+    """
+    Primary function for adding items to the toolbox.
+
+    Takes in a list of items to add to the toolbox as a single parameter.
+    """
     def addToToolbox(items):
         for item in items:
             toolbox_items.append(item)
@@ -655,6 +701,11 @@ init python:
             environment_SM.redraw(0)
             renpy.restart_interaction()
 
+    """
+    Primary function for adding items to the toolbox pop-up slot.
+
+    Takes in a list of items to add to the toolbox pop-up slot as a single parameter.
+    """
     def addToToolboxPop(items):
         for item in items:
             toolboxpop_items.append(item)
@@ -688,32 +739,54 @@ init python:
             environment_SM.redraw(0)
             renpy.restart_interaction()
 
+    """
+    Removes environment item from the environment (makes environment item disappear)
+
+    Takes in the item to be removed as a parameter.
+    """
     def removeEnvironmentItem(item):
         item.destroy()
         # environment_items_deleted.append(item.type)
         environment_sprites.pop(environment_sprites.index(item))
         environment_items.pop(environment_items.index(item.type))
 
+    """
+    Removes evidence box item from the evidence bar.
+
+    Takes in the item to be removed as a parameter.
+    """
     def removeInventoryItem(item):
         item.destroy()
         inventory_sprites.pop(inventory_sprites.index(item))
         inventory_items.pop(inventory_items.index(item.type))
         repositionInventoryItems()
 
+    """
+    Removes toolbox item from the toolbox bar.
+
+    Takes in the item to be removed as a parameter.
+    """
     def removeToolboxItem(item):
         item.destroy()
         toolbox_sprites.pop(toolbox_sprites.index(item))
         toolbox_items.pop(toolbox_items.index(item.type))
         repositionToolboxItems()
 
+    """
+    Removes evidence box item from the toolbox pop-up bar.
+
+    Takes in the item to be removed as a parameter.
+    """
     def removeToolboxPopItem(item):
         item.destroy()
         toolboxpop_sprites.pop(toolboxpop_sprites.index(item))
         toolboxpop_items.pop(toolboxpop_items.index(item.type))
         repositionToolboxPopItems()
 
+    """
+    Controls arrow functionality for the evidence box bar.
+    """
     def inventoryArrows(button):
-
         # determines if arrow buttons should be enabled or disabled - might change to up and down
         global inventory_ub_enabled
         global inventory_db_enabled
@@ -756,8 +829,9 @@ init python:
                 inventory_SM.redraw(0)
                 renpy.restart_interaction
     
-
-    
+    """
+    Controls arrow functionality for the toolbox bar.
+    """
     def toolboxArrows(button):
         
         # determines if arrow buttons should be enabled or disabled - might change to up and down
@@ -802,6 +876,9 @@ init python:
                 toolbox_SM.redraw(0)
                 renpy.restart_interaction
 
+    """
+    Controls arrow functionality for the toolbox pop-up bar.
+    """
     def toolboxPopArrows(button):
         # determines if arrow buttons should be enabled or disabled - might change to up and down
         global toolboxpop_ub_enabled
@@ -845,6 +922,11 @@ init python:
                 toolboxpop_SM.redraw(0)
                 renpy.restart_interaction
 
+    """
+    Controls item visibility in the toolbar.
+
+    Takes in an item and boolean controlling item's visibility (visible).
+    """
     def setItemVisibility(item, visible):
         if visible == False:
             item.visible = False
@@ -858,23 +940,16 @@ init python:
         toolbox_SM.redraw(0)
         toolboxpop_SM.redraw(0)
 
-
-
-
 # INVENTORY SCREENS ------------------------- (might move to custom_screens)
 
-# this the real one
+"""
+Sets up inventory screen when player enters.
+"""
 screen study_room3_inventory:
     zorder 1
-    # image "taped_left.png" xpos 0 ypos 0.8 at half_size
     image "UI/inv-icon-bg.png" xpos 0.014 ypos -0.03 at half_size
     imagebutton auto "UI/inventory-icon-%s.png" action If(renpy.get_screen("inventory") == None, true= [Show("inventory"), Hide("toolbox"), Hide("toolboxpop")], false= [Hide("inventory"), Hide("toolboxpop")]) xpos 0.087 ypos 0.02 at half_size
     imagebutton auto "UI/tool-inventory-icon-%s.png" action If(renpy.get_screen("toolbox") == None, true= [Show("toolbox"), Hide("inventory")], false= [Hide("toolbox"), Hide("toolboxpop")]) xpos 0.037 ypos 0.02 at half_size
-
-screen UI:
-    zorder 1
-    image "UI/inventory-icon-bg.png" xpos 0 ypos 0.8 at half_size
-    imagebutton auto "UI/inventory-icon-%s.png" action If(renpy.get_screen("inventory") == None, true= Show("inventory"), false= Hide("inventory")) xpos 0.03 ypos 0.5 at half_size
 
 # evidence:
 screen inventory:
@@ -903,7 +978,7 @@ screen toolboxpop:
     imagebutton idle If(toolboxpop_ub_enabled == True, true= "UI/inventory-arrow-up-enabled-idle.png", false= "UI/inventory-arrow-up-disabled.png") hover If(toolboxpop_ub_enabled == True, true= "UI/inventory-arrow-up-enabled-hover.png", false= "UI/inventory-arrow-up-disabled.png") action Function(toolboxPopArrows, button = "up") xpos 0.157 ypos 0.32 at half_size
     add toolboxpop_SM
 
-# inventory item menu
+# evidence box item menu
 screen inventoryItemMenu(item):
     zorder 7
     frame:
@@ -915,7 +990,7 @@ screen inventoryItemMenu(item):
         imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [Function(startDrag, item = item), Hide("inventoryItemMenu")]
         # imagebutton auto "UI/expand-inventory-item-%s.png" align (2.0, 0.5) at half_size action If(renpy.get_screen("toolboxpop") == None, true= Show("toolboxpop"), false= Hide("toolboxpop")) 
 
-# inventory item menu
+# toolbox item menu
 screen toolboxItemMenu(item):
     zorder 7
     frame:
@@ -926,7 +1001,8 @@ screen toolboxItemMenu(item):
         imagebutton auto "UI/view-inventory-item-%s.png" align (0.0, 0.5) at half_size action [Show("inspectItem", items = [item.type]), Hide("toolboxItemMenu")]
         # imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [Function(startDrag2, item = item), Hide("toolboxItemMenu")]
         imagebutton auto "UI/expand-inventory-item-%s.png" align (1.0, 0.5) at half_size action If(renpy.get_screen("toolboxpop") == None, true= Show("toolboxpop"), false= Hide("toolboxpop")) 
-# inventory item menu
+
+# toolbox pop-up item menu
 screen toolboxPopItemMenu(item):
     zorder 7
     frame:
@@ -937,6 +1013,11 @@ screen toolboxPopItemMenu(item):
         imagebutton auto "UI/view-inventory-item-%s.png" align (0.0, 0.5) at half_size action [Show("inspectItem", items = [item.type]), Hide("toolboxPopItemMenu")]
         imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [Function(startDrag3, item = item), Hide("toolboxPopItemMenu")]
 
+"""
+Controls item inspection (when player clicks info button on an item for closer inspection).
+
+Takes in a list of items.
+"""
 screen inspectItem(items):
     modal True
     zorder 4
@@ -962,6 +1043,9 @@ screen inspectItem(items):
         else:
             image "Items Pop Up/{}-pop-up.png".format(items[0]) align (0.5, 0.5) at half_size
 
+"""
+Displays dialogue box.
+"""
 screen characterSay(who = None, what = None, jump_to = None):
     modal True
     zorder 6
