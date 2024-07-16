@@ -11,8 +11,8 @@ default camera_photo_show = False
 # current cursor
 default current_cursor = ''
 
-# transition for photo taking flash
-define flash = Fade(.25, 0, .75, color="#fff")
+# transition for photo taking flash (0 in/out so middle screen don't last long)
+define flash = Fade(.25, 0, 0, color="#fff")
 
 # which tool is currently enabled (shown on screen)
 default tools = {"magnetic_black": False, "magnetic_white": False, "marker": False, "bag" : False, "tape": False, "tag": False, "ruler": False, "knife": False, "hungarian_red": False, "brush": False, "applicator": False, "ziplock": False, "stone": False, "water": False}
@@ -30,9 +30,8 @@ default evidence_marker_set = {'deskfoot': False, 'blood': False, "bullet": Fals
 # which evidence has been processed (add once processed)
 default processed = []
 
-# evidence photos list (add once processed), evidence photos counter (to flip through camera)
-default evidence_photos = []
-default evidence_photos_counter = 0
+# counter to flip through camera for evidences photos
+default photo_counter = 0
 
 # whether second level toolbox shows for different magnetic powder choices
 default mag_powder_show = False
@@ -76,28 +75,17 @@ init python:
         global processed
         processed.append(evidence)
 
-    # Add photo to camera photo list
-    def add_photo(photo):
-        global evidence_photos
-        pictures = {
-            'deskfoot': ['camera_deskfoot'],
-            'blood':['camera_blood'],
-            'bullet':['camera_bullet'],
-            'cheque':['camera_cheque']
-        }
-        evidence_photos.append(pictures[photo])
-    
     # Add/subtract to counter to change current displaying photo index
     def photo_switch(cmd):
-        global evidence_photos_counter
+        global photo_counter
         if cmd == 'next':
-            if evidence_photos_counter + 1 < len(evidence_photos):
-                evidence_photos_counter += 1
+            if photo_counter + 1 < len(processed):
+                photo_counter += 1
         elif cmd == 'prev':
-            if evidence_photos_counter - 1 >= 0:
-                evidence_photos_counter -= 1
+            if photo_counter - 1 >= 0:
+                photo_counter -= 1
         else:
-            evidence_photos_counter = 0
+            photo_counter = 0
     
     # Add/subtract to counter to change current displaying photo index
     def tools_switch(cmd):
@@ -111,7 +99,6 @@ init python:
         else:
             tools_counter = 3
     
-
 
 # Labels of scenes, calls screens in custom_screens
 # Start scenes: bahen and gloves
@@ -147,6 +134,8 @@ label office_start:
     show screen case_files_screen onlayer over_screens
     show screen camera_screen onlayer over_camera
     show screen toolbox_screen onlayer over_toolbox
+    if not all(evidence_marker_set[evidence] for evidence in evidence_marker_set):
+        "Spot the evidence locations and mark them with the evidence markers in tools before analyzing its details."
     call screen scene_office
 
 # All evidence scene preps: not main screen, default pop tools, reset cursor, call screen
