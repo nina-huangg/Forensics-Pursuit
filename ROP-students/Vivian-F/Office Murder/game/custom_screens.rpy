@@ -27,22 +27,20 @@ screen scene_office():
     
     # Before markers are set, tool can be marker, allow hotspot to place
     if tools['marker']:
+        # Store current marker number (check if bigger numbers already taken for an evidence)
         if num_deskfoot == 'numthree' or num_blood == 'numthree' or num_bullet == 'numthree' or num_cheque == 'numthree':
             $ curr_num = 'numfour'
-        
         elif num_deskfoot == 'numtwo' or num_blood == 'numtwo' or num_bullet == 'numtwo' or num_cheque == 'numtwo':
             $ curr_num = 'numthree'
-        
         elif num_deskfoot == 'numone' or num_blood == 'numone' or num_bullet == 'numone' or num_cheque == 'numone':
             $ curr_num = 'numtwo'
-        
         else:
             $ curr_num = 'numone'
         
         showif not case_file_show and not camera_photo_show:
             imagemap:
                 idle "office_bg"
-
+                # When marker not already placed for an evidence, create hotspot to add marker and set number
                 if evidence_marker_set['deskfoot'] == False:
                     hotspot(130,500,400,240) action [SetDict(evidence_marker_set,'deskfoot', True), SetVariable('num_deskfoot', curr_num)] sensitive tools['marker']
                 if evidence_marker_set['blood'] == False:
@@ -63,7 +61,7 @@ screen scene_office():
                 hotspot(640,280,440,310) action [SetLocalVariable('missing', True)] mouse "exclamation"
                 hotspot(550,825,200,145) action [SetLocalVariable('missing', True)] mouse "exclamation"
                 hotspot(1530,700,250,200) action [SetLocalVariable('missing', True)] mouse "exclamation"
-
+            # Show hint if trying to proceed (clicking into the evidence locations (exclamation marks)
             showif missing:
                 hbox:
                     xpos 0.35 ypos 0.1        
@@ -103,7 +101,7 @@ screen scene_office():
             pos(1303, 0)
             image "office_cheque"
 
-    # Place evidence markers on top of all previous images layers
+    # Place evidence markers and numbers on top of all previous images layers
     if evidence_marker_set['deskfoot']:
         hbox:
             pos(260, 350)
@@ -396,7 +394,7 @@ screen scene_deskfoot():
         image 'deskfoot_gone'
         
 # After photo taken (flashed), send here from label take_deskfoot
-# Final step to bag and screen_finished_processing
+# Final step to bag, tape, and screen_finished_processing
 screen scene_deskfoot_tobag():
     default bagged = False
     default taped = False
@@ -563,7 +561,7 @@ screen scene_blood():
             xpos 0.791 ypos 0.286
             image '[num_blood]' at blood_nums
 
-# After photo, here from label take_blood -- bag carpet and screen_finished_processing
+# After photo, here from label take_blood -- bag carpet, tape, and screen_finished_processing
 screen scene_blood_tobag():
     default bagged = False
     default taped = False
@@ -702,7 +700,7 @@ screen scene_cheque():
             xpos 0.762 ypos 0.47
             image '[num_cheque]' at cheque_nums
 
-# After photo, here from label take_cheque -- bag and screen_finished_processing
+# After photo, here from label take_cheque -- bag, tape, and screen_finished_processing
 screen scene_cheque_tobag():
     default bagged = False
     default taped = False
@@ -796,29 +794,6 @@ screen toolbox_screen():
 
                     action [Function(set_tool, 'marker')]
                     mouse "marker"
-            
-            # hbox:
-            #     xpos 0.017 ypos 0.275
-            #     imagebutton:
-            #         idle "evidence_markers" at Transform(zoom=0.04) 
-            #         hovered [Notify("evidence markers")]
-            #         unhovered [Notify('')]
-            #         action NullAction()
-            # hbox:
-            #     xpos 0.017 + 0.005 ypos 0.275 + 0.05
-            #     imagebutton:
-            #         idle "info_white" at Transform(alpha=0.5)
-            #         hovered [Notify("information")]
-            #         unhovered [Notify('')]
-            #         action NullAction()
-            # hbox:
-            #     xpos 0.017 + 0.035 ypos 0.275 + 0.05
-            #     imagebutton:
-            #         idle "use_white" at Transform(alpha=0.5)
-            #         hovered [Notify("pick to use")]
-            #         unhovered [Notify('')]
-            #         action [Function(set_tool, 'marker')]
-            #         mouse "marker"
     
         # Disable marker after placing last marker (all placed but tool marker)
         elif tools['marker']:        
@@ -841,7 +816,7 @@ screen toolbox_screen():
                 $ (mag_powder_ypos) = 0.7
             else:
                 $ (mag_powder_ypos) = 0
-
+            # Show four tools at once
             hbox:
                 xpos 0.018 ypos 0.285
                 imagebutton:
@@ -853,7 +828,6 @@ screen toolbox_screen():
 
                     action[Function(set_tool, tools_set_list[tools_counter])]
                     mouse "glove"
-
             hbox:
                 xpos 0.018 ypos 0.43
                 imagebutton:
@@ -876,7 +850,6 @@ screen toolbox_screen():
 
                     action[Function(set_tool, tools_set_list[tools_counter + 2])]
                     mouse "glove"
-
             hbox:
                 xpos 0.018 ypos 0.7
                 imagebutton:
@@ -888,7 +861,7 @@ screen toolbox_screen():
 
                     action[Function(set_tool, tools_set_list[tools_counter + 3])]
                     mouse "glove"
-            
+            # Secondary toolbox for magnetic powder
             showif tools["applicator"]:
                 hbox:
                     xpos 0.0885 ypos (mag_powder_ypos - 0.024)
@@ -1007,7 +980,8 @@ screen camera_screen():
                 
                 action [Function(photo_switch, 'prev')]
         
-        # When there are photos, display one at counter index
+        # When there are photos, display one at counter index 
+        # account for image name by storing in photo_name
         # Must code for hbox under each if, muliple if then hbox only shows one
         if len(processed) != 0:
             default photo_name = ''
