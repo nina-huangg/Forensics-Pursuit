@@ -1,0 +1,56 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+After initialization, but before game start.
+  File "game/scripts/custom_screens.rpy", line 177, in prepare_screen
+    screen toolbox_presumptive():
+  File "game/scripts/custom_screens.rpy", line 177, in prepare
+    screen toolbox_presumptive():
+  File "game/scripts/custom_screens.rpy", line 179, in prepare
+    hbox:
+  File "game/scripts/custom_screens.rpy", line 179, in prepare
+    hbox:
+  File "game/scripts/custom_screens.rpy", line 181, in prepare
+    imagebutton:
+  File "game/scripts/custom_screens.rpy", line 181, in prepare
+    imagebutton:
+SyntaxError: invalid syntax (game/scripts/custom_screens.rpy, line 183)
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\bootstrap.py", line 359, in bootstrap
+    renpy.main.main()
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\main.py", line 635, in main
+    run(restart)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\main.py", line 94, in run
+    renpy.display.screen.prepare_screens()
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\screen.py", line 1026, in prepare_screens
+    s.ast.prepare_screen()
+  File "game/scripts/custom_screens.rpy", line 177, in prepare_screen
+    screen toolbox_presumptive():
+  File "game/scripts/custom_screens.rpy", line 177, in prepare
+    screen toolbox_presumptive():
+  File "game/scripts/custom_screens.rpy", line 179, in prepare
+    hbox:
+  File "game/scripts/custom_screens.rpy", line 179, in prepare
+    hbox:
+  File "game/scripts/custom_screens.rpy", line 181, in prepare
+    imagebutton:
+  File "game/scripts/custom_screens.rpy", line 181, in prepare
+    imagebutton:
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\py3analysis.py", line 803, in ast_eval
+    return self.ast_eval_literal(expr)[0]
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\py3analysis.py", line 785, in ast_eval_literal
+    expr = py_compile(expr, 'eval', ast_node=True)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\python.py", line 1144, in py_compile
+    raise e
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\python.py", line 1081, in py_compile
+    raise orig_e
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\python.py", line 1073, in py_compile
+    tree = compile(source, filename, py_mode, ast.PyCF_ONLY_AST | flags, 1)
+SyntaxError: invalid syntax (game/scripts/custom_screens.rpy, line 183)
+
+Windows-10-10.0.22631 AMD64
+Ren'Py 8.2.1.24030407
+evidence collection v3 1.0
+Wed Jul  3 15:36:59 2024

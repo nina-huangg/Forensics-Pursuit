@@ -9,7 +9,7 @@ screen opening_screen():
         hotspot (1491, 198, 356, 102) action Jump("enter_splash_screen")
 
 screen splash_screen():
-    key "K_SPACE" action Jump("study_room1")
+    key "K_SPACE" action Jump("robarts_exterior")
 
 screen move_on():
     frame:
@@ -55,6 +55,15 @@ screen phone_ring():
     key "K_SPACE" action Jump("supervisor_call")
 
 
+screen study_room1(): 
+    frame:
+        xcenter 0.5 ycenter 0.5
+        hbox:
+            spacing 30
+            xsize 800
+            text "Hit space to inside."
+    key "K_SPACE" action Jump("study_room1")
+
 screen file_folder():
     frame:
         xcenter 0.5 ycenter 0.5
@@ -87,13 +96,13 @@ screen outside_study1():
         hbox:
             spacing 30
             xsize 800
-            text "You found the correct study room, great job! Now, let's go inside and investigate. Before we do that, let's first put on our gloves! \n\n\n>> press space to continue"
+            text "This is the study room where the victim was allegedly attacked! Before we go inside and investigate, let's put on some vinyl gloves as a precaution! \n\n\n>> press space to continue"
     key "K_SPACE" action Jump("gloves1")
 
 screen outside_study2():
     imagebutton:
-        xalign 0.63
-        yalign 0.6
+        xalign 0.625
+        yalign 0.616
         idle "doorknob_idle"
         hover "doorknob_hover"
         action Jump("study_room3")
@@ -177,48 +186,48 @@ screen inside_study1():
 
     # door scratches
     imagebutton:
-        xalign 0.9
-        yalign 0.45
+        xalign 0.62
+        yalign 0.57
         idle "click1_idle"
         hover "click1_hover"
         action Jump("scratches")
     
     # under table
     imagebutton:
-        xalign 0.01
-        yalign 0.8
+        xalign 0.07
+        yalign 0.97
         idle "click2_idle"
         hover "click2_hover"
         action Jump("under_table")
 
     # chair
     imagebutton:
-        xalign 0.5
-        yalign 0.6
+        xalign 0.24
+        yalign 0.73
         idle "click3_idle"
         hover "click3_hover"
         action Jump("chair")
 
 screen back_button1():
     imagebutton:
-        xalign 0.05
+        xalign 0.9
         yalign 0.8
         idle "back_button_idle"
         hover "back_button_hover"
         action Jump("study_room3")
 
-screen gun_insert:
-    key "K_SPACE" action Jump("gun_front")
+# screen gun_insert:
+#     key "K_SPACE" action Jump("gun_front")
 
-screen gun_insert_tip:
-    key "K_SPACE" action Jump("gun_side")
+# screen gun_insert_tip:
+#     key "K_SPACE" action Jump("gun_side")
 
-screen impression:
-    key "K_SPACE" action Jump("impression")
+# screen impression:
+#     key "K_SPACE" action Jump("impression")
 
 screen impression_dry:
     imagebutton:
-        xalign 0.65
+        xalign 0.45
         yalign 0.5
         idle "pvs_idle"
         hover "pvs_hover"
