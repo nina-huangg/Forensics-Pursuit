@@ -2,13 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 309: expected ':' not found.
-    else if snowed_cp == False:
-         ^
-
-File "game/script.rpy", line 311: expected statement.
-    else:
-        ^
+File "game/script.rpy", line 1072: expected statement.
+    yanchor 0.5
+             ^
 
 Ren'Py Version: Ren'Py 8.2.1.24030407
-Thu Jun 13 10:33:02 2024
+Thu Jul 11 12:58:46 2024
