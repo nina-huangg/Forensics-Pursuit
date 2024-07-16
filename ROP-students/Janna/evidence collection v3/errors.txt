@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/scripts/print_analysis.rpy", line 105: elif clause expects a non-empty block.
+    elif analyzing["gin"]:
+                          ^
+
+Ren'Py Version: Ren'Py 8.2.1.24030407
+Wed Jul 10 14:57:57 2024

@@ -1,27 +1,27 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
-While loading <renpy.display.im.Image object ('Items Pop Up/pvs_in_bag-pop-up.png') at 0x0000000005a37820>:
-  File "game/script.rpy", line 534, in script
-    pause
-  File "renpy/common/000statements.rpy", line 462, in execute_pause
-    renpy.pause()
-OSError: Couldn't find file 'Items Pop Up/pvs_in_bag-pop-up.png'.
+While loading <renpy.display.im.Image object ('Inventory Items/Inventory-evidence_bag.png') at 0x0000000005a9c3d0>:
+  File "game/script.rpy", line 149, in script
+    call screen scene1
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+OSError: Couldn't find file 'Inventory Items/Inventory-evidence_bag.png'.
 
 -- Full Traceback ------------------------------------------------------------
 
 Full traceback:
-  File "game/script.rpy", line 534, in script
-    pause
+  File "game/script.rpy", line 149, in script
+    call screen scene1
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 1968, in execute
     self.call("execute")
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 1950, in call
     return renpy.statements.call(method, parsed, *args, **kwargs)
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\statements.py", line 349, in call
     return method(parsed, *args, **kwargs)
-  File "renpy/common/000statements.rpy", line 462, in execute_pause
-    renpy.pause()
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\exports.py", line 1661, in pause
-    rv = renpy.ui.interact(mouse='pause', type='pause', roll_forward=roll_forward, pause=delay, pause_modal=modal)
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\exports.py", line 3413, in call_screen
+    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ui.py", line 301, in interact
     rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\core.py", line 2165, in interact
@@ -52,20 +52,9 @@ Full traceback:
     surf = render(child, width, height, cst, cat)
   File "render.pyx", line 170, in renpy.display.render.render
   File "render.pyx", line 260, in renpy.display.render.render
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\behavior.py", line 968, in render
-    rv = super(Button, self).render(width, height, st, at)
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\layout.py", line 1361, in render
-    surf = render(child,
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\particle.py", line 298, in render
+    cache.render = r = render(cache.child_copy, width, height, cst, cst)
   File "render.pyx", line 170, in renpy.display.render.render
-  File "render.pyx", line 260, in renpy.display.render.render
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\layout.py", line 900, in render
-    surf = render(child, width, height, cst, cat)
-  File "render.pyx", line 170, in renpy.display.render.render
-  File "render.pyx", line 260, in renpy.display.render.render
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\transform.py", line 957, in render
-    return RenderTransform(self).render(width, height, st, at)
-  File "accelerator.pyx", line 978, in renpy.display.accelerator.RenderTransform.render
-  File "accelerator.pyx", line 413, in renpy.display.accelerator.RenderTransform.render_child
   File "render.pyx", line 260, in renpy.display.render.render
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\transform.py", line 957, in render
     return RenderTransform(self).render(width, height, st, at)
@@ -82,9 +71,9 @@ Full traceback:
     filelike = renpy.loader.load(self.filename, directory="images")
   File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\loader.py", line 672, in load
     raise IOError("Couldn't find file '%s'." % name)
-OSError: Couldn't find file 'Items Pop Up/pvs_in_bag-pop-up.png'.
+OSError: Couldn't find file 'Inventory Items/Inventory-evidence_bag.png'.
 
 Windows-10-10.0.19045 AMD64
 Ren'Py 8.2.1.24030407
 Forensics 1.0
-Thu Jun 20 01:41:20 2024
+Thu Jul 11 23:45:58 2024
