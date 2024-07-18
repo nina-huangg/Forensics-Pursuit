@@ -3,11 +3,11 @@ See evidence collection v3 for the latest level. Lab level TBD. evidence collect
 **July 13 Update**
 
 TBD:
-  ~~- Add intro/outro code~~
-  ~~- Add photo evidence~~
-  ~~- Add evidence markers~~
+  - ~~Add intro/outro code~~
+  - ~~Add photo evidence~~
+  - ~~Add evidence markers~~
   - Add evidence labelling
-  ~~- Set dragging bounds for packaging draggables~~
+  - ~~Set dragging bounds for packaging draggables~~
   - Replace images of light switch fingerprint OR change position of light switch fingerprint to door to fix background inconsistency
   - Collect images for second gin bottle to be processed
   - Potentially retake corridor image for better quality
