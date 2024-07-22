@@ -20,21 +20,18 @@ default tools_image_list = ["magnetic_black_idle", "magnetic_white_idle", "marke
 default tools_set_list = ["magnetic_black", "magnetic_white", "marker", "bag", "tape", "tag", "ruler", "knife", "hungarian_red", "brush", "applicator", "ziplock", "stone", "water"]
 default tools_name_list = ["black magntic powder", "white magnetic powder", "marker", "evidence bag", "seal tape", "tag", "ruler", "knife", "hungarian red", "dusting brush", "magnetic powder applicator", "ziplock", "stone", "water"]
 default tools_counter = 3
+# whether second level toolbox shows for different magnetic powder choices
+default mag_powder_show = False
 
 # whether the item should be examined
 default should_be_examined = {'deskfoot': False, 'blood': False, "bullet": False, "cheque": False}
-
 # whether the evidence_marker is set
 default evidence_marker_set = {'deskfoot': False, 'blood': False, "bullet": False, "cheque": False}
-
 # which evidence has been processed (add once processed)
 default processed = []
-
+default photoed = []
 # counter to flip through camera for evidences photos
 default photo_counter = 0
-
-# whether second level toolbox shows for different magnetic powder choices
-default mag_powder_show = False
 
 # hold evidence marker number for each evidence
 default num_deskfoot = ''
@@ -74,12 +71,16 @@ init python:
     def finished_process(evidence):
         global processed
         processed.append(evidence)
+        global photoed
+        photoed.append(photoed)
+        if evidence == 'blood':
+            photoed.append('blood_sprayed')
 
     # Add/subtract to counter to change current displaying photo index
     def photo_switch(cmd):
         global photo_counter
         if cmd == 'next':
-            if photo_counter + 1 < len(processed):
+            if photo_counter + 1 < len(photoed):
                 photo_counter += 1
         elif cmd == 'prev':
             if photo_counter - 1 >= 0:
@@ -98,7 +99,7 @@ init python:
                 tools_counter -= 1
         else:
             tools_counter = 3
-    
+
 
 # Labels of scenes, calls screens in custom_screens
 # Start scenes: bahen and gloves
@@ -169,6 +170,8 @@ label show_blood:
     hide screen camera_screen onlayer over_camera
     if 'blood' not in processed:
         $ toolbox_show = True
+        scene blood_zoom
+        "First, place down the ruler in preparation of an initial photo of the blood stain before proceeding to develop print."
     else:
         show screen back_button_screen('office_start', 'scene_blood') onlayer over_screens
     call screen scene_blood
@@ -176,6 +179,19 @@ label show_blood:
 # From screen scene_blood to flash, back to screen to bag
 label take_blood:
     scene camera_blood
+    with flash
+    scene blood_ruler
+    "Now you can proceed with using the appropriate chemical"
+    call screen scene_blood_tospray
+
+label blood_tocut:
+    scene blood_sprayed
+    "Note: no print seems to show, it turns out that hungarian red spraying on carpet material will not reveal clear blood patterns since we cannot wash off the excess."
+    "Now proceed to carve out the area of carpet you would file as evidence before photographing this"
+    call screen scene_blood_tocut
+
+label take_blood_sprayed:
+    scene camera_blood_sprayed
     with flash
     call screen scene_blood_tobag
 

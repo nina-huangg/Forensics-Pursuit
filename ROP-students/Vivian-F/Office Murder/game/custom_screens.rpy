@@ -40,15 +40,16 @@ screen scene_office():
         showif not case_file_show and not camera_photo_show:
             imagemap:
                 idle "office_bg"
+                hover "office_bg_hover"
                 # When marker not already placed for an evidence, create hotspot to add marker and set number
                 if evidence_marker_set['deskfoot'] == False:
-                    hotspot(130,500,400,240) action [SetDict(evidence_marker_set,'deskfoot', True), SetVariable('num_deskfoot', curr_num)] sensitive tools['marker']
+                    hotspot(10,520,450,430) action [SetDict(evidence_marker_set,'deskfoot', True), SetVariable('num_deskfoot', curr_num)] sensitive tools['marker']
                 if evidence_marker_set['blood'] == False:
-                    hotspot(640,280,440,310) action [SetDict(evidence_marker_set,'blood', True), SetVariable('num_blood', curr_num)] sensitive tools['marker']
+                    hotspot(590,280,490,320) action [SetDict(evidence_marker_set,'blood', True), SetVariable('num_blood', curr_num)] sensitive tools['marker']
                 if evidence_marker_set['bullet'] == False:
-                    hotspot(550,825,200,145) action [SetDict(evidence_marker_set,'bullet', True), SetVariable('num_bullet', curr_num)] sensitive tools['marker']
+                    hotspot(580,830,240,190) action [SetDict(evidence_marker_set,'bullet', True), SetVariable('num_bullet', curr_num)] sensitive tools['marker']
                 if evidence_marker_set['cheque'] == False:
-                    hotspot(1530,700,250,200) action [SetDict(evidence_marker_set,'cheque', True), SetVariable('num_cheque', curr_num)] sensitive tools['marker']
+                    hotspot(1450,650,380,300) action [SetDict(evidence_marker_set,'cheque', True), SetVariable('num_cheque', curr_num)] sensitive tools['marker']
 
     # When tool not marker but markers not all placed
     # Show magnify hovering but clicking has no actions so markers are forced
@@ -56,11 +57,12 @@ screen scene_office():
         showif not case_file_show and not camera_photo_show:
             imagemap:
                 idle "office_bg"
+                hover "office_bg_hover"
 
-                hotspot(130,500,400,240) action [SetLocalVariable('missing', True)] mouse "exclamation"
-                hotspot(640,280,440,310) action [SetLocalVariable('missing', True)] mouse "exclamation"
-                hotspot(550,825,200,145) action [SetLocalVariable('missing', True)] mouse "exclamation"
-                hotspot(1530,700,250,200) action [SetLocalVariable('missing', True)] mouse "exclamation"
+                hotspot(10,520,450,430) action [SetLocalVariable('missing', True)] mouse "exclamation"
+                hotspot(590,280,490,320) action [SetLocalVariable('missing', True)] mouse "exclamation"
+                hotspot(580,830,240,190) action [SetLocalVariable('missing', True)] mouse "exclamation"
+                hotspot(1450,650,380,300) action [SetLocalVariable('missing', True)] mouse "exclamation"
             # Show hint if trying to proceed (clicking into the evidence locations (exclamation marks)
             showif missing:
                 hbox:
@@ -73,11 +75,12 @@ screen scene_office():
         showif not case_file_show and not camera_photo_show:
             imagemap:
                 idle "office_bg"
+                hover "office_bg_hover"
 
-                hotspot(130,500,400,240) action [Jump("show_deskfoot")] mouse "magnify"
-                hotspot(640,280,440,400) action [Jump("show_blood")] mouse "magnify"
-                hotspot(550,825,200,200) action [Jump("show_bullet")] mouse "magnify"
-                hotspot(1530,700,250,260) action [Jump("show_cheque")] mouse "magnify"
+                hotspot(10,520,450,430) action [Jump("show_deskfoot")] mouse "magnify"
+                hotspot(590,280,490,320) action [Jump("show_blood")] mouse "magnify"
+                hotspot(580,830,240,190) action [Jump("show_bullet")] mouse "magnify"
+                hotspot(1450,650,380,300) action [Jump("show_cheque")] mouse "magnify"
     
     # Place images of post-evidence collection (evidence not in place)
     # Note: office_deskfoot/blood has pixel overlap, blood must appear after
@@ -85,17 +88,14 @@ screen scene_office():
         hbox:
             pos(0, 0)
             image "office_deskfoot"
-    
     if 'blood' in processed: 
         hbox:
-            pos(427, 0)
-            image "office_blood"
-    
+            pos(533, 251)
+            image "office_blood" at Transform(zoom=0.395)
     if 'bullet' in processed: 
         hbox:
             pos(519, 911)
             image "office_bullet"
-    
     if 'cheque' in processed: 
         hbox:
             pos(1303, 0)
@@ -419,123 +419,19 @@ transform blood_nums():
 # Latnet blood on floor: Hungarian Red spray (mistake) - cut - ruler - photo - bag
 screen scene_blood():
     # Define local variables to track stage of processing
-    default under_sprayed = False
-    default proceed_under_sprayed = False
-    default good_sprayed = False
-    default over_sprayed = False
-    default proceed_good_sprayed = False
-    default appeared = False
-    default cut = False
     default rulered = False
 
     # Start processed if not done: first hungarian red dye spray
     if 'blood' not in processed:
         imagemap:
             idle "blood_zoom"
-            hotspot(232,195,1035,580) action [SetLocalVariable('under_sprayed', True)] sensitive tools['hungarian_red']
+            hotspot(232,195,1035,580) action [Function(set_tool, 'ruler'), SetLocalVariable('rulered', True)] sensitive tools['ruler']
             hbox:
                 xpos 0.781 ypos 0.276
                 image "marker_blank" at blood_markers
             hbox:
                 xpos 0.791 ypos 0.286
                 image '[num_blood]' at blood_nums
-        # Spray once is not enough, good if spray again, proceed_under if clicked enough
-        showif under_sprayed:
-            imagemap:
-                idle "blood_spray_under"
-                hotspot(232,195,1035,580) action [SetLocalVariable('good_sprayed', True)] sensitive tools['hungarian_red']
-                hbox:
-                    xpos 0.781 ypos 0.276
-                    image "marker_blank" at blood_markers
-                hbox:
-                    xpos 0.791 ypos 0.286
-                    image '[num_blood]' at blood_nums
-                hbox:
-                    xpos 0.25 ypos 0.8
-                    textbutton('Click if you think this is enough dye'):
-                        style 'custom_button'
-                        action [SetLocalVariable('proceed_under_sprayed', True), Function(set_cursor, '')]
-        # One layer click enough (mistake) send automatically to good_sprayed
-        showif proceed_under_sprayed:
-            image 'blood_spray_under'
-            hbox:
-                xpos 0.781 ypos 0.276
-                image "marker_blank" at blood_markers
-            hbox:
-                xpos 0.791 ypos 0.286
-                image '[num_blood]' at blood_nums
-            hbox:
-                xpos 0.25 ypos 0.8
-                textbutton('That was not enough! (click here to spray more)'):
-                    style 'custom_button'
-                    action [SetLocalVariable('good_sprayed', True), Function(set_cursor, '')]       
-        # Enough spray (twice or from under), can go over or press enough to proceed_good
-        showif good_sprayed:
-            imagemap:
-                idle "blood_spray_good"
-                hotspot(232,195,1035,580) action [SetLocalVariable('over_sprayed', True)] sensitive tools['hungarian_red']
-                hbox:
-                    xpos 0.781 ypos 0.276
-                    image "marker_blank" at blood_markers
-                hbox:
-                    xpos 0.791 ypos 0.286
-                    image '[num_blood]' at blood_nums
-                hbox:
-                    xpos 0.25 ypos 0.8
-                    textbutton('Click if you think this is enough dye'):
-                        style 'custom_button'
-                        action [SetLocalVariable('proceed_good_sprayed', True), Function(set_cursor, '')]       
-        # Over jumps forward to proceed_good_sprayed
-        showif over_sprayed:
-            image 'blood_spray_over'
-            hbox:
-                xpos 0.781 ypos 0.276
-                image "marker_blank" at blood_markers
-            hbox:
-                xpos 0.791 ypos 0.286
-                image '[num_blood]' at blood_nums
-            hbox:
-                xpos 0.25 ypos 0.8
-                textbutton('That is too much, the blood stains would not be visible!\n(click to proceede with last dye level)'):
-                    style 'custom_button'
-                    action [SetLocalVariable('proceed_good_sprayed', True), Function(set_cursor, '')]        
-        # Hungarian red dye reveals latent blood maybe within few seconds even 
-        # so no mistake point here for how long to wait
-        showif proceed_good_sprayed:
-            image 'blood_spray_good'
-            hbox:
-                xpos 0.781 ypos 0.276
-                image "marker_blank" at blood_markers
-            hbox:
-                xpos 0.791 ypos 0.286
-                image '[num_blood]' at blood_nums
-            hbox:
-                xpos 0.25 ypos 0.8
-                textbutton('Take a pause for latent blood to appear'):
-                    style 'custom_button'
-                    action [SetLocalVariable('appeared', True), Function(set_cursor, '')]        
-        showif appeared:
-            imagemap:
-                idle 'blood_appear'
-                hover 'blood_cut_hover'
-                hotspot(212,195,1055,590) action [SetLocalVariable('cut', True)] sensitive tools['knife']        
-                hbox:
-                    xpos 0.781 ypos 0.276
-                    image "marker_blank" at blood_markers
-                hbox:
-                    xpos 0.791 ypos 0.286
-                    image '[num_blood]' at blood_nums
-        showif cut:
-            imagemap:
-                idle 'blood_cut'
-                hotspot(232,195,1035,600) action [Function(set_tool, 'ruler'), SetLocalVariable('rulered', True)] sensitive tools['ruler']  
-                # set_tool toggles to unselect ruler tool before take photo button       
-                hbox:
-                    xpos 0.781 ypos 0.276
-                    image "marker_blank" at blood_markers
-                hbox:
-                    xpos 0.791 ypos 0.286
-                    image '[num_blood]' at blood_nums
         # After place ruler, take photo with evidence marker in scene -- jump to label take_blood 
         showif rulered:
             image 'blood_ruler'
@@ -550,7 +446,6 @@ screen scene_blood():
                 textbutton('Take Photo'):
                     style 'custom_button'
                     action [Jump("take_blood")]
-    
     # When already processed, show scene with carpet cut out -- shows flooring
     else:
         image 'blood_gone'
@@ -560,13 +455,51 @@ screen scene_blood():
         hbox:
             xpos 0.791 ypos 0.286
             image '[num_blood]' at blood_nums
+    
+screen scene_blood_tospray():
+    imagemap:
+        idle "blood_ruler"
+        hbox:
+            xpos 0.781 ypos 0.276
+            image "marker_blank" at blood_markers
+        hbox:
+            xpos 0.791 ypos 0.286
+            image '[num_blood]' at blood_nums
+        hotspot(232,195,1035,580) action [Function(set_tool, 'hungarian_red'), SetLocalVariable('sprayed', True), Jump('blood_tocut')] sensitive tools['hungarian_red']
+
+screen scene_blood_tocut():
+    default cut = False
+    imagemap:
+        idle "blood_sprayed"
+        hover "blood_cut_hover"
+        hbox:
+            xpos 0.781 ypos 0.276
+            image "marker_blank" at blood_markers
+        hbox:
+            xpos 0.791 ypos 0.286
+            image '[num_blood]' at blood_nums
+        hotspot(232,195,1135,680) action [Function(set_tool, 'knife'), SetLocalVariable('cut', True)] sensitive tools['knife']
+    showif cut:
+        imagemap:
+            idle "blood_cut"
+            hbox:
+                xpos 0.781 ypos 0.276
+                image "marker_blank" at blood_markers
+            hbox:
+                xpos 0.791 ypos 0.286
+                image '[num_blood]' at blood_nums
+            hbox:
+                xpos 0.15 ypos 0.85
+                textbutton('Take Photo'):
+                    style 'custom_button'
+                    action [Jump("take_blood_sprayed")]
 
 # After photo, here from label take_blood -- bag carpet, tape, and screen_finished_processing
 screen scene_blood_tobag():
     default bagged = False
     default taped = False
     imagemap:
-        idle "blood_ruler"
+        idle "blood_cut"
         hbox:
             xpos 0.781 ypos 0.276
             image "marker_blank" at blood_markers
@@ -985,22 +918,27 @@ screen camera_screen():
         # Must code for hbox under each if, muliple if then hbox only shows one
         if len(processed) != 0:
             default photo_name = ''
-            if processed[photo_counter] == 'deskfoot':
+            if photoed[photo_counter] == 'deskfoot':
                 $ photo_name = 'camera_deskfoot'
                 hbox:
                         xalign 0.5 yalign 0.4
                         image '[photo_name]' at Transform(zoom=0.55)
-            if processed[photo_counter] == 'blood':
+            if photoed[photo_counter] == 'blood':
                 $ photo_name = 'blood_' + num_blood
                 hbox:
                         xalign 0.5 yalign 0.4
                         image '[photo_name]' at Transform(zoom=0.55)
-            if processed[photo_counter] == 'bullet':
+            if photoed[photo_counter] == 'blood_sprayed':
+                $ photo_name = 'blood_sprayed_' + num_blood
+                hbox:
+                        xalign 0.5 yalign 0.4
+                        image '[photo_name]' at Transform(zoom=0.55)
+            if photoed[photo_counter] == 'bullet':
                 $ photo_name = 'bullet_' + num_bullet
                 hbox:
                         xalign 0.5 yalign 0.4
                         image '[photo_name]' at Transform(zoom=0.55)
-            if processed[photo_counter] == 'cheque':
+            if photoed[photo_counter] == 'cheque':
                 $ photo_name = 'cheque_' + num_cheque
                 hbox:
                     xalign 0.5 yalign 0.4
