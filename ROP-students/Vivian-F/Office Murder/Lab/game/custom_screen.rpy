@@ -1,14 +1,15 @@
 screen screen_finished_processing(evidence):
     hbox:
-        xpos 0.15 ypos 0.85
+        xpos 0.25 ypos 0.8
         textbutton('Store in case file'):
             style "custom_button"
             action [Hide('screen_finished_processing', _layer='over_screens'),
             Hide('case_files_screen', _layer='over_screens'), 
             Hide('toolbox_button_screen', _layer='over_screens'), 
             Hide('back_button_screen', _layer='over_screens'),
-            Function(set_state_to_processed, current_evidence), 
-            Function(set_current_evidence, ''),
+            Function(set_state_to_processed, current_process), 
+            SetVariable('current_process', ''), 
+            SetVariable('current_evidence', no_evidence),
             SetVariable('process_fumehood', False), 
             SetVariable('process_afis', False),
             Jump('hallway'), Function(set_cursor, '')]
@@ -23,15 +24,11 @@ screen hallway_screen():
         hbox:
             xpos 0.20 yalign 0.5
             imagebutton:
-                idle "data_lab_button_idle"
-                hover "data_lab_button_hover"
+                idle "data_analysis_lab_idle"
+                hover "data_analysis_lab_hover"
                 hovered Notify("Data Analysis Lab")
                 unhovered Notify('')     
                 action Jump("data_analysis_lab")
-        hbox:
-            xpos 0.234 yalign 0.628
-            hbox:
-                text("{size=-6}Data Analysis Lab{/size}")
         hbox:
             xpos 0.55 yalign 0.48
             imagebutton:
@@ -95,7 +92,7 @@ screen afis_screen:
                 SetLocalVariable('interface_imported', True),
                 Function(set_cursor, '')]
 
-    showif interface_imported:
+    showif interface_imported and current_evidence != no_evidence:
         hbox:
             xpos current_evidence.afis_details['xpos'] ypos current_evidence.afis_details['ypos']
             image current_evidence.afis_details['image']
@@ -165,62 +162,100 @@ screen fumehood_screen():
         imagemap:
             xpos 0.0 ypos 0.0
             idle "fumehood_bg"
-            hotspot(130,100,1230,880) action [Show('gun_blue_screen')] sensitive 'current_evidence' == bullet
-            hotspot(130,100,1230,880) action [Show('ninhydrin_screen')] sensitive 'current_evidence' == cheque
+            hotspot(130,100,1230,880) action [SetVariable('current_process', 'gun_blue'), Function(set_cursor, ''), Show('gun_blue_screen')] sensitive current_evidence == bullet
+            hotspot(130,100,1230,880) action [SetVariable('current_process', 'ninhydrin'), Function(set_cursor, ''), Show('ninhydrin_screen')] sensitive current_evidence == cheque
     
 
 screen gun_blue_screen:
     # Note: will not reach here if process already done
     # Ratio mistake tbi
     default bottle_placed = False
-    # default gb_poured = False
-    # default water_under = False
-    # default water_good = False
-    # default water_over = False
-    default dipped = False
-    # default dipped_gb = False
-    # default dipped_water = False
-    ## default bin_clipped = False
-    ## default rulered = False
-    default set_up = False
+    default water_poured = False
+    default gb_poured = False
+    default bullet_picked = False
+    default dipped_gb = False
+    default lift_gb = False
+    default dipped_water = False
+    default lift_water = False
+    default to_photo = False
+    default macro = False
 
     imagemap:
-        idle "fumehood_bg"
-        hotspot(130,100,1230,880) action [SetLocalVariable('bottle', True), Function(set_tool, 'bottle')] sensitive tools['bottle']
+        idle "bullet_placed"
+        hover "bullet_placed_hover"
+        hotspot(130,100,1230,880) action [SetLocalVariable('bottle_placed', True)] sensitive tools['bottle']
     showif bottle_placed:
-        image "gb_bottle"
+        imagemap:
+            idle "bottle_placed_zoom"
+            hover "bottle_placed_zoom_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('water_poured', True)] sensitive tools['water']
+    showif water_poured:
+        imagemap:
+            idle "bottle_water"
+            hover "bottle_water_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('gb_poured', True), Function(set_tool, 'gun_blue')] sensitive tools['gun_blue']
+    showif gb_poured:
+        image "bottle_gb"
+        imagebutton:
+            xpos 300 ypos 450
+            idle "bullet_photo_mouse" at Transform(zoom=8)
+            hovered Notify("Pick up bullet with tweezer")
+            unhovered Notify('')     
+            action [Function(set_cursor, 'tweezer_bullet'), SetLocalVariable('bullet_picked', True)]
+    showif bullet_picked:
+        imagemap:
+            idle "bottle_gb"
+            hover "bottle_gb_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('dipped_gb', True)]
+    showif dipped_gb:
+        imagemap:
+            idle "bullet_dip_gb"
+            hover "bullet_dip_gb_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('lift_gb', True)]
+    showif lift_gb:
+        imagemap:
+            idle "bullet_lift_gb"
+            hover "bullet_lift_gb_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('dipped_water', True)]
+    showif dipped_water:
+        imagemap:
+            idle "bullet_dip_water"
+            hover "bullet_dip_water_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('lift_water', True), Function(set_cursor, '')]
+    showif lift_water:
+        image "bullet_lift_water"
         hbox:
             xpos 0.25 ypos 0.8
-            textbutton('Gun Blue process'):
+            textbutton('Set up for photo (white background, evidence clipped\nto stand with ruler on side)'):
                 style 'custom_button'
-                action [SetLocalVariable('dipped', True)]
-    showif dipped:
-        image "gb_done"
+                action [SetLocalVariable('to_photo', True)]
+    showif to_photo:
+        image 'bullet_ruler'
         hbox:
             xpos 0.25 ypos 0.8
-            textbutton('Set up for photo (white background with ruler next to evidence)'):
+            textbutton('Change camera to macro lens to better photograph the print'):
                 style 'custom_button'
-                action [SetLocalVariable('set_up', True)]
-    showif set_up:
-        image 'bullet_print_photo'
+                action [SetLocalVariable('macro', True)]
+    showif macro:
+        image 'bullet_ruler'
+        image 'bullet_print' at Transform(zoom=0.5, xalign=0.5, yalign=0.45)
         hbox:
-            xpos 0.15 ypos 0.85
-            textbutton('Take Photo'):
+            xpos 0.25 ypos 0.8
+            textbutton('Take photo (this will be your digital evidence)'):
                 style 'custom_button'
-                action [Jump("take_bullet")]
-    
+                action [Hide('gun_blue_screen'), Jump('take_bullet')]
+
 screen gun_blue_tobag:
     default bagged = False
     default taped = False
     imagemap:
-        idle "bullet_print_photo"
+        idle "bullet_ruler"
         hotspot(130,100,1230,880) action [SetLocalVariable('bagged', True)] sensitive tools['bag']
     showif bagged:
         imagemap:
             idle "bin_bagged"
             hotspot(710,210,510,680) action [SetLocalVariable('taped', True), Function(set_tool, 'tape'),
                 Show('screen_finished_processing', evidence='bullet',_layer='over_screens')] sensitive tools['tape']
-            # Overwrite current evidence before return to main screen 
     showif taped:
         image 'bin_taped'
 
@@ -250,7 +285,7 @@ screen ninhydrin_screen:
     showif set_up:
         image 'cheque_print_photo'
         hbox:
-            xpos 0.15 ypos 0.85
+            xpos 0.15 ypos 0.8
             textbutton('Take Photo'):
                 style 'custom_button'
                 action [Jump("take_cheque")]
@@ -269,10 +304,3 @@ screen ninhydrin_tobag:
             # Overwrite current evidence before return to main screen 
     showif taped:
         image 'bin_taped'
-
-
-screen show_consistency():
-    image("consistency_result_afis")
-    hbox:
-        xalign 0.51 yalign 0.42
-        text"80% consistency found\nbetween the fingerprints!"

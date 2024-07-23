@@ -5,7 +5,7 @@ default show_case_files = False
 default evidence_complete_process = {'gun_blue': False, 'ninhydrin': False, 'bullet_AFIS': False, 'cheque_AFIS': False, 'deskfoot_AFIS': False}
 
 default current_cursor = ''
-default current_evidence = ''
+default current_process = ''
 default process_fumehood = False
 default process_afis = False
 
@@ -25,6 +25,8 @@ default tools = {'gun_blue': False, 'water': False, 'bottle': False, 'ninhydrin'
 default afis_search = []
 default afis_search_coordinates = [{'score_xpos': 0.53, 'xpos':0.61, 'ypos':0.505}]
 
+# transition for photo taking flash (0 in/out so middle screen don't last long)
+define flash = Fade(.25, 0, 0, color="#fff")
 
 init python:
     def set_cursor(cursor):
@@ -50,9 +52,9 @@ init python:
                 if t!= tool:
                     tools[t] = False
     
-    def set_state_to_processed(evidence):
+    def set_state_to_processed(process):
         global evidence_complete_process
-        evidence_complete_process[evidence] = True
+        evidence_complete_process[process] = True
 
     def set_current_casefile(type_case):
         global current_casefile
@@ -76,6 +78,8 @@ init python:
             self.processed = False
     
     # declare each piece of evidence
+    no_evidence = Evidence(name = '', afis_details = {})
+
     bullet = Evidence(name = 'bullet',
                         afis_details = {
                             'image': 'bullet_fingerprint',
@@ -99,6 +103,7 @@ init python:
     
     # declare afis relevant evidence
     afis_evidence = [bullet, cheque, deskfoot, blood]
+    current_evidence = no_evidence
 
 
 
@@ -141,36 +146,38 @@ label hallway_intro:
 
 label hallway:
     scene lab_hallway_idle
+    show screen toolbox_button_screen onlayer over_screens
+    show screen case_files_screen onlayer over_screens  
     $ show_evidence = False
     $ show_toolbox = False
     call screen hallway_screen()
 
 label data_analysis_lab:
-    scene afis_workstation_idle
+    scene afis_interface
     show screen toolbox_button_screen onlayer over_screens
     show screen back_button_screen('hallway') onlayer over_screens
     show screen case_files_screen onlayer over_screens  
-    "Here you can pick digital evidence data in case files to compare prints against known prints from AFIS using CSIpix."
+    "Pick digital evidence data in case files to compare prints against known prints from AFIS using CSIpix."
     call screen data_analysis_lab_screen
-    if current_evidence == 'bullet':
-        show afis_animated_no_consistency
-        pause 5
-        "You have processed the print."
-        "It seems like there is no similar data found."
-        scene dim_afis
-        "Let's check out the other evidences!"
-    if current_evidence == 'cheque':
-        show afis_animated_consistency
-        pause 5.5
-        "That is 80% consist!"
-        show screen show_consistency
-        "This high consistency between the fingerprints we collected on the cheque and the known data."
-        "This knowledge will be helpful later in your testimony."
-    # Implement desk footprint AFIS (CSIpix) comparison animation
-    if current_evidence == 'deskfoot':
-        "To be implemented"
-    # for blood, data anaysis lab does not support choosing it hence will not send back here
-    jump hallway
+    # if current_evidence == 'bullet':
+    #     show afis_animated_no_consistency
+    #     pause 5
+    #     "You have processed the print."
+    #     "It seems like there is no similar data found."
+    #     scene dim_afis
+    #     "Let's check out the other evidences!"
+    # if current_evidence == 'cheque':
+    #     show afis_animated_consistency
+    #     pause 5.5
+    #     "That is 80% consist!"
+    #     show screen show_consistency
+    #     "This high consistency between the fingerprints we collected on the cheque and the known data."
+    #     "This knowledge will be helpful later in your testimony."
+    # # Implement desk footprint AFIS (CSIpix) comparison animation
+    # if current_evidence == 'deskfoot':
+    #     "To be implemented"
+    # # for blood, data anaysis lab does not support choosing it hence will not send back here
+    # jump hallway
 
 label materials_lab:
     show screen toolbox_button_screen onlayer over_screens
@@ -193,13 +200,12 @@ label fumehood_pick:
     show gloved_hands
     "Now let's pick an evidence to analyze"
     hide gloved_hands
-    # Note: evidence will not be it if it's already processed
     $ process_fumehood = True
     call screen fumehood_screen
 
 label take_bullet:
-    scene bullet_print_photo
-    with flash
+    scene bullet_ruler with flash
+    "Now your can secure the processed physical evidence into a new evidence bag and tape to store safely"
     call screen gun_blue_tobag
 
 label take_cheque:
@@ -223,7 +229,6 @@ label analytical_instruments:
 # To be called
 label end_lab:
     scene lab_hallway_idle
-    hide screen show_consistency
     "Congratulations! You have finished the lab scene part of the tutorial."
     "Let's head on over to the court room."
     scene enter_courtroom_screen 

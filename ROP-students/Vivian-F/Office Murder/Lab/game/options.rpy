@@ -17,8 +17,6 @@ define config.layers = ['master', 'transient', 'screens', 'over_screens', 'overl
 
 define config.mouse = {}
 define config.mouse['glove'] = [('/images/mouse/glove_mouse.png', 0, 0)]
-define config.mouse['exclamation'] = [('/images/mouse/exclamation_mouse.png', 0, 0)]
-define config.mouse['magnify'] = [('/images/mouse/magnify_orange.png', 0, 0)]
 define config.mouse['bag'] = [('/images/mouse/bag_mouse.png', 0, 0)]
 define config.mouse['tape'] = [('/images/mouse/tape_mouse.png', 0, 0)]
 define config.mouse['water'] = [('/images/mouse/water_mouse.png', 0, 0)]
