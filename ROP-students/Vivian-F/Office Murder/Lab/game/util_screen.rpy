@@ -220,7 +220,7 @@ screen show_case_evidence():
                     xpos 0.55 ypos 0.3
                     textbutton('Process cheque'):
                         style "custom_button"
-                        action [Function(set_cursor, 'tweezer_cheque'), SetVariable('current_evidence', cheque), SetVariable("bool_show_case_evidence", False)]
+                        action [Function(set_cursor, 'cheque_mouse'), SetVariable('current_evidence', cheque), SetVariable("bool_show_case_evidence", False)]
                         sensitive process_fumehood
                 hbox:
                     xalign 0.3 yalign 0.3

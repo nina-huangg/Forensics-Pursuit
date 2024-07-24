@@ -262,45 +262,126 @@ screen gun_blue_tobag:
 
 screen ninhydrin_screen:
     # Note: will not reach here if process already done
-    # default tray_placed = False
-    # default picked = False
-    # default sprayed = False
-    # default kettle_placed = False
-    default dried = False
-    ## default bin_placed = False
-    ## default rulered = False
-    default set_up = False
+    default poured = False
+    default to_dip = False
+    default dipped = False
+    default lift = False
+    default choice = False
+    default dry = False
+    default humidified = False
+    default at_cabinet = False
+    default opened = False
+    default placed = False
+    default setting = False
+    default wait = False
+    default takeout = False
+    default to_photo = False
 
-    # imagemap:
-    #     idle "fumehood_bg"
-    #     hotspot(130,100,1230,880) action [SetLocalVariable('tray_placed', True)] sensitive tools['tray']
-    
-    # showif dried:
-    image "ninhydrin_done"
-    hbox:
-        xpos 0.25 ypos 0.8
-        textbutton('Set up for photo (white background with ruler next to evidence)'):
-            style 'custom_button'
-            action [SetLocalVariable('set_up', True), Function(set_cursor, '')]
-    showif set_up:
-        image 'cheque_print_photo'
+    imagemap:
+        idle "cheque_placed"
+        hover "cheque_placed_hover"
+        hotspot(130,100,1230,880) action [SetLocalVariable('poured', True), Function(set_tool, 'ninhydrin')] sensitive tools['ninhydrin']
+    showif poured:
+        imagemap:
+            idle "cheque_ninhydrin"
+            hover "cheque_ninhydrin_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('to_dip', True), Function(set_cursor, 'cheque_mouse')]
+    showif to_dip:
+        imagemap:
+            idle "cheque_pickup"
+            hover "cheque_pickup_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('dipped', True), Function(set_cursor, '')]
+    showif dipped:
+        imagemap:
+            idle "cheque_dipped"
+            hover "cheque_dipped_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('lift', True), Function(set_cursor, 'tray_cheque')]
+    showif lift:
+        image "cheque_pickup"
+        imagebutton:
+            xpos 1100 ypos 70
+            idle "cabinet" at Transform(zoom=0.5)
+            hovered Notify("Proceed to the heated cabinets")
+            unhovered Notify('')     
+            action [SetLocalVariable('choice', True), Function(set_cursor, '')]
+    showif choice:
+        image 'cheque_pickup'
+        hbox:
+            xpos 1100 ypos 70
+            image "cabinet" at Transform(zoom=0.5)
+        hbox:
+            xpos 0.15 ypos 0.6
+            textbutton('Dry'):
+                style 'custom_button'
+                action SetLocalVariable('dry', True)
+        hbox:
+            xpos 0.15 ypos 0.7
+            textbutton('Humidified'):
+                style 'custom_button'
+                action SetLocalVariable('humidified', True)
+    showif dry:
+        image 'cheque_pickup'
+        hbox:
+            xpos 0.2 ypos 0.7
+            textbutton('That is incorrect, you should place paper evidence in\na humidified heated cabinet to evaporate exccess liquid\n(click to proceed)'):
+                style 'custom_button'
+                action [SetLocalVariable('at_cabinet', True)]
+    showif dry:
+        image 'cheque_pickup'
+        hbox:
+            xpos 0.2 ypos 0.75
+            textbutton('That is correct (click to walk to the cabinet)'):
+                style 'custom_button'
+                action [SetLocalVariable('at_cabinet', True)]
+    showif at_cabinet:
+        imagemap:
+            idle "cabinet_humidified"
+            hover "cabinet_humidified_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('opened', True), Function(set_cursor, 'tray_cheque')]
+    showif opened:
+        imagemap:
+            idle "cabinet_open"
+            hover "cabinet_open_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('placed', True), Function(set_cursor, '')]
+    showif placed:
+        image 'cabinet_placed'
+        hbox:
+            xpos 0.2 ypos 0.75
+            textbutton('Set temperature to 80 degrees celcius with 65%\ relative humidity'):
+                style 'custom_button'
+                action [SetLocalVariable('setting', True)]
+    showif setting:
+        image 'cabinet_humidified'
+        hbox:
+            xpos 0.2 ypos 0.75
+            textbutton('Wait for 5 minutes'):
+                style 'custom_button'
+                action [SetLocalVariable('wait', True)]
+    showif wait:
+        image 'cabinet_done'
+        hbox:
+            xpos 0.15 ypos 0.75
+            textbutton('Set up exhibit behind white background for photograph'):
+                style 'custom_button'
+                action [SetLocalVariable('takeout', True)]
+    showif takeout:
+        image 'ninhydrin_tophoto'
         hbox:
             xpos 0.15 ypos 0.8
             textbutton('Take Photo'):
                 style 'custom_button'
-                action [Jump("take_cheque")]
+                action [Hide('ninhydrin_screen'), Jump("take_cheque")]
     
 screen ninhydrin_tobag:
     default bagged = False
     default taped = False
     imagemap:
-        idle "cheque_print_photo"
+        idle "ninhydrin_tophoto"
         hotspot(130,100,1230,880) action [SetLocalVariable('bagged', True)] sensitive tools['bag']
     showif bagged:
         imagemap:
             idle "bin_bagged"
             hotspot(710,210,510,680) action [SetLocalVariable('taped', True), Function(set_tool, 'tape'),
                 Show('screen_finished_processing', evidence='cheque',_layer='over_screens')] sensitive tools['tape']
-            # Overwrite current evidence before return to main screen 
     showif taped:
         image 'bin_taped'

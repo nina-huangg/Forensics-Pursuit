@@ -209,8 +209,8 @@ label take_bullet:
     call screen gun_blue_tobag
 
 label take_cheque:
-    scene cheque_print_photo
-    with flash
+    scene ninhydrin_take_photo with flash
+    "Now your can secure the processed physical evidence into a new evidence bag and tape to store safely"
     call screen ninhydrin_tobag
 
 label afis:
