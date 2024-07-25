@@ -1,0 +1,128 @@
+# initial screen
+screen lab_hallway_screen:
+    image "lab_hallway_dim"
+    hbox:
+        xpos 0.20 yalign 0.5
+        imagebutton:
+            idle "data_analysis_lab_idle"
+            hover "data_analysis_lab_hover"
+            hovered Notify("Data Analysis Lab")
+            unhovered Notify('')
+            action Jump('data_analysis_lab')
+    hbox:
+        xpos 0.55 yalign 0.48
+        imagebutton:
+            idle "materials_lab_idle"
+            hover "materials_lab_hover"
+            hovered Notify("Materials Lab")
+            unhovered Notify('')
+            action Jump('materials_lab')
+
+############################## DATA ANALYSIS ##############################
+screen data_analysis_lab_screen:
+    image "afis_interface"
+    hbox:
+        xpos 0.25 yalign 0.25
+        imagebutton:
+            idle "afis_software_idle"
+            hover "afis_software_hover"
+            action [SetVariable("location", "afis"), Jump('computer')]
+
+screen afis_screen:
+    default afis_bg = "software_interface"
+    default interface_import = False
+    default interface_imported = False
+    default interface_search = False
+    image afis_bg
+
+    hbox:
+        xpos 0.35 ypos 0.145
+        textbutton('Import'):
+            style "afis_button"
+            action [
+                ToggleLocalVariable('interface_import'),
+                ToggleVariable('show_case_files'),
+                SetLocalVariable('interface_imported', False),
+                SetLocalVariable('interface_search', False),
+                SetLocalVariable('afis_bg', 'software_interface'),
+                Function(set_cursor, '')]
+    
+    hbox:
+        xpos 0.55 ypos 0.145
+        textbutton('Search'):
+            sensitive not interface_search
+            style "afis_button"
+            action [
+                ToggleLocalVariable('interface_search'),
+                SetLocalVariable('afis_bg', 'software_search'),
+                Function(calculate_afis, current_evidence),
+                Function(set_cursor, '')]
+    
+    showif interface_import:
+        imagemap:
+            idle "software_interface"
+            hover "software_import_hover"
+            hotspot (282,241,680,756) action [
+                SetLocalVariable('interface_import', False), 
+                SetLocalVariable('interface_imported', True),
+                Function(set_cursor, '')]
+
+    showif interface_imported:
+        hbox:
+            xpos current_evidence.afis_details['xpos'] ypos current_evidence.afis_details['ypos']
+            image current_evidence.afis_details['image']
+    
+    showif interface_search:
+        if afis_search:
+            for i in range(len(afis_search)):
+                hbox:
+                    xpos afis_search_coordinates[i]['xpos'] ypos afis_search_coordinates[i]['ypos']
+                    hbox:
+                        text("{color=#000000}"+afis_search[i].name+"{/color}")
+                hbox:
+                    xpos afis_search_coordinates[i]['score_xpos'] ypos afis_search_coordinates[i]['ypos']
+                    hbox:
+                        text("{color=#000000}"+afis_search[i].afis_details['score']+"{/color}")
+            
+        else:
+            hbox:
+                xpos 0.57 yalign 0.85
+                hbox:
+                    text("{color=#000000}No match found in records.{/color}")
+
+    
+
+    
+#################################### MATERIALS ####################################
+screen materials_lab_screen:
+    image "materials_lab"
+
+    # hbox:
+    #     xpos 0.15 yalign 0.5
+    #     imagebutton:
+    #         idle "wet_lab_idle"
+    #         hover "wet_lab_hover"
+    #         hovered Notify("Wet Lab")
+    #         unhovered Notify('')
+    #         action Jump('wet_lab')
+    hbox:
+        xpos 0.26 yalign 0.5
+        imagebutton:
+            auto "oven_%s" at Transform(zoom=0.7)
+            hovered Notify("Oven")
+            unhovered Notify('')
+            action [SetVariable("location", "oven"), Jump("oven")]
+    
+    hbox:
+        xpos 0.52 yalign 0.5
+        imagebutton:
+            auto "fumehood_%s" at Transform(zoom=0.95)
+            hovered Notify("Fumehood")
+            unhovered Notify('')
+            action [SetVariable("location", "fumehood"), Jump("fumehood")]
+
+screen wet_lab_screen:
+    image "fumehood"
+
+screen analytical_instruments_screen:
+    image "lab_bench"

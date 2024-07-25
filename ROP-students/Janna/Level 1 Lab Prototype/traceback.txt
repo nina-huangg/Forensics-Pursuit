@@ -1,0 +1,90 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 99, in script
+    call screen lab_hallway_screen
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "game/evidence.rpy", line 119, in execute
+    screen casefile_physical():
+  File "game/evidence.rpy", line 119, in execute
+    screen casefile_physical():
+  File "game/evidence.rpy", line 130, in execute
+    hbox:
+  File "game/evidence.rpy", line 133, in execute
+    imagebutton:
+  File "game/evidence.rpy", line 133, in keywords
+    imagebutton:
+  File "game/evidence.rpy", line 138, in <module>
+    action If(location == "fumehood" and not gin.processed, [ToggleScreen("casefile_physical"), Jump("fumehood_bottle")], renpy.say(None, gin.description))
+Exception: ui.interact called with non-empty widget/layer stack. Did you forget a ui.close() somewhere?
+Stack was <Layer: 'transient'>
+<Many: <renpy.display.layout.Fixed object at 0x000000000681fa00>>
+<renpy.sl2.slast.SLContext object at 0x0000000006858e80>
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 99, in script
+    call screen lab_hallway_screen
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 1968, in execute
+    self.call("execute")
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 1950, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\statements.py", line 349, in call
+    return method(parsed, *args, **kwargs)
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\exports.py", line 3413, in call_screen
+    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ui.py", line 301, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\core.py", line 2165, in interact
+    repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, pause_modal=pause_modal, **kwargs) # type: ignore
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\core.py", line 2687, in interact_core
+    root_widget.visit_all(lambda d : d.per_interact())
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\displayable.py", line 431, in visit_all
+    d.visit_all(callback, seen)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\displayable.py", line 431, in visit_all
+    d.visit_all(callback, seen)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\displayable.py", line 431, in visit_all
+    d.visit_all(callback, seen)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\screen.py", line 480, in visit_all
+    callback(self)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\core.py", line 2687, in <lambda>
+    root_widget.visit_all(lambda d : d.per_interact())
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\screen.py", line 491, in per_interact
+    self.update()
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\screen.py", line 697, in update
+    self.screen.function(**self.scope)
+  File "game/evidence.rpy", line 119, in execute
+    screen casefile_physical():
+  File "game/evidence.rpy", line 119, in execute
+    screen casefile_physical():
+  File "game/evidence.rpy", line 130, in execute
+    hbox:
+  File "game/evidence.rpy", line 133, in execute
+    imagebutton:
+  File "game/evidence.rpy", line 133, in keywords
+    imagebutton:
+  File "game/evidence.rpy", line 138, in <module>
+    action If(location == "fumehood" and not gin.processed, [ToggleScreen("casefile_physical"), Jump("fumehood_bottle")], renpy.say(None, gin.description))
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\exports.py", line 1493, in say
+    who(what, *args, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\character.py", line 1394, in __call__
+    self.do_display(who, what, cb_args=self.cb_args, dtt=dtt, **display_args)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\character.py", line 1045, in do_display
+    display_say(who,
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\character.py", line 741, in display_say
+    rv = renpy.ui.interact(mouse='say', type=type, roll_forward=roll_forward)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ui.py", line 295, in interact
+    raise Exception("ui.interact called with non-empty widget/layer stack. Did you forget a ui.close() somewhere?\nStack was " + ('\n'.join([str(item) for item in stack])))
+Exception: ui.interact called with non-empty widget/layer stack. Did you forget a ui.close() somewhere?
+Stack was <Layer: 'transient'>
+<Many: <renpy.display.layout.Fixed object at 0x000000000681fa00>>
+<renpy.sl2.slast.SLContext object at 0x0000000006858e80>
+
+Windows-10-10.0.22631 AMD64
+Ren'Py 8.2.1.24030407
+Forensics Lab L1 Prototype 1.0
+Thu Jul 25 10:56:49 2024
