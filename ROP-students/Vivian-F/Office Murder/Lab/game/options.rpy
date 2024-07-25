@@ -26,6 +26,9 @@ define config.mouse['ninhydrin'] = [('/images/mouse/ninhydrin_mouse.png', 0, 0)]
 define config.mouse['tweezer_bullet'] = [('/images/mouse/tweezer_bullet_mouse.png', 0, 0)]
 define config.mouse['cheque_mouse'] = [('/images/mouse/cheque_mouse.png', 0, 0)]
 define config.mouse['tray_cheque'] = [('/images/mouse/cheque_tray_mouse.png', 0, 0)]
+define config.mouse['bullet_fingerprint'] = [('/images/data_analysis_lab/bullet_fingerprint.jpg', 0, 0)]
+define config.mouse['cheque_fingerprint'] = [('/images/data_analysis_lab/cheque_fingerprint.jpg', 0, 0)]
+define config.mouse['deskfoot_footprint'] = [('/images/data_analysis_lab/deskfoot_footprint.jpg', 0, 0)]
 
 # Disables mouse scroll for scrolling back/forward
 # define config.rollback_enabled = False

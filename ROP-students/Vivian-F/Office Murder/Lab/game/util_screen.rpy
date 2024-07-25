@@ -24,7 +24,6 @@ screen toolbox_button_screen:
             action [ToggleVariable("show_toolbox"), Function(set_cursor, '')]
     
     showif show_toolbox:
-        # (add?) ruler
         hbox:
             xpos 0.9 ypos 0.05
             imagebutton:
@@ -208,11 +207,11 @@ screen show_case_evidence():
                     xpos 0.55 ypos 0.3
                     textbutton('Bullet casing processed'):
                         style "custom_button"
-                        action NullAction()
+                        action NullAction() sensitive False
                 hbox:
                     xalign 0.3 yalign 0.3
                     imagebutton:
-                        idle "bullet_print" at evidence_small
+                        idle "casefile_bullet" at evidence_small
         
         if case_file_dict['cheque']:
             showif not evidence_complete_process['ninhydrin']:
@@ -231,18 +230,18 @@ screen show_case_evidence():
                     xpos 0.55 ypos 0.3
                     textbutton('Cheque processed'):
                         style "custom_button"
-                        action NullAction()
+                        action NullAction() sensitive False
                 hbox:
                     xalign 0.3 yalign 0.3
                     imagebutton:
-                        idle "cheque_print" at evidence_small
+                        idle "casefile_cheque_processed" at evidence_small
         
         if case_file_dict['deskfoot']:
             hbox:
                 xpos 0.5 ypos 0.3
                 textbutton('Footprint processed (KNAAP)'):
                     style "custom_button"
-                    action NullAction()
+                    action NullAction() sensitive False
             hbox:
                 xalign 0.3 yalign 0.3
                 imagebutton:
@@ -253,7 +252,7 @@ screen show_case_evidence():
                 xpos 0.5 ypos 0.3
                 textbutton('Bloody carpet processed\n(Hungarian Red)'):
                     style "custom_button"
-                    action NullAction()
+                    action NullAction() sensitive False
             hbox:
                 xalign 0.3 yalign 0.3
                 imagebutton:
@@ -276,19 +275,11 @@ screen show_case_digi_evidence():
         
         if case_file_dict['bullet']:
             showif evidence_complete_process['gun_blue']:
-                showif not evidence_complete_process['bullet_AFIS']:
-                    hbox:
-                        xpos 0.55 ypos 0.3
-                        textbutton('Process fingerprint'):
-                            style "custom_button"
-                            action [Function(set_cursor, 'bullet_fingerprint'), SetVariable('current_evidence', bullet), SetVariable('bool_show_case_digi', False)]
-                            sensitive process_afis
-                else:
-                    hbox:
-                        xpos 0.55 ypos 0.3
-                        textbutton('Fingerprint processed'):
-                            style "custom_button"
-                            action NullAction() sensitive False
+                hbox:
+                    xpos 0.55 ypos 0.3
+                    textbutton('No visible complete print to process'):
+                        style "custom_button"
+                        action NullAction() sensitive False
                 hbox:
                     xalign 0.28 yalign 0.3
                     imagebutton:
@@ -296,17 +287,17 @@ screen show_case_digi_evidence():
         
         if case_file_dict['cheque']:
             showif evidence_complete_process['ninhydrin']:
-                showif not evidence_complete_process['cheque_AFIS']:
+                showif not cheque.afis_processed:
                     hbox:
                         xpos 0.55 ypos 0.3
                         textbutton('Process fingerprint'):
                             style "custom_button"
-                            action [Function(set_cursor, 'cheque_print'), SetVariable('current_evidence', deskfoot), SetVariable('bool_show_case_digi', False)]
+                            action [Function(set_cursor, 'cheque_fingerprint'), SetVariable('current_evidence', cheque), SetVariable('bool_show_case_digi', False)]
                             sensitive process_afis
                 else:
                     hbox:
                         xpos 0.55 ypos 0.3
-                        textbutton('Fingerprint processed'):
+                        textbutton('Fingerprint searched'):
                             style "custom_button"
                             action NullAction() sensitive False
                 hbox:
@@ -315,17 +306,17 @@ screen show_case_digi_evidence():
                         idle "cheque_print" at evidence_small
 
         if case_file_dict['deskfoot']:
-            showif not evidence_complete_process['deskfoot_AFIS']:
+            showif not deskfoot.afis_processed:
                 hbox:
                     xpos 0.55 ypos 0.3
                     textbutton('Process footprint'):
                         style "custom_button"
-                        action [Function(set_cursor, 'casefile_deskfoot'), SetVariable('current_evidence', blood), SetVariable('bool_show_case_digi', False)]
+                        action [Function(set_cursor, 'deskfoot_footprint'), SetVariable('current_evidence', deskfoot), SetVariable('bool_show_case_digi', False)]
                         sensitive process_afis
             else:
                 hbox:
                     xpos 0.55 ypos 0.3
-                    textbutton('Footprint processed'):
+                    textbutton('Footprint searched'):
                         style "custom_button"
                         action NullAction() sensitive False
             hbox:

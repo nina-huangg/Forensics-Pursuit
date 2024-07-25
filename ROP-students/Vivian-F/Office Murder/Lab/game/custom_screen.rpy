@@ -47,20 +47,15 @@ screen data_analysis_lab_screen:
             imagebutton:
                 idle "afis_software_idle"
                 hover "afis_software_hover"
-                action Jump('afis')    
-    # imagemap:
-    #     idle "afis_workstation_idle"
-    #     hover "afis_workstation_hover"
-    #     hotspot (473,207,975,513) action [Function(set_state_to_processed, current_evidence), Function(set_cursor, ''), 
-    #     Return()] sensitive current_cursor =='bullet' or current_cursor=='cheque' or current_cursor=='deskfoot' or current_cursor=='blood'
- 
+                action [SetVariable('process_afis', True), Show('afis_screen')]
+    
 screen afis_screen:
     default afis_bg = "software_interface"
     default interface_import = False
     default interface_imported = False
     default interface_search = False
+    
     image afis_bg
-
     showif not (show_case_files or bool_show_case or bool_show_case_evidence or bool_show_case_digi or bool_show_case_report):
         hbox:
             xpos 0.35 ypos 0.145
@@ -82,7 +77,6 @@ screen afis_screen:
                     ToggleLocalVariable('interface_search'),
                     SetLocalVariable('afis_bg', 'software_search'),
                     Function(set_cursor, '')]
-    
     showif interface_import:
         imagemap:
             idle "software_interface"
@@ -90,25 +84,25 @@ screen afis_screen:
             hotspot (282,241,680,756) action [
                 SetLocalVariable('interface_import', False), 
                 SetLocalVariable('interface_imported', True),
-                Function(set_cursor, '')]
-
-    showif interface_imported and current_evidence != no_evidence:
-        hbox:
-            xpos current_evidence.afis_details['xpos'] ypos current_evidence.afis_details['ypos']
-            image current_evidence.afis_details['image']
-    
+                Function(set_cursor, ''),
+                Function(add_afis, current_evidence)]
+    # Note: line under does not work when placed into showif, hence the separate if statement
+    if current_evidence != no_evidence:
+        showif interface_imported:
+            hbox:
+                xpos current_evidence.afis_details['xpos'] ypos current_evidence.afis_details['ypos']
+                image current_evidence.afis_details['image']
     showif interface_search:
         if afis_search:
             for i in range(len(afis_search)):
                 hbox:
-                    xpos afis_search_coordinates[i]['xpos'] ypos afis_search_coordinates[i]['ypos']
+                    xpos afis_search_coordinates['xpos'] ypos afis_search_coordinates['ypos']+(i*0.04)
                     hbox:
                         text("{color=#000000}"+afis_search[i].name+"{/color}")
                 hbox:
-                    xpos afis_search_coordinates[i]['score_xpos'] ypos afis_search_coordinates[i]['ypos']
+                    xpos afis_search_coordinates['score_xpos'] ypos afis_search_coordinates['ypos']+(i*0.04)
                     hbox:
-                        text("{color=#000000}"+afis_search[i].afis_details['score']+"{/color}")
-            
+                        text("{color=#000000}"+afis_search[i].afis_details['score']+"{/color}")        
         else:
             hbox:
                 xpos 0.57 yalign 0.85
@@ -326,7 +320,7 @@ screen ninhydrin_screen:
             textbutton('That is incorrect, you should place paper evidence in\na humidified heated cabinet to evaporate exccess liquid\n(click to proceed)'):
                 style 'custom_button'
                 action [SetLocalVariable('at_cabinet', True)]
-    showif dry:
+    showif humidified:
         image 'cheque_pickup'
         hbox:
             xpos 0.2 ypos 0.75
@@ -360,14 +354,14 @@ screen ninhydrin_screen:
     showif wait:
         image 'cabinet_done'
         hbox:
-            xpos 0.15 ypos 0.75
+            xpos 0.2 ypos 0.75
             textbutton('Set up exhibit behind white background for photograph'):
                 style 'custom_button'
                 action [SetLocalVariable('takeout', True)]
     showif takeout:
-        image 'ninhydrin_tophoto'
+        image 'ninhydrin_take_photo'
         hbox:
-            xpos 0.15 ypos 0.8
+            xpos 0.2 ypos 0.8
             textbutton('Take Photo'):
                 style 'custom_button'
                 action [Hide('ninhydrin_screen'), Jump("take_cheque")]

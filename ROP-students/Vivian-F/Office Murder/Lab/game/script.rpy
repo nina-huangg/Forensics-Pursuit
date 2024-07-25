@@ -23,7 +23,7 @@ default tools = {'gun_blue': False, 'water': False, 'bottle': False, 'ninhydrin'
 
 # entries on afis when search
 default afis_search = []
-default afis_search_coordinates = [{'score_xpos': 0.53, 'xpos':0.61, 'ypos':0.505}]
+default afis_search_coordinates = {'score_xpos': 0.53, 'xpos':0.61, 'ypos':0.505}
 
 # transition for photo taking flash (0 in/out so middle screen don't last long)
 define flash = Fade(.25, 0, 0, color="#fff")
@@ -71,65 +71,48 @@ init python:
             case_file_dict[key] = False
         case_file_dict[evidence] = True
     
+    def add_afis(evidence):
+        afis_search.append(evidence)
+        evidence.afis_processed = True
+    
     class Evidence:
-        def __init__(self, name, afis_details):
+        def __init__(self, name, afis_details, afis_processed):
             self.name = name
             self.afis_details = afis_details
-            self.processed = False
+            self.afis_processed = False
     
     # declare each piece of evidence
-    no_evidence = Evidence(name = '', afis_details = {})
+    no_evidence = Evidence(name = '', afis_details = {}, afis_processed = False)
 
     bullet = Evidence(name = 'bullet',
                         afis_details = {
                             'image': 'bullet_fingerprint',
-                            'xpos':0.18, 'ypos':0.3,
-                            'score': '0'})
+                            'xpos': 0.18, 'ypos': 0.3,
+                            'score': '0'},
+                        afis_processed = False)
     cheque = Evidence(name = 'cheque',
                         afis_details = {
                             'image': 'cheque_fingerprint',
-                            'xpos':0.18, 'ypos':0.3,
-                            'score': '80'})
+                            'xpos':0.22, 'ypos':0.28,
+                            'score': '80'},
+                        afis_processed = False)
     deskfoot = Evidence(name = 'deskfoot',
                         afis_details = {
                             'image': 'deskfoot_footprint',
-                            'xpos':0.18, 'ypos':0.3,
-                            'score': '80'})
+                            'xpos':0.22, 'ypos':0.28,
+                            'score': '80'},
+                        afis_processed = False)
     blood = Evidence(name = 'blood',
                         afis_details = {
                             'image': 'blood_footprint',
                             'xpos':0.18, 'ypos':0.3,
-                            'score': '0'})
+                            'score': '0'},
+                        afis_processed = False)
     
     # declare afis relevant evidence
     afis_evidence = [bullet, cheque, deskfoot, blood]
     current_evidence = no_evidence
 
-
-
-image afis_animated_no_consistency:
-    "afis1"
-    pause 0.8
-    "afis2"
-    pause 0.8
-    "afis3"
-    pause 0.8
-    "afis4"
-    pause 0.8
-    "no_match_afis"
-    pause 0.8
-
-image afis_animated_consistency:
-    "afis1"
-    pause 0.8
-    "afis2"
-    pause 0.8
-    "afis3"
-    pause 0.8
-    "afis4"
-    pause 0.8
-    "match_afis"
-    pause 0.8
 
 
 # The game starts here.
@@ -148,8 +131,10 @@ label hallway:
     scene lab_hallway_idle
     show screen toolbox_button_screen onlayer over_screens
     show screen case_files_screen onlayer over_screens  
+    hide screen afis_screen
     $ show_evidence = False
     $ show_toolbox = False
+    $ current_evidence = no_evidence
     call screen hallway_screen()
 
 label data_analysis_lab:
@@ -159,25 +144,6 @@ label data_analysis_lab:
     show screen case_files_screen onlayer over_screens  
     "Pick digital evidence data in case files to compare prints against known prints from AFIS using CSIpix."
     call screen data_analysis_lab_screen
-    # if current_evidence == 'bullet':
-    #     show afis_animated_no_consistency
-    #     pause 5
-    #     "You have processed the print."
-    #     "It seems like there is no similar data found."
-    #     scene dim_afis
-    #     "Let's check out the other evidences!"
-    # if current_evidence == 'cheque':
-    #     show afis_animated_consistency
-    #     pause 5.5
-    #     "That is 80% consist!"
-    #     show screen show_consistency
-    #     "This high consistency between the fingerprints we collected on the cheque and the known data."
-    #     "This knowledge will be helpful later in your testimony."
-    # # Implement desk footprint AFIS (CSIpix) comparison animation
-    # if current_evidence == 'deskfoot':
-    #     "To be implemented"
-    # # for blood, data anaysis lab does not support choosing it hence will not send back here
-    # jump hallway
 
 label materials_lab:
     show screen toolbox_button_screen onlayer over_screens
@@ -212,10 +178,6 @@ label take_cheque:
     scene ninhydrin_take_photo with flash
     "Now your can secure the processed physical evidence into a new evidence bag and tape to store safely"
     call screen ninhydrin_tobag
-
-label afis:
-    $ process_afis = True
-    call screen afis_screen
 
 label wet_lab:
     show screen back_button_screen('materials_lab') onlayer over_screens
