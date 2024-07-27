@@ -1,4 +1,5 @@
-# Scenario: Detecting Cleaned Up Blood
+# Scenario: Detecting Cleaned Up Blood 
+# Crime Scene Collection:
 All the game files can be found in the directory titled "Detecting Cleaned Up Blood". Details about the scenario can be found below.
 
 ## Flowchart:
@@ -7,7 +8,7 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
 ## What is Currently Completed:
 - Navigation between the main scenes:
   - Implemented navigation between the view of the entire kitchen, the stove, viewing the dish towel, and a closeup of the floor
-  - Visual elements include the mouse cursor changeing into a magnifying glass or an exclamation point
+  - Visual elements include the mouse cursor changing into a magnifying glass or an exclamation point
   - How the player can navigate through the scenes:
     - Player can select the floor where there is cleaned up blood only after they discovered it with ALS
     - Player can select the stove to investigate it further
@@ -40,6 +41,10 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
   - Added separate button for the backing card
   - Added the debrief scene before the player enters the house
   - Fixed bug that kept leading the player to the fingerprint scene and taping the evidence bag
+  - Implemented Vivian's inventory system
+  - Added a camera button to take pictures of the current scene and evidence, and implemented a system so the photos are shown in the order taken
+  - Changed the way the screen looked when looking through the photos taken
+  - Replaced all stock photos
 
 ## Feedback Received:
 - Limit the scenario to one room/seciton (completed, the scenario now only takes place in the kitchen near the stove)
@@ -52,10 +57,42 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
 ## What Needs to be Developed/Bug Fixes:
 - Bug Fixes:
   - Currnetly do not know of any bugs
-- Find a way making the photos appear in the order collected so there are no blank gaps
-- Possible Addition: add a camera button to allow the player to take the picture of what they are currently looking at
+ 
+# Lab Scene:
 
-___
+## What is Currently Completed:
+- Navigation within the materials lab, can currently navigate between the lab bench, fumehood and cyanosafe
+- Implemented the hemastix and collecting a sample on both the dish towel and knife on the lab bench
+  - Guiding messages have been added to inform the player that:
+    - That they need to use a hemastix before collecting a sample
+    - Are using a hemastix when trying to start swabbing and vice versa
+    - They messed up the presumptive test with the hemastix, and prompt the player to try again
+    - The player is trying to collect an incorrect sample
+    - The player has successfully performed the presumptive test and should photograph the positive result next to the evidence and then collect a sample
+- Implemented lifting the print in the cyanosafe
+  - Guiding messages have been added to inform the player that:
+    - A sample has not been collected and that should be done first (the player can bypass this and continue with lifting the fingerprint which will result in damaged DNA)
+    - The time provided by the player is incorrect and should try again
+    - After the print has been lifted, a message hints toward staining the knife and provides further guidance if the player is still unsure about what to do, directly telling them to stain the knife
+  - The player is able to put the knife, superglue and distilled water into the cyanosafe in any order, once the player has put the knife in the cyanosafe, they cannot go back
+- Implemented staining the knife in the fumehood
+  - The player is able to put the knife in the fumehood, select the stain and stain the knife blade, and then collect the knife once again to use ALS to see the fingerprint
+  - When the player has stained the knife a message guides them to use ALS on the knife
+- Implemented using ALS on the knife
+  - Allows the player to use the UVA, 415nm, 450nm, or 530nm (only the 450nm flashlight will work)
+  - The player can select the scalebar and place it by the fingerprint to take a scaled photo of the print
+  - The player must take a scaled photo of the fingerprint under ALS and has the option to take a scaled photo of the fingerprint without ALS
+- When the player selects a sample swab, a message will appear asking the player if they would like to send the sample off to start the extraction process. Upon answering yes, the player will receive the extracted DNA (not implemented yet), if they answered no the sample remains in their inventory
+
+## Feedback Recieved:
+- The amount of guiding messages so far is good
+
+## What needs to be Developed/Bug Fixes:
+- Implement Janet's timer to use instead of a multiple choice question
+- Implement analyzing the DNA evidence to create DNA profiles
+- Implement comparing DNA profiles in the data analysis lab
+- Implement comparing fingerprints in the data analysis lab
+_
 
 # Scenario: Trespassing Gone Wrong
 ## Overview of Scenario:
