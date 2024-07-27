@@ -1220,33 +1220,7 @@ label start:
         call screen discover_fingerprint_first
         call screen full_inventory
 
-    # Code for when the player selects the black granular powder
-    label select_black_powder:
-        if currently_collecting_knife: # If player is currently collecting knife, tell them they can't use thid right now
-            show screen full_inventory
-            call screen already_collecting_knife
-            call screen full_inventory
-        if not collected_fingerprint and discovered_fingerprint:
-            if dusted_fingerprint: # If fingerprint has already been dusted, tell player they have already dusted this print
-                show screen full_inventory
-                call screen already_dusted
-                call screen full_inventory
-            if black_powder_selected: # If black granular powder is being used, put it away
-                $ default_mouse = "default"
-                $ black_powder_selected = False
-                hide screen dust_fingerprint
-            else: # If powder is not being used, put in player's hand
-                $ default_mouse = "powder"
-                $ black_powder_selected = True
-                show screen dust_fingerprint
-
-            call screen full_inventory
-        else: # If the fingerprint has already been collected or has not been found yet, inform the player that they need to find a fingerprint first
-            show screen full_inventory
-            call screen discover_fingerprint_first
-            call screen full_inventory
-
-    # Code fir after player has dusted the fingerprint
+    # Code for after player has dusted the fingerprint
     label dusted_fingerprint:
         $ default_mouse = "default"
         $ black_powder_selected = False
@@ -1265,27 +1239,6 @@ label start:
         call screen already_scaled
         call screen full_inventory
 
-    # Code for when the player selects the scalebar
-    label selected_scalebar:
-        if currently_collecting_knife: # If player is already collecting knife, tell them they cannot use this now
-            show screen full_inventory
-            call screen already_collecting_knife
-            call screen full_inventory
-        if not collected_fingerprint and dusted_fingerprint:
-            if scaled_fingerprint: # If player has already scaled the fingerprint, tell them that
-                show screen full_inventory
-                call screen already_scaled
-                call screen full_inventory
-            if scalebar_selected: # If scalebar is being used, put it away
-                $ default_mouse = "default"
-                $ scalebar_selected = False
-                hide screen scalebar_screen
-            else: # If scalebar is not being used, put in player's hand
-                $ default_mouse = "scalebar"
-                $ scalebar_selected = True
-                show screen scalebar_screen
-        call screen full_inventory
-
     # Code for when the player places the scalebar
     label placed_scalebar:
         $ default_mouse = "default"
@@ -1300,29 +1253,6 @@ label start:
     label has_been_taped:
         show screen full_inventory
         call screen already_taped
-        call screen full_inventory
-
-    # Code for when the player selects the lifting tape
-    label selected_lifting_tape:
-        if currently_collecting_knife: # If player is currently collecting the knife, tell them they cannot use this now
-            show screen full_inventory
-            call screen already_collecting_knife
-            call screen full_inventory
-        if not collected_fingerprint and scaled_fingerprint:
-            if taped_fingerprint: # If fingerprint has already been taped, tell the player that
-                show screen full_inventory
-                call screen already_taped
-                call screen full_inventory
-            if lifting_tape_selected: # If lifitng tape is being used, put it away
-                $ default_mouse = "default"
-                $ lifting_tape_selected = False
-                hide screen taping_screen
-                call screen full_inventory
-            else: # If lifting tape is not being used, put it in player's hand
-                $ default_mouse = "lifting_tape"
-                $ lifting_tape_selected = True
-                show screen taping_screen
-                call screen full_inventory
         call screen full_inventory
     
     # Code for when the player places the tape on the fingerprint
@@ -1352,24 +1282,6 @@ label start:
     label has_been_put_on_card:
         show screen full_inventory
         call screen already_put_on_card
-        call screen full_inventory
-
-    # Code for if the player selects the backing card
-    label selected_backing_card:
-        if currently_collecting_knife: # If the player is currently collecting the knife, tell them they cannot use that right now
-            show screen full_inventory
-            call screen already_collecting_knife
-            call screen full_inventory
-        if not collected_fingerprint and taped_fingerprint:
-            if put_print_on_card: # If the fingerprint has already been put on a card, tell the player that
-                show screen full_inventory
-                call screen already_put_on_card
-                call screen full_inventory
-            if picking_up: # If player is currently holding the lifted print, put print on backing card
-                jump finished_placing_fingerprint
-            else: # If player is not holding the lifted print, place empty backing card on stove
-                $ backing_card_placed = True
-                show screen placing_backing_card
         call screen full_inventory
 
     label placed_backing_card:
@@ -1402,73 +1314,6 @@ label start:
         show screen full_inventory
         call screen currently_holding_swab
         call screen full_invetory
-
-    # Code for if player selects the evidence bag
-    label evidence_bags:
-        if currently_in_swabbing_process and not put_swab_in_tube: # If player is in the middle of swabbing, tell them that
-            show screen full_inventory
-            call screen swabbing_in_progress
-            call screen full_inventory
-        if currently_spraying_luminol: # If player is currently spraying/making luminol, tell them that
-            show screen full_inventory
-            call screen in_luminol_process
-            call screen full_inventory
-        if holding_swab: # If player is holding swab, tell them they are holding the swab and cannot use this item right now
-            show screen full_inventory
-            call screen currently_holding_swab
-            call screen full_inventory
-        if bag_selected: # If evidence bag is being used/held, put it away
-            $ bag_selected = False
-            $ default_mouse = "default"
-            hide screen packed_fingerprint
-            hide screen packing_swab
-            hide screen collecting_dish_towel
-            hide screen collected_knife
-            if not currently_collecting_fingerprint:
-                jump select_screen
-            else:
-                call screen full_inventory
-        else: # if evidence bag is not being used, put in player's hand
-            $ bag_selected = True
-            $ default_mouse = "bag"
-            if currently_collecting_fingerprint and put_print_on_card and not collected_fingerprint:
-                show screen packed_fingerprint
-                call screen full_inventory
-            elif viewing_floor:
-                if taped_swab_tube and not collected_swab and not put_swab_in_bag:
-                    show screen packing_swab(bag_selected)
-                call screen full_inventory
-            elif viewing_dish_towel:
-                hide screen dish_towel_camera
-                if not collected_dish_towel:
-                    show screen collecting_dish_towel
-                call screen full_inventory
-            elif at_stove:
-                if knife_tube_sealed and not put_knife_in_bag:
-                    hide taped_tube_idle
-                    show screen collect_knife_tube
-                call screen full_inventory
-
-    # Code for if the player selects the forensic tube for the knife
-    label selected_forensic_tube:
-        if forensic_tube_selected: # if forensic tube is being used/held, put away
-            $ forensic_tube_selected = False
-            $ default_mouse = "default"
-            hide screen collected_knife
-            if not collected_knife and not put_knife_in_tube and not put_knife_in_bag and not knife_marked and not took_photo_knife_close:
-                show screen knife_unmarked_camera
-            elif knife_marked and not collected_knife and not put_knife_in_tube and not put_knife_in_bag and not took_photo_knife_close_marked:
-                show screen knife_marked_camera
-            call screen full_inventory
-        else: # If forensic tube is not being used, put in player's hand
-            $ forensic_tube_selected = True
-            $ default_mouse = "forensic_tube"
-            hide screen knife_unmarked_camera
-            hide screen knife_marked_camera
-            hide screen camera_screen
-            if not currently_collecting_fingerprint and not put_knife_in_tube:
-                show screen collected_knife
-            call screen full_inventory
 
     # Code for when the player puts the knife in the forensic tube
     label knife_put_in_tube:
@@ -1583,7 +1428,7 @@ label start:
         jump select_screen
         call screen full_inventory
 
-    # Code for when playre has put the dish towel in an evidence bag
+    # Code for when player has put the dish towel in an evidence bag
     label collect_towel:
         hide screen camera_screen
         $ bag_selected = False
@@ -1690,52 +1535,6 @@ label start:
         else:
             call screen full_inventory
 
-    # Code for when the player selects the tamper tape
-    label tamper_tape:
-        if currently_in_swabbing_process and not put_swab_in_tube: # If swab is not being collected, tell player they cannot use this now
-            show screen full_inventory
-            call screen swabbing_in_progress
-            call screen full_inventory
-        if currently_spraying_luminol: # if player is making/spraying luminol, tell the player they cannout use this right now
-            show screen full_inventory
-            call screen in_luminol_process
-            call screen full_inventory
-        if holding_swab: # If player is holding swab, tell them they cannot use this right now
-            show screen full_inventory
-            call screen currently_holding_swab
-            call screen full_inventory
-        if tamper_tape_selected: # If tape is being used, put it away and display the packed but not sealed evidence bag
-            $ tamper_tape_selected = False
-            $ default_mouse = "default"
-            hide screen collected_evidence
-            show packed_evidence_bag:
-                xpos 0.4
-                ypos 0.07
-            if not currently_collecting_fingerprint:
-                jump select_screen
-            else:
-                call screen toolbox
-        else: # If tape is not being used, put in player's hand
-            $ tamper_tape_selected = True
-            $ default_mouse = "tape"
-            if viewing_floor:
-                if put_swab_in_bag:
-                    show screen collected_evidence
-            elif viewing_dish_towel:
-                if put_towel_in_bag:
-                    show screen collected_evidence
-            elif currently_collecting_fingerprint and not collected_fingerprint:
-                if put_print_in_bag:
-                    show screen collected_evidence
-            elif at_stove:
-                if put_knife_in_bag:
-                    hide screen collect_knife_tube
-                    show screen collected_evidence
-                elif knife_not_ready_to_bag and put_knife_in_tube:
-                    hide filled_tube
-                    show screen tube_with_knife(sealed_tube_top, sealed_tube_bottom)
-            call screen full_inventory
-
     # Code for moving from kitchen to floor
     label floor:
         hide screen kitchen_screen
@@ -1768,41 +1567,6 @@ label start:
         hide screen kitchen_floor
         show screen swabbing(swabbing_floor, display_clean_swab, display_positive_swab)
         call screen full_inventory
-
-    # Code for when the player selects the swab button
-    label selected_swab:
-        if put_swab_in_tube or put_swab_in_bag: # If a swab is currently being collected, tell player they cannot use this right now
-            show screen full_inventory
-            call screen finish_collecting
-            call screen full_inventory
-        if currently_spraying_luminol: # If player is making/spraying luminol tell them they cannot use this right now
-            show screen full_inventory
-            call screen in_luminol_process
-            call screen full_inventory
-        if collected_swab or put_swab_in_bag: # If a sample has already been collected, tell the player this
-            show screen full_inventory
-            call screen already_collected_swab
-            call screen full_inventory
-        if currently_swabbing: # If swab is currently being used, put it away
-            $ default_mouse = "default"
-            $ currently_swabbing = False
-            $ swabbing_floor = False
-            $ currently_in_swabbing_process = False
-            hide screen swabbing
-            # Determine if the player can take a photo of the floor
-            if not conducted_kastle_meyer_test:
-                show screen camera_screen
-            show screen kitchen_floor
-        else: # If swab is not being used, put in player's hand
-            hide screen camera_screen
-            $ currently_swabbing = True
-            $ display_clean_swab = True
-            $ currently_in_swabbing_process = True
-            hide screen kitchen_floor
-            show screen swabbing(swabbing_floor, display_clean_swab, display_positive_swab)
-            call screen full_inventory
-            
-        jump select_screen
 
     # Code for when the player selects the distilled water
     label wet:
@@ -2038,44 +1802,6 @@ label start:
         $ currently_spraying_luminol = True
         show screen luminol(only_water, luminol_ready)
         call screen full_inventory
-
-
-
-    # Code for when the player selects the spray bottle tool
-    label spray_bottle:
-        if put_swab_in_tube or put_swab_in_bag: # If currently collecting swab, tell player to finish that first
-            show screen full_inventory
-            call screen finish_collecting
-            call screen full_inventory
-        if currently_in_swabbing_process: # If player is currently swabbing, tell them they cannot use this right now
-            show screen full_inventory
-            call screen swabbing_in_progress
-            call screen full_inventory
-        if holding_swab: # If the player is holding the swab tell them they can't use this now since they are holding the swab
-            show screen full_inventory
-            call screen currently_holding_swab
-            call screen full_inventory
-        if not collected_swab: # If player has not collected a sample, inform the player to do that first
-            show screen full_inventory
-            call screen collect_swab_first
-            call screen full_inventory
-        if currently_swabbing:
-            show screen swabbing(swabbing_floor, display_clean_swab, display_positive_swab)
-            show screen full_inventory
-            call screen cannot_use_now
-            show screen swabbing(swabbing_floor, display_clean_swab, display_positive_swab)
-            call screen full_inventory
-        if spray_bottle_selected: # If spray bottle is being used, put away
-            $ spray_bottle_selected = False
-            $ currently_spraying_luminol = False
-            hide screen luminol
-        else: # If spray bottle is not being used, put in player's hand
-            $ spray_bottle_selected = True
-            $ currently_spraying_luminol = True
-            show screen luminol(only_water, luminol_ready)
-            call screen full_inventory
-
-        jump select_screen
 
     # Code for when the player selects the luminol packet
     label luminol_packet:

@@ -657,7 +657,7 @@ init python:
                 if currently_spraying_luminol:
                     renpy.jump("busy_luminol")
                 if collected_swab or put_swab_in_bag:
-                    renpy.jump("already_collected_swab")
+                    renpy.jump("already_collected_sample")
                 if not currently_swabbing:
                     renpy.jump("start_swabbing")
                 else:
