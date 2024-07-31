@@ -1,0 +1,88 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While loading <renpy.display.im.Image object ('Items Pop Up/screwdriver-pop-up.png') at 0x101e94a90>:
+  File "game/script.rpy", line 151, in script
+    "Let's get started!"
+OSError: Couldn't find file 'Items Pop Up/screwdriver-pop-up.png'.
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 151, in script
+    "Let's get started!"
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/ast.py", line 930, in execute
+    renpy.exports.say(who, what, *args, **kwargs)
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/exports.py", line 1473, in say
+    who(what, *args, **kwargs)
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/character.py", line 1349, in __call__
+    self.do_display(who, what, cb_args=self.cb_args, dtt=dtt, **display_args)
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/character.py", line 1000, in do_display
+    display_say(who,
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/character.py", line 690, in display_say
+    rv = renpy.ui.interact(mouse='say', type=type, roll_forward=roll_forward)
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/ui.py", line 299, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/core.py", line 3499, in interact
+    repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, pause_modal=pause_modal, **kwargs) # type: ignore
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/core.py", line 4089, in interact_core
+    self.draw_screen(root_widget, fullscreen_video, (not fullscreen_video) or video_frame_drawn)
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/core.py", line 2699, in draw_screen
+    surftree = renpy.display.render.render_screen(
+  File "render.pyx", line 492, in renpy.display.render.render_screen
+  File "render.pyx", line 266, in renpy.display.render.render
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/layout.py", line 886, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 266, in renpy.display.render.render
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/layout.py", line 886, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 266, in renpy.display.render.render
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/layout.py", line 886, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 266, in renpy.display.render.render
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/screen.py", line 731, in render
+    child = renpy.display.render.render(self.child, w, h, st, at)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 266, in renpy.display.render.render
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/layout.py", line 886, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 266, in renpy.display.render.render
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/behavior.py", line 944, in render
+    rv = super(Button, self).render(width, height, st, at)
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/layout.py", line 1336, in render
+    surf = render(child,
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 266, in renpy.display.render.render
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/layout.py", line 886, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 266, in renpy.display.render.render
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/transform.py", line 909, in render
+    return RenderTransform(self).render(width, height, st, at)
+  File "accelerator.pyx", line 979, in renpy.display.accelerator.RenderTransform.render
+  File "accelerator.pyx", line 404, in renpy.display.accelerator.RenderTransform.render_child
+  File "render.pyx", line 266, in renpy.display.render.render
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/transform.py", line 909, in render
+    return RenderTransform(self).render(width, height, st, at)
+  File "accelerator.pyx", line 979, in renpy.display.accelerator.RenderTransform.render
+  File "accelerator.pyx", line 404, in renpy.display.accelerator.RenderTransform.render_child
+  File "render.pyx", line 266, in renpy.display.render.render
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/im.py", line 676, in render
+    return cache.get(self, render=True)
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/im.py", line 330, in get
+    surf = image.load()
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/im.py", line 803, in load
+    raise e
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/im.py", line 757, in load
+    filelike = renpy.loader.load(self.filename, directory="images")
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/loader.py", line 833, in load
+    raise IOError("Couldn't find file '%s'." % name)
+OSError: Couldn't find file 'Items Pop Up/screwdriver-pop-up.png'.
+
+macOS-14.2.1-arm64-arm-64bit arm64
+Ren'Py 8.1.0.23051307
+Forensics Testimony Scene Tutorial 1.0
+Tue Jul 30 19:54:29 2024
