@@ -72,7 +72,7 @@ init python:
         global processed
         processed.append(evidence)
         global photoed
-        photoed.append(photoed)
+        photoed.append(evidence)
         if evidence == 'blood':
             photoed.append('blood_sprayed')
 
