@@ -1,0 +1,56 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+After initialization, but before game start.
+  File "game/custom_screens.rpy", line 31, in prepare_screen
+    screen afis_screen:
+  File "game/custom_screens.rpy", line 31, in prepare
+    screen afis_screen:
+  File "game/custom_screens.rpy", line 38, in prepare
+    hbox:
+  File "game/custom_screens.rpy", line 38, in prepare
+    hbox:
+  File "game/custom_screens.rpy", line 40, in prepare
+    textbutton('Import'):
+  File "game/custom_screens.rpy", line 40, in prepare
+    textbutton('Import'):
+SyntaxError: invalid syntax (custom_screens.rpy, line 45)
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/bootstrap.py", line 275, in bootstrap
+    renpy.main.main()
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/main.py", line 670, in main
+    run(restart)
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/main.py", line 93, in run
+    renpy.display.screen.prepare_screens()
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/display/screen.py", line 1003, in prepare_screens
+    s.ast.prepare_screen()
+  File "game/custom_screens.rpy", line 31, in prepare_screen
+    screen afis_screen:
+  File "game/custom_screens.rpy", line 31, in prepare
+    screen afis_screen:
+  File "game/custom_screens.rpy", line 38, in prepare
+    hbox:
+  File "game/custom_screens.rpy", line 38, in prepare
+    hbox:
+  File "game/custom_screens.rpy", line 40, in prepare
+    textbutton('Import'):
+  File "game/custom_screens.rpy", line 40, in prepare
+    textbutton('Import'):
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/py3analysis.py", line 808, in ast_eval
+    return self.ast_eval_literal(expr)[0]
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/py3analysis.py", line 790, in ast_eval_literal
+    expr = py_compile(expr, 'eval', ast_node=True)
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/python.py", line 1088, in py_compile
+    raise e
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/python.py", line 1034, in py_compile
+    raise orig_e
+  File "/Users/nina/Desktop/renpy-8.1.0-sdk/renpy/python.py", line 1027, in py_compile
+    tree = compile(source, filename, py_mode, ast.PyCF_ONLY_AST | flags, 1)
+SyntaxError: invalid syntax (custom_screens.rpy, line 45)
+
+macOS-14.2.1-arm64-arm-64bit arm64
+Ren'Py 8.1.0.23051307
+Forensics Lab L1 Prototype 1.0
+Fri Jul 26 00:13:23 2024

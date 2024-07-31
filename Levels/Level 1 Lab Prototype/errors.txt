@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/inventory.rpy", line 1066: 'return' is not a keyword argument or valid child of the screen statement.
+    return
+          ^
+
+Ren'Py Version: Ren'Py 8.1.0.23051307
+Thu Jul 25 21:04:36 2024
