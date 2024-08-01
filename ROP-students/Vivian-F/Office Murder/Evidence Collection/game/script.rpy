@@ -1,11 +1,9 @@
-﻿# whether the screen in the main screen (office)
+﻿# track current mouse position
+default mousepos = (0.0, 0.0) 
+# whether the screen in the main screen (office)
 default on_main_screen = True
-# whether toolbox is currently displayed
-default toolbox_show = False
 # whether casefiles are currently displayed
 default case_file_show = False
-# whether camera is currently displayed
-default camera_show = False
 # whether photos inside the camera is currently displayed
 default camera_photo_show = False
 # current cursor
@@ -13,15 +11,6 @@ default current_cursor = ''
 
 # transition for photo taking flash (0 in/out so middle screen don't last long)
 define flash = Fade(.25, 0, 0, color="#fff")
-
-# which tool is currently enabled (shown on screen)
-default tools = {"magnetic_black": False, "magnetic_white": False, "marker": False, "bag" : False, "tape": False, "tag": False, "ruler": False, "knife": False, "hungarian_red": False, "brush": False, "applicator": False, "ziplock": False, "stone": False, "water": False}
-default tools_image_list = ["magnetic_black_idle", "magnetic_white_idle", "marker_idle", "bag_idle", "tape_idle", "tag_idle", "ruler_idle", "knife_idle", "hungarian_red_idle", "brush_idle", "applicator_idle", "ziplock_idle", "stone_idle", "water_idle"]
-default tools_set_list = ["magnetic_black", "magnetic_white", "marker", "bag", "tape", "tag", "ruler", "knife", "hungarian_red", "brush", "applicator", "ziplock", "stone", "water"]
-default tools_name_list = ["black magntic powder", "white magnetic powder", "marker", "evidence bag", "seal tape", "tag", "ruler", "knife", "hungarian red", "dusting brush", "magnetic powder applicator", "ziplock", "stone", "water"]
-default tools_counter = 3
-# whether second level toolbox shows for different magnetic powder choices
-default mag_powder_show = False
 
 # whether the item should be examined
 default should_be_examined = {'deskfoot': False, 'blood': False, "bullet": False, "cheque": False}
@@ -39,6 +28,11 @@ default num_blood = ''
 default num_bullet = ''
 default num_cheque = ''
 
+# tools list and which are currently enabled (shown on screen)
+default inventory_item_names = ["Magnetic Black ", "Magnetic White", "Marker", "Bag", "Tape", "Tag", "Ruler", "Knife", "Hungarian Red", "Brush", "Applicator", "Ziplock", "Stone", "Water", "Camera", "Evidences"] # holds names for inspect pop-up text 
+default tools = {"magnetic_black": False, "magnetic_white": False, "marker": False, "bag" : False, "tape": False, "tag": False, "ruler": False, "knife": False, "hungarian_red": False, "brush": False, "applicator": False, "ziplock": False, "stone": False, "water": False}
+default tools_counter = 3
+
 
 # Python helper functions
 init python:
@@ -54,27 +48,27 @@ init python:
             current_cursor = cursor
 
     # Toggle tool in tools list & set cursor to the tool 
-    def set_tool(tool):
+    def set_tool(tool_name):
         global tools
 
-        if tools[tool]:
+        if tools[tool_name]:
             set_cursor('')
-            tools[tool] = False
+            tools[tool_name] = False
         else:
-            set_cursor(tool)
-            tools[tool] = True
+            set_cursor(tool_name)
+            tools[tool_name] = True
             for t in tools:
-                if t!= tool:
+                if t!= tool_name:
                     tools[t] = False
 
     # Add evidence to processed list
     def finished_process(evidence):
         global processed
         processed.append(evidence)
+    
+    def add_photo(evidence):
         global photoed
         photoed.append(evidence)
-        if evidence == 'blood':
-            photoed.append('blood_sprayed')
 
     # Add/subtract to counter to change current displaying photo index
     def photo_switch(cmd):
@@ -100,10 +94,48 @@ init python:
         else:
             tools_counter = 3
 
+transform half_size:
+    zoom 0.5
 
 # Labels of scenes, calls screens in custom_screens
 # Start scenes: bahen and gloves
-label start: 
+label start:
+    $slot_size = (int(215 / 2), int(196 / 2)) # sets slot size for inventory
+    $slot_padding = 120 / 2
+    $distance_slot = slot_size[0] + slot_padding
+    $first_slot_x = 105 # inventory and toolbox
+    $first_slot_y = 300 # inventory and toolbox
+    $toolboxpop_first_slot_x = 285 # sets x coordinate for first toolbox pop-up slot
+    $toolboxpop_first_slot_y = 470 # sets y coordinate for first toolbox pop-up slot
+    
+    # inventory
+    $inventory_SM = SpriteManager(event = inventoryEvents) # sprite manager that manages inventory items; triggers function inventoryUpdate 
+    $inventory_sprites = [] # holds all inventory sprite objects
+    $inventory_items = [] # holds inventory items
+    $inventory_db_enabled = False # determines whether down arrow on inventory hotbar is enabled or not
+    $inventory_ub_enabled = False # determines whether up arrow on inventory hotbar is enabled or not
+
+    # toolbox:
+    $toolbox_SM = SpriteManager(event = toolboxEvents)
+    $toolbox_sprites = []
+    $toolbox_items = []
+    $toolbox_db_enabled = False
+    $toolbox_ub_enabled = False
+
+    # toolbox popup:
+    $toolboxpop_SM = SpriteManager(event = toolboxPopupEvents)
+    $toolboxpop_sprites = []
+    $toolboxpop_items = []
+    $toolboxpop_db_enabled = False
+    $toolboxpop_ub_enabled = False
+
+
+    python:
+        addToInventory(["bag", "tape", "camera", "evidences"])
+        addToToolbox(["marker", "ruler", "tag", "brush", "applicator", "hungarian_red", "knife", 
+        "ziplock", "stone", "water"])
+        addToToolboxPop(["magnetic_black", "magnetic_white"])
+
     scene bahen
     "Yesterday midnight, the Bahen Centre security guard's body was found in an office room in the building."
     "Your job now is to analyze the scene and collect evidences."
@@ -117,9 +149,8 @@ label gloves_start:
 
 label gloves2:
     hide hands
-    show gloved_hands
     "Now let's enter the scene!"
-    hide gloved_hands
+    show screen full_inventory
     jump office_start
 
 
@@ -127,34 +158,34 @@ label gloves2:
 # Every time back, change cursor to default and turn off all layovers, only icon
 label office_start:
     scene office_bg
-    $ set_cursor('')
-    $ toolbox_show = False
-    $ case_file_show = False
-    $ camera_photo_show = False
     hide screen back_button_screen onlayer over_screens
-    show screen case_files_screen onlayer over_screens
-    show screen camera_screen onlayer over_camera
-    show screen toolbox_screen onlayer over_toolbox
+    $ set_cursor('')
     if not all(evidence_marker_set[evidence] for evidence in evidence_marker_set):
         "Spot the evidence locations and mark them with the evidence markers in tools before analyzing its details."
     call screen scene_office
+    
 
 # All evidence scene preps: not main screen, default pop tools, reset cursor, call screen
 # Preps deskfoot scene
 label show_deskfoot:
     hide screen scene_office
-    $ on_main_screen = False
-    hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
+    hide screen case_files_screen onlayer over_screens
+    $ on_main_screen = False
     # Show background prompt first before analyze
     if 'deskfoot' not in processed:
-        $ toolbox_show = True
         scene deskfoot_zoom
         "Looks like there is a waxy footprint on the desk, you heard from a professor that there 
         had been a popcorn spill in the kitchen next door last night. (click to start development)"
     else:
         show screen back_button_screen('office_start', 'scene_deskfoot') onlayer over_screens
     call screen scene_deskfoot
+
+label deskfoot_dusted:
+    scene deskfoot_dust_clear
+    "Now with a clear dusted print, you want to cast it using the KNAAP technique"
+    "Start with grabbing an empty clean ziplock bag, put a layer of dental stone powder, then gradually add water to make a mix of correct consisitency"
+    call screen scene_deskfoot_tomix
 
 # Called back here from screen scene_deskfoot to flash photo-shoot, back to screen to bag
 label take_deskfoot:
@@ -166,10 +197,9 @@ label take_deskfoot:
 label show_blood:
     hide screen scene_office
     $ on_main_screen = False
-    hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
+    hide screen case_files_screen onlayer over_screens
     if 'blood' not in processed:
-        $ toolbox_show = True
         scene blood_zoom
         "First, place down the ruler in preparation of an initial photo of the blood stain before proceeding to develop print."
     else:
@@ -199,10 +229,9 @@ label take_blood_sprayed:
 label show_bullet:
     hide screen scene_office
     $ on_main_screen = False
-    hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
+    hide screen case_files_screen onlayer over_screens
     if 'bullet' not in processed:
-        $ toolbox_show = True
         scene bullet_zoom
         "Record this evidence and send it to lab for further investigation. (click anywhere to proceed)"
     else:
@@ -219,10 +248,9 @@ label take_bullet:
 label show_cheque:
     hide screen scene_office
     $ on_main_screen = False
-    hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
+    hide screen case_files_screen onlayer over_screens
     if 'cheque' not in processed:
-        $ toolbox_show = True
         scene cheque_zoom
         "Record this evidence and send it to lab for further investigation. (click anywhere to proceed)"
     else:
@@ -238,9 +266,8 @@ label take_cheque:
 # Here from screen scene_office once all evidence processed and user pressed to proceed to lab
 label end:
     # Turn off all crime scene layers (back to bahen for now as lab is to be implemented)
-    hide screen case_files_screen onlayer over_screens
     hide screen camera_screen onlayer over_camera
-    hide screen toolbox_screen onlayer over_toolbox
+    hide screen case_files_screen onlayer over_screens
     hide screen scene_office
     scene bahen
     "Lab to be implemented"
