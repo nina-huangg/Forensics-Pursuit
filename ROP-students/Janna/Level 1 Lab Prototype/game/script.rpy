@@ -9,6 +9,7 @@ default afis_search_coordinates = [{'score_xpos': 0.53, 'xpos':0.61, 'ypos':0.50
 # default correct_dfo_mixture = {"dfo", "hfe", "acetic acid", "methanol"}
 # default player_dfo_mixture = {}
 # default player_tool = ""
+define s = "Supervisor"
 
 init python:
     config.mouse = {
@@ -85,25 +86,25 @@ label start:
     scene entering_lab_screen
     with Dissolve(1.5)
 
-label lab_hallway_intro:
-    # show screen case_files_screen onlayer over_screens 
-    # show screen toolbox_button_screen onlayer over_screens     
+label lab_hallway_intro:  
     scene lab_hallway_idle
-    "Welcome to the lab!"
-    "This is where you will spend time analyzing the evidence you have collected."
-    "Let's get started!"
+    show ema normal
+    s "Officer, good to see you again."
+    show ema holding glasses
+    s "Great job processing the scene! I knew I could count on you"
+    # s "While you’ve been busy, I talked to the other officers who were on the scene that day. They collected this."
+    s "Welcome to the lab! Here, you can analyze all the evidence you collected from the crime scene."
+    show ema normal
+    s "You can go wherever you want - but I suggest beginning with the oven first so we won't have to waste time waiting for it to heat up."
 
 label hallway:
     $ location = ""
-    show screen ui
+    hide screen back_button_screen
     call screen lab_hallway_screen
 
 label data_analysis_lab:
     $ location = ""
-    show screen back_button_screen('hallway') onlayer over_screens
-    # hide screen ui
-    # show screen case_files_screen onlayer over_screens 
-    # show screen toolbox_button_screen onlayer over_screens    
+    show screen back_button_screen('hallway') onlayer over_screens  
     call screen data_analysis_lab_screen
 
 label afis:

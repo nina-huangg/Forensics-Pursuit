@@ -232,6 +232,7 @@ screen interactive_gin:
         action Jump("label_collected")
 
 label fumehood_bottle:
+    hide screen back_button_screen
     hide screen casefile_physical
     hide screen ui
     "Let's remove the label."

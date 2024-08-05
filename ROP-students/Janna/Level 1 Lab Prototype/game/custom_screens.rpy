@@ -26,7 +26,7 @@ screen data_analysis_lab_screen:
         imagebutton:
             idle "afis_software_idle"
             hover "afis_software_hover"
-            action [SetVariable("location", "afis"), Jump('computer')]
+            action Jump("computer")
 
 screen afis_screen:
     default afis_bg = "software_interface"

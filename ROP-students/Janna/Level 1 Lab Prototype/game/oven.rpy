@@ -7,6 +7,7 @@ init python:
             (3) preheated
             (4) baking
             (5) baked
+            (6) finished
         
         When the oven is in states (2) or (4), in_use is True.
         """
@@ -32,7 +33,7 @@ init python:
                 self.in_use = False
             # May omit else altogether since it could proc the preheating after baking
             else: # oven.state == baked
-                self.state = "off"
+                self.state = "finished"
                 self.in_use = False
     
     oven = Oven()
@@ -51,6 +52,8 @@ label oven:
     if oven.in_use:
         "The oven isn't finished [oven.state] yet. Let's come back another time."
         jump materials_lab
+    elif oven.state == "finished":
+        "We have no more business with the oven."
     call screen oven
 
 label preheat:
@@ -58,20 +61,33 @@ label preheat:
     "What temperature would you like to preheat the oven to?"
     menu:
         "100 F":
-            "That's not quite right..."
+            s "That's not quite right..."
             jump preheat
         "100 C":
-            "Excellent!"
-            "Let's do something else while waiting."
-            $ oven.update_state()
-            jump materials_lab
+            $ oven.update_state() # to preheating
+            s "Excellent!"
+            if not gin.processed or not fingerprint.processed:
+                s "Let's do something else while waiting."
+                jump materials_lab
+            else:
+                s "We've already finished analyzing the other pieces of evidence."
+                s "Looks like we'll have to wait this out."
+                "{color=#30b002}10 minutes later...{/color}"
+                $ oven.update_state() # to preheated
+                "{color=#30b002}Ding!{/color}"
+                "The oven's ready!"
+                jump bake
         "300 C":
-            "This is way too high!"
+            s "This is way too high!"
             jump preheat
 
 label bake:
     scene oven open empty
-    "Let's place our label inside."
+    if not label.dipped:
+        s "The oven is ready for baking - but our label isn't."
+        s "You should go to the fumehood and dip this label in DFO - which you'll have to make yourself, of course."
+    else:
+        "Let's place our label inside."
     call screen ui
 
 label label_placed_in_oven:
@@ -84,19 +100,23 @@ label set_timer:
     menu:
         "10 minutes":
             $ oven.update_state() # to baking
-            jump materials_lab
-            if fingerprint.processed:
-                "Now all we need to do is wait."
+            s "That's right."
+            if not gin.processed or not fingerprint.processed:
+                s "Let's do something else while waiting."
+                jump materials_lab
+            else:
+                s "We've finished processing the rest of our evidence."
+                s "Now all we need to do is wait."
                 "{color=#30b002}10 minutes later...{/color}"
                 $ oven.update_state()
                 "{color=#30b002}Ding!{/color}"
                 "Looks like it's ready to take out!"
                 jump label_baked
         "100 minutes":
-            "Added an extra zero there..."
+            s "Added an extra zero there..."
             jump set_timer
         "1 hour":
-            "What made you think that?!"
+            s "What made you think that?!"
             jump set_timer
 
 label label_baked:
@@ -105,5 +125,6 @@ label label_baked:
     $ label.image = "baked label %s"
     $ label.process_evidence()
     "{color=#30b002}The label has been updated.{/color}"
-    call screen ui
+    $ oven.update_state() # to finished
+    "Let's run this through AFIS."
     jump materials_lab

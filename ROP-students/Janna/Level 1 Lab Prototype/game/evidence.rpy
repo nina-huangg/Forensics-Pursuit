@@ -64,6 +64,20 @@ init python:
             ypos = ypos
         )
 
+    def label_function() -> None:
+        global location
+        global imported_print
+        global oven
+        if location == "fumehood":
+            renpy.hide_screen("casefile_physical")
+            renpy.jump("fumehood_label_v2")
+        elif location == "oven" and oven.state == "preheated":
+            renpy.hide_screen("casefile_physical")
+            renpy.jump("label_placed_in_oven")
+        elif location == "afis" and label.processed:
+            imported_print = "print_4"
+            renpy.jump("import_print")
+
     gin = Evidence_v2(
         name = "gin bottle",
         image = "gin %s",
@@ -76,34 +90,14 @@ init python:
         description = "The label collected from the gin bottle. May contain prints."
     )
 
+    # Additional attribute for label
+    label.dipped = False
+
     fingerprint = Evidence_v2(
         name = "fingerprint",
         image = "fingerprint %s",
         description = "The fingerprint gathered from the light switch."
     )
-
-    # TODO: ask navya if we can also process saliva from bottle is that within fsc300 scope?
-    # bottle = Evidence_v2("bottle")
-    # label = Evidence_v2("label")
-
-    # class Tool:
-    #     name: str
-    #     available: bool
-
-    #     def __init__(self, name: str):
-    #         self.name = name
-    #         self.available = False
-        
-    #     def enable_tool(self):
-    #         self.available = True
-
-    #     def disable_tool(self):
-    #         self.available = False
-
-    # methanol = Tool("methanol")
-    # dfo = Tool("dfo")
-    # acetic_acid = Tool("acetic acid")
-    # hfe = Tool("hfe")
 
 screen ui():
     zorder 1
@@ -114,7 +108,6 @@ screen ui():
             auto "case_file_%s" at Transform(zoom=2.5)
             hovered Notify("evidence")
             action ToggleScreen("casefile_physical")
-
 
 screen casefile_physical():
     zorder 1
@@ -146,7 +139,7 @@ screen casefile_physical():
                     auto "baked label %s" at Transform(zoom=0.7)
                 else:
                     auto "label_%s" at Transform(zoom=0.7)
-                action [If(location == "fumehood", [ToggleScreen("casefile_physical"), Jump("fumehood_label")]), If(location == "oven" and oven.state == "preheated", [ToggleScreen("casefile_physical"),Jump("label_placed_in_oven")])]
+                action Function(label_function)
     
     # showif label.processed:
     # hbox:
@@ -166,7 +159,7 @@ screen casefile_physical():
         xpos 0.35 ypos 0.24
         imagebutton:
             auto fingerprint.image at Transform(zoom=0.7)
-            action If(location == "afis" and pressed == "import", [ToggleScreen("casefile_physical"), SetVariable("print_imported", True), Jump("import_print_1")])
+            action If(location == "afis" and pressed == "import", [SetVariable("imported_print", "print_1"), Jump("import_print")])
 
     # hbox:
     #     xpos 0.5 ypos 0.51

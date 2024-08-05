@@ -2,9 +2,8 @@
 errors listed below, and try again.
 
 
-File "game/evidence.rpy", line 135: imagebutton expects a non-empty block.
-    else:
-         ^
+File "game/evidence.rpy", line 94: invalid syntax
+    label.
 
 Ren'Py Version: Ren'Py 8.2.1.24030407
-Thu Jul 25 10:42:23 2024
+Wed Jul 31 22:27:39 2024
