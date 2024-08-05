@@ -88,6 +88,9 @@ init python:
         global holding_towel
         global holding_knife
         global holding_knife_lifted_print
+        # Globals added for DNA code
+        global holding_incubated_knife_sample
+        global current_dna_evidence
         if event.type == renpy.pygame_sdl2.MOUSEBUTTONUP:
             if event.button == 1:
                 for item1 in inventory_sprites:
@@ -186,6 +189,14 @@ init python:
                                 elif item1.type == "knife_with_lifted_fingerprint":
                                     holding_knife_lifted_print = False
                                     renpy.hide_screen("put_knife_in_fumehood")
+                                elif item1.type == "incubated_sample_from_knife":
+                                    current_dna_evidence.holding_incubated_sample = False
+                                elif item1.type == "incubated_sample_from_towel":
+                                    current_dna_evidence.holding_incubated_sample = False
+                                elif item1.type == "incubated_sample_from_blood_pool":
+                                    current_dna_evidence.holding_incubated_sample = False
+                                elif item1.type == "filled_plate":
+                                    current_dna_evidence.holding_tray = False
                                 # ----------- END OF ADDED CODE -------------
 
         if event.type == renpy.pygame_sdl2.MOUSEMOTION:
@@ -309,7 +320,7 @@ init python:
                                     renpy.hide_screen("spray_knife")
                                 elif item1.type == "scalebar":
                                     holding_scalebar = False
-                                    renpy.hide("place_scalebar")
+                                    renpy.hide_screen("place_scalebar")
                                 # ---------- END OF ADDED CODE ------------
 
         if event.type == renpy.pygame_sdl2.MOUSEMOTION:
@@ -480,7 +491,7 @@ init python:
                     environment_SM.redraw(0)
         # action on click
         elif event.type == renpy.pygame_sdl2.MOUSEBUTTONUP:
-             if event.button == 1:
+            if event.button == 1:
                 for item in environment_sprites:
                     if item.x <= x <= item.x + item.width and item.y <= y <= item.y + item.height:
                         if item.type == "tape":
@@ -511,7 +522,11 @@ init python:
         global holding_towel
         global holding_knife
         global holding_knife_with_lifted_print
+        # Add for DNA code:
         global swab_sample_being_looked_at
+        global holding_incubated_knife_sample
+        global current_dna_evidence
+        global table_of_findings
         # set the original x and y values to be the current x and y values before the item is dragged
         item.original_x = item.x
         item.original_y = item.y
@@ -543,15 +558,209 @@ init python:
             holding_knife_lifted_print = True
             if at_fumehood:
                 renpy.show_screen("put_knife_in_fumehood")
+            elif at_lab_bench and not towel_on_lab_bench:
+                renpy.show_screen("place_knife_on_lab_bench")
         elif item.type == "sample_from_floor":
+            # Update variable
             swab_sample_being_looked_at = "floor"
+            # Jump to code that will ask if player wants to send sample to start extraction process
             renpy.jump("ask_to_send_for_extraction")
         elif item.type == "sample_from_towel":
+            # Update variable
             swab_sample_being_looked_at = "towel"
+            # Jump to code that will ask if player wants to send sample to start extraction process
             renpy.jump("ask_to_send_for_extraction")
         elif item.type == "sample_from_knife":
+            # Update variable
             swab_sample_being_looked_at = "knife"
+            # Jump to code that will ask if player wants to send sample to start extraction process
             renpy.jump("ask_to_send_for_extraction")
+        elif item.type == "incubated_sample_from_knife":
+            # To fix bug I had
+            if not at_thermal_cycler:
+                renpy.hide_screen("thermal_cycler_screen")
+
+            # If current sample is not this piece of evidence and nothing is in centrifuge and 
+            # centrifuge is not completed, change what the cirrent evidence is
+            if current_dna_evidence.name != "knife" and not current_dna_evidence.in_centrifuge and not current_dna_evidence.finished_centrifuge:
+                current_dna_evidence = knife_sample
+            # Only need this elif if you have a sample with an insufficient concentration of DNA, 
+            # in which you would replace "towel" with the name of the evidence
+            elif current_dna_evidence.name == "towel" and not current_dna_evidence.continuing_with_amplification:
+                current_dna_evidence = knife_sample
+            # If current evidence is not matching and not done the DNA analysis process, tell player they can;t use this
+            elif current_dna_evidence.name != "knife" and not current_dna_evidence.finished_detection:
+                renpy.jump("busy_with_another_sample")
+
+            # If finished analysis with this evidence, tell player that
+            if current_dna_evidence.name == "knife" and current_dna_evidence.finished_detection:
+                renpy.jump("dont_use_this_anymore")
+
+            if at_centrifuge and ((not current_dna_evidence.in_centrifuge and not current_dna_evidence.counterweight_in) or current_dna_evidence.finished_centrifuge):
+                current_dna_evidence.centrifuge_open = False # reset the value
+                current_dna_evidence = knife_sample
+                if at_open_centrifuge:
+                    current_dna_evidence.centrifuge_open = True
+
+            # Modify these to fit your evidence
+            if at_centrifuge and current_dna_evidence.name == "knife":
+                current_dna_evidence.holding_incubated_sample = True
+                renpy.show_screen("centrifuge_screen")
+            elif at_centrifuge and not current_dna_evidence.name == "knife":
+                renpy.jump("busy_with_another_sample")
+
+        elif item.type == "incubated_sample_from_towel":
+            if not at_thermal_cycler:
+                renpy.hide_screen("thermal_cycler_screen")
+
+            if current_dna_evidence.name != "towel" and not current_dna_evidence.in_centrifuge and not current_dna_evidence.finished_centrifuge:
+                current_dna_evidence = towel_sample
+            elif current_dna_evidence.name != "towel" and not current_dna_evidence.finished_detection:
+                renpy.jump("busy_with_another_sample")
+
+            if current_dna_evidence.name == "towel" and current_dna_evidence.finished_detection:
+                renpy.jump("dont_use_this_anymore")
+
+            if at_centrifuge and ((not current_dna_evidence.in_centrifuge and not current_dna_evidence.counterweight_in) or current_dna_evidence.finished_centrifuge):
+                current_dna_evidence.centrifuge_open = False # reset the value
+                current_dna_evidence = towel_sample
+                if at_open_centrifuge:
+                    current_dna_evidence.centrifuge_open = True
+
+            if at_centrifuge and current_dna_evidence.name == "towel":
+                current_dna_evidence.holding_incubated_sample = True
+                renpy.show_screen("centrifuge_screen")
+            elif at_centrifuge and not current_dna_evidence.name == "towel":
+                renpy.jump("busy_with_another_sample")
+
+        elif item.type == "incubated_sample_from_blood_pool":
+            if not at_thermal_cycler:
+                renpy.hide_screen("thermal_cycler_screen")
+
+            if current_dna_evidence.name != "floor" and not current_dna_evidence.in_centrifuge and not current_dna_evidence.finished_centrifuge:
+                current_dna_evidence = floor_sample
+            elif current_dna_evidence.name != "floor" and current_dna_evidence.finished_detection:
+                current_dna_evidence = floor_sample
+            elif current_dna_evidence.name == "towel" and not current_dna_evidence.continuing_with_amplification:
+                current_dna_evidece = floor_sample
+            #elif current_dna_evidence.name == "towel" and not current_dna_evidence.continuing_with_amplification:
+                #renpy.jump("busy_with_another_sample")
+            elif current_dna_evidence.name != "floor" and not current_dna_evidence.finished_detection:
+                renpy.jump("busy_with_another_sample")
+
+            if current_dna_evidence.name == "floor" and current_dna_evidence.finished_detection:
+                renpy.jump("dont_use_this_anymore")
+
+            if at_centrifuge and ((not current_dna_evidence.in_centrifuge and not current_dna_evidence.counterweight_in) or current_dna_evidence.finished_centrifuge):
+                current_dna_evidence.centrifuge_open = False # reset the value
+                current_dna_evidence = floor_sample
+                if at_open_centrifuge:
+                    current_dna_evidence.centrifuge_open = True
+
+            if at_centrifuge and current_dna_evidence.name == "floor":
+                current_dna_evidence.holding_incubated_sample = True
+                renpy.show_screen("centrifuge_screen")
+            elif at_centrifuge and not current_dna_evidence.name == "floor":
+                renpy.jump("busy_with_another_sample")
+        elif item.type == "filled_plate":
+            if current_dna_evidence.holding_pipette and current_dna_evidence.finished_amplification:
+                current_dna_evidence.holding_sample = True
+                renpy.jump("update_detection_plate_scene")
+            current_dna_evidence.holding_tray = True
+
+        elif item.type == "extracted_dna_from_floor":
+            # Change to match your evidence
+            # If already analyzed, tell player
+            if finished_analyzing_floor_sample:
+                renpy.jump("already_analyzed_sample")
+
+            # If current evidence does not match and not finished analysis, tell player
+            # Will need to change to match your evidence
+            if current_dna_evidence.name != "floor" and not current_dna_evidence.finished_detection:
+                renpy.jump("busy_with_another_sample")
+            elif current_dna_evidence.name != "floor" and current_dna_evidence.finished_detection:
+                # Update the current_dna_evidence
+                current_dna_evidence = floor_sample
+
+            if current_dna_evidence.name == "floor" and current_dna_evidence.finished_detection:
+                renpy.jump("dont_use_this_anymore")
+
+            # Should not need to change any of this
+            if current_dna_evidence.viewing_tray and not current_dna_evidence.dna_sample_in and current_dna_evidence.holding_pipette:
+                current_dna_evidence.holding_extracted_dna = True
+                current_dna_evidence.holding_distilled_water = False
+                current_dna_evidence.holding_sample = False
+                current_dna_evidence.holding_positive_control = False
+                renpy.jump("amount_to_add_for_quantification")
+            elif current_dna_evidence.finished_amplification:
+                renpy.jump("dont_use_this_anymore")
+            elif current_dna_evidence.viewing_tray and current_dna_evidence.dna_sample_in and current_dna_evidence.holding_pipette:
+                renpy.jump("sample_already_in")
+            elif current_dna_evidence.viewing_amp_plate and not current_dna_evidence.added_sample_to_amp_plate and current_dna_evidence.holding_pipette:
+                current_dna_evidence.holding_sample = True
+                current_dna_evidence.holding_distilled_water = False
+                current_dna_evidence.holding_extracted_dna = False
+                current_dna_evidence.holding_positive_control = False
+                renpy.jump("update_amp_plate_scene")
+
+        elif item.type == "extracted_dna_from_knife":
+            if finished_analyzing_knife_sample:
+                renpy.jump("already_analyzed_sample")
+
+            if current_dna_evidence.name != "knife" and not current_dna_evidence.finished_detection:
+                renpy.jump("busy_with_another_sample")
+            elif current_dna_evidence.name != "knife" and current_dna_evidence.finished_detection:
+                current_dna_evidence = knife_sample
+
+            if current_dna_evidence.name == "knife" and current_dna_evidence.finished_detection:
+                renpy.jump("dont_use_this_anymore")
+
+            if current_dna_evidence.viewing_tray and not current_dna_evidence.dna_sample_in and current_dna_evidence.holding_pipette:
+                current_dna_evidence.holding_extracted_dna = True
+                current_dna_evidence.holding_distilled_water = False
+                current_dna_evidence.holding_sample = False
+                current_dna_evidence.holding_positive_control = False
+                renpy.jump("amount_to_add_for_quantification")
+            elif current_dna_evidence.finished_amplification:
+                renpy.jump("dont_use_this_anymore")
+            elif current_dna_evidence.viewing_tray and current_dna_evidence.dna_sample_in and current_dna_evidence.holding_pipette:
+                renpy.jump("sample_already_in")
+            elif current_dna_evidence.viewing_amp_plate and not current_dna_evidence.added_sample_to_amp_plate and current_dna_evidence.holding_pipette:
+                current_dna_evidence.holding_sample = True
+                current_dna_evidence.holding_distilled_water = False
+                current_dna_evidence.holding_extracted_dna = False
+                current_dna_evidence.holding_positive_control = False
+                renpy.jump("update_amp_plate_scene")
+        elif item.type == "extracted_dna_from_towel":
+            if finished_analyzing_towel_sample:
+                renpy.jump("already_analyzed_sample")
+
+            if current_dna_evidence.name != "towel" and not current_dna_evidence.finished_detection:
+                renpy.jump("busy_with_another_sample")
+            elif current_dna_evidence.name != "towel" and current_dna_evidence.finished_detection:
+                current_dna_evidence = towel_sample
+
+            if current_dna_evidence.name == "towel" and current_dna_evidence.finished_amplification:
+                renpy.jump("dont_use_this_anymore")
+
+            if current_dna_evidence.viewing_tray and not current_dna_evidence.dna_sample_in and current_dna_evidence.holding_pipette:
+                current_dna_evidence.holding_extracted_dna = True
+                current_dna_evidence.holding_distilled_water = False
+                current_dna_evidence.holding_sample = False
+                current_dna_evidence.holding_positive_control = False
+                renpy.jump("amount_to_add_for_quantification")
+            elif current_dna_evidence.viewing_tray and current_dna_evidence.dna_sample_in and current_dna_evidence.holding_pipette:
+                renpy.jump("sample_already_in")
+            elif current_dna_evidence.viewing_amp_plate and not current_dna_evidence.added_sample_to_amp_plate and current_dna_evidence.holding_pipette:
+                current_dna_evidence.holding_sample = True
+                current_dna_evidence.holding_distilled_water = False
+                current_dna_evidence.holding_extracted_dna = False
+                current_dna_evidence.holding_positive_control = False
+                renpy.jump("update_amp_plate_scene")
+        elif item.type == "electropherogram_of_floor_sample":
+            table_of_findings.holding_floor_electropherogram = True
+        elif item.type == "electropherogram_of_knife_sample":
+            table_of_findings.holding_knife_electropherogram = True
         # ------------------ END OF ADDED CODE ---------------------
         inventory_drag = True
         item_dragged = item.type
@@ -570,6 +779,7 @@ init python:
         global holding_distilled_water
         global holding_basic_yellow
         global holding_scalebar
+        global current_dna_evidence # Need for DNA code
         item.original_x = item.x
         item.original_y = item.y
         if item.type == "superglue":
@@ -580,7 +790,25 @@ init python:
                 else:
                     renpy.show_screen("add_superglue_before_knife")
         elif item.type == "distilled_water":
-            if at_lab_bench:
+            # ------------- Needed for DNA code ---------------------
+            if current_dna_evidence.viewing_tray and current_dna_evidence.dna_sample_in and current_dna_evidence.holding_pipette and not current_dna_evidence.finished_pcr:
+                current_dna_evidence.holding_distilled_water = True
+                current_dna_evidence.holding_extracted_dna = False
+                current_dna_evidence.holding_sample = False
+                current_dna_evidence.holding_positive_control = False
+                renpy.jump("update_pcr_plate_scene")
+            elif current_dna_evidence.viewing_tray and not current_dna_evidence.dna_sample_in and current_dna_evidence.holding_pipette:
+                renpy.jump("add_dna_first")
+            elif current_dna_evidence.viewing_amp_plate and current_dna_evidence.holding_pipette and not current_dna_evidence.added_negative_control:
+                current_dna_evidence.holding_distilled_water = True
+                current_dna_evidence.holding_extracted_dna = False
+                current_dna_evidence.holding_sample = False
+                current_dna_evidence.holding_positive_control = False
+                renpy.jump("update_amp_plate_scene")
+            elif current_dna_evidence.viewing_amp_plate and current_dna_evidence.holding_pipette and current_dna_evidence.added_negative_control and not current_dna_evidence.finished_amplification:
+                renpy.jump("already_added_negative_control")
+            # ---------------------------------------------------------
+            elif at_lab_bench:
                 renpy.jump("selected_water")
             holding_distilled_water = True
             if at_cyanosafe_machine and not added_water and close_to_cyanosafe and not ran_cyanosafe:
@@ -588,6 +816,9 @@ init python:
                     renpy.show_screen("add_water_to_cyanosafe")
                 else:
                     renpy.show_screen("add_water_before_knife")
+            else:
+                holding_distilled_water = False
+                renpy.jump("dont_need_tool")
         elif item.type == "basic_yellow":
             holding_basic_yellow = True
             if knife_in_fumehood:
@@ -600,20 +831,36 @@ init python:
             if at_lab_bench:
                 if currently_swabbing:
                     renpy.jump("busy_swabbing")
+                # Check if current_evidence has already used hemastix
                 elif (current_evidence.name == "dish towel" and determined_blood_on_towel) or (current_evidence.name == "knife" and determined_blood_on_knife):
                     renpy.jump("already_used_hemastix")
+                # If evidence is on lab bench, use hemastix screen
                 elif towel_on_lab_bench or knife_on_lab_bench:
                     renpy.jump("using_hemastix")
         elif item.type == "cotton_swab":
             if at_lab_bench:
                 if currently_using_hemastix:
                     renpy.jump("busy_using_hemastix")
+                # Check if current evidence has not used hemastix yet
                 elif (current_evidence.name == "dish towel" and not determined_blood_on_towel) or (current_evidence.name == "knife" and not determined_blood_on_knife):
                     renpy.jump("use_hemastix_first")
+                # Check if current evidence has already been swabbed
                 elif (current_evidence.name == "dish towel" and sample_collected_from_towel) or (current_evidence.name == "knife" and sample_collected_from_knife):
                     renpy.jump("already_swabbed")
+                # If evidence is on lab bench, use swab
                 elif towel_on_lab_bench or knife_on_lab_bench:
                     renpy.jump("using_swab")
+        elif item.type == "gf_positive_control":
+            if current_dna_evidence.viewing_amp_plate and current_dna_evidence.holding_pipette and not current_dna_evidence.added_positive_control:
+                current_dna_evidence.holding_positive_control = True
+                current_dna_evidence.holding_distilled_water = False
+                current_dna_evidence.holding_extracted_dna = False
+                current_dna_evidence.holding_sample = False
+                renpy.jump("update_amp_plate_scene")
+            elif current_dna_evidence.viewing_amp_plate and current_dna_evidence.holding_pipette and current_dna_evidence.added_positive_control and not current_dna_evidence.finished_amplification:
+                renpy.jump("already_added_positive_control")
+            else:
+                renpy.jump("dont_need_tool")
         # --------------- END OF ADDED CODE ------------------
         toolbox_drag = True
         item_dragged = item.type
@@ -633,12 +880,18 @@ init python:
         item.original_x = item.x
         item.original_y = item.y
         if item.type == "450nm_flashlight":
-            if photographing_knife:
+            if holding_incorrect_flashlight:
+                renpy.show_screen("back_button")
+                renpy.jump("already_using_light")
+            elif photographing_knife:
                 holding_450nm_flashlight = True
                 renpy.jump("correct_als_flashlight")
             else:
                 renpy.jump("dont_need_flashlight")
         else:
+            if holding_incorrect_flashlight or holding_450nm_flashlight:
+                renpy.show_screen("back_button")
+                renpy.jump("already_using_light")
             if photographing_knife:
                 holding_incorrect_flashlight = True
                 renpy.jump("incorrect_als_flashlight")

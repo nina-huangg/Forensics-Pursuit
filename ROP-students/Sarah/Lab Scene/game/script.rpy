@@ -1,5 +1,8 @@
 ﻿# Variable for mouse
-define config.mouse_displayable = MouseDisplayable("mouse_cursor", 0, 0).add("inspect", "magnifying_glass_cursor", 0, 0).add("knife", "knife_cursor", 0, 0).add("swab", "swab_cursor", 0, 0).add("water", "water_cursor", 0, 0).add("unused_hemastix", "unused_hemastix_cursor", 0, 0).add("negative_result", "negative_result_cursor", 0, 0).add("positive_result", "positive_result_cursor", 0, 0)
+define config.mouse_displayable = MouseDisplayable("mouse_cursor", 0, 0).add("inspect", "magnifying_glass_cursor", 0, 0).add("knife", "knife_cursor", 0, 0).add("swab", "swab_cursor", 0, 0).add("water", "water_cursor", 0, 0).add("unused_hemastix", "unused_hemastix_cursor", 0, 0).add("negative_result", "negative_result_cursor", 0, 0).add("positive_result", "positive_result_cursor", 0, 0).add("dna_tube", "dna_tube_cursor", 0, 0).add("pipette", "pipette_cursor", 0, 173)
+
+# Variable for flash effect
+define flash = Fade(.25, 0, .75, color="#fff")
 
 # Variables to keep track of where the player is
 define in_hallway = True
@@ -8,6 +11,18 @@ define in_data_analysis_lab = False
 define at_cyanosafe_machine = False
 define at_fumehood = False
 define at_lab_bench = False
+define in_biology_lab = False
+define in_chemistry_lab = False
+define at_centrifuge = False
+define at_open_centrifuge = False
+define at_pcr = False
+define at_pcr_tray = False
+define at_thermal_cycler = False
+define at_amplifier_tray = False
+define at_detection_plate = False
+define at_plate_centrifuge = False
+define at_miseq = False
+define viewing_table_of_findings = False
 
 # Variables for cyanosafe
 define cyanosafe_door_open = False
@@ -30,11 +45,16 @@ define scaled_knife = False
 define inspecting_fingerprint = False
 define sent_knife_sample_to_be_extracted = False
 define warned_player_about_fingerprint_before_swabbing = False
+define finished_analyzing_knife_sample = False
 
 # Variables for dish towel
 define determined_blood_on_towel = False
 define sample_collected_from_towel = False
 define sent_towel_sample_to_be_extracted = False
+define finished_analyzing_towel_sample = False
+
+# Variables for floor sample
+define finished_analyzing_floor_sample = False
 
 # Variables to keep track of what is being held
 define holding_towel = False
@@ -52,6 +72,10 @@ define holding_450nm_flashlight = False
 define holding_incorrect_flashlight = False
 define holding_hemastix = False
 define holding_swab = False
+define holding_incubated_knife_sample = False
+define holding_incubated_towel_sample = False
+define holding_incubated_floor_sample = False
+define holding_pipette = False
 
 # Variables for photos taken
 define took_photo_fingerprint_scaled = False
@@ -91,6 +115,7 @@ init python:
 
             # Variables to keep track of what hemastix to display
             self.display_unused_hemastix = True
+            self.display_wet_hemastix = False
             self.display_negative_result = False
             self.display_positive_result = False
 
@@ -99,6 +124,7 @@ init python:
             self.wet_swab_first = False
             self.swabbed_object_with_swab = False
             self.display_swab = True
+            self.display_wet_swab = False
 
     # define the variables for evidence that requires hemastix
     dish_towel = EvidenceNeedingSwabbing(name = "dish towel", 
@@ -125,8 +151,89 @@ init python:
                                         'hover_image_place_hemastix': "place_hemastix_by_knife_hover"
                                     })
 
-    # Set current_evidence to keep trackof which evidence is currently active
+    # Set current_evidence to keep track of which evidence is currently active
     current_evidence = dish_towel
+
+    # Class for dna evidence
+    class DNAEvidence:
+        def __init__(self, name, concentration_value, required_volume):
+            # name of piece of evidence the DNA was from
+            self.name = name
+
+            self.holding_pipette = False
+            self.holding_distilled_water = False
+
+            # variables for extraction process of DNA
+            self.centrifuge_open = False
+            self.holding_tube = False
+            self.holding_incubated_sample = False
+            self.in_centrifuge = False
+            self.counterweight_in = False
+            self.finished_centrifuge = False
+
+            # variables for PCR and quantification process
+            self.viewing_tray = False
+            self.holding_extracted_dna = False
+            self.dna_sample_in = False
+            self.negative_solution_in = False
+            self.all_pcr_wells_filled = False
+            self.holding_tray = False
+            self.pcr_open = False
+            self.tray_in_pcr = False
+            self.finished_pcr = False
+            self.concentration_value = concentration_value
+            self.required_volume = required_volume
+            self.continuing_with_amplification = True
+            self.did_correct_calculation = False
+
+            # variables for amplification process
+            self.viewing_amp_plate = False
+            self.holding_sample = False
+            self.holding_positive_control = False
+            self.added_sample_to_amp_plate = False
+            self.added_positive_control = False
+            self.added_negative_control = False
+            self.all_plate_wells_filled = False
+            self.thermal_cycler_open = False
+            self.plate_in_thermal_cycler = False
+            self.finished_amplification = False
+
+            # variables for detection process
+            self.viewing_detection_plate = False
+            # variables holding_sample, thermal_cycler_open, and plate_in_thermal_cycler are also used here
+            self.added_sample_to_det_plate = False
+            self.plate_centrifuge_open = False
+            self.plate_in_centrifuge = False
+            self.plate_on_ice = False
+            self.miseq_first_open = False
+            self.miseq_second_open = False
+            self.plate_in_miseq = False
+            self.finished_detection_centrifuge = False
+            self.finished_detection_thermal_cycler = False
+            self.finished_detection = False
+
+            # variables to keep track of messages displayed
+            self.displayed_dna_message = False
+            self.displayed_water_message = False
+
+    knife_sample = DNAEvidence("knife", "0.353", "2.85")
+
+    towel_sample = DNAEvidence("towel", "0.014", "71.79")
+
+    floor_sample = DNAEvidence("floor", "0.351", "2.86")
+
+    current_dna_evidence = knife_sample
+
+    class TableofFindings:
+        def __init__(self):
+
+            self.first_evidence = None
+            self.second_evidence = None
+            self.display_add_box = False
+            self.holding_knife_electropherogram = False
+            self.holding_floor_electropherogram = False
+
+    table_of_findings = TableofFindings()
 
 # The game starts here.
 
@@ -148,7 +255,10 @@ label start:
     $inventory_item_names = ["ALS Flashlights", "UVA Flashlight", "415nm Flashlight", "450nm Flashlight", "530nm Flashlight", 
     "Distilled Water", "Superglue", "Basic Yellow", "Cotton Swab", "Knife", "Dish Towel", "Hemastix", "Scalebar", 
     "Knife With Lifted Fingerprint", "Knife with Basic Yellow", "Photo Of Fingerprint Scaled", "Photo Of Fingerprint Scaled Wtih 450nm", 
-    "Photo Of Hemastix Next To Towel", "Photo Of Hemastix Next To Knife", "Sample From Floor", "Sample From Towel", "Sample From Knife"] # holds names for inspect pop-up text 
+    "Photo Of Hemastix Next To Towel", "Photo Of Hemastix Next To Knife", "Sample From Floor", "Sample From Towel", "Sample From Knife", 
+    "Incubated Sample From Blood Pool", "Incubated Sample From Towel", "Incubated Sample From Knife", "Extracted DNA From Knife", 
+    "Extracted DNA From Towel", "Extracted DNA From Floor", "Filled Plate", "Fingerprint From Stove", "GF Positive Control", 
+    "Electropherogram of Knife Sample", "Electropherogram of Towel Sample", "Electropherogram of Floor Sample"] # holds names for inspect pop-up text 
     $inventory_db_enabled = False # determines whether up arrow on evidence hotbar is enabled or not
     $inventory_ub_enabled = False # determines whether down arrow on evidence hotbar is enabled or not
     $inventory_slot_size = (int(215 / 2), int(196 / 2)) # sets slot size for evidence bar
@@ -201,8 +311,8 @@ label setupScene1:
     python:
         # --------- ADDING ITEMS TO INVENTORY --------- 
         # change these parameters as necessary
-        addToInventory(["knife", "dish_towel", "sample_from_floor"])
-        addToToolbox(["als_flashlights", "distilled_water", "superglue", "basic_yellow", "cotton_swab", "hemastix", "scalebar"])
+        addToInventory(["knife", "dish_towel", "sample_from_floor", "fingerprint_from_stove"])
+        addToToolbox(["als_flashlights", "distilled_water", "superglue", "basic_yellow", "cotton_swab", "hemastix", "scalebar", "gf_positive_control"])
         addToToolboxPop(["uva_flashlight", "415nm_flashlight", "450nm_flashlight", "530nm_flashlight"])
 
         for item in environment_items: # iterate through environment items list
@@ -251,23 +361,85 @@ label back:
     elif photographing_knife and took_photo_fingerprint_scaled_als and not inspecting_fingerprint:
         $ photographing_knife = False
         hide screen inspect_fingerprint
-        jump enter_materials_lab
+        jump in_chemistry_lab
+    elif viewing_table_of_findings:
+        $ viewing_table_of_findings = False
+        hide screen profiles
+        jump enter_data_analysis_lab
     elif at_fumehood:
         $ at_fumehood = False
-        jump enter_materials_lab
+        jump in_chemistry_lab
+    elif close_to_cyanosafe:
+        $ close_to_cyanosafe = False
+        jump cyanosafe_machine
     elif at_cyanosafe_machine:
         $ at_cyanosafe_machine = False
-        jump enter_materials_lab
+        hide screen open_cyanosafe_door
+        hide screen inspect_cyanosafe
+        jump in_chemistry_lab
     elif at_lab_bench:
         $ at_lab_bench = False
+        jump enter_materials_lab
+    elif at_centrifuge:
+        $ at_centrifuge = False
+        $ at_open_centrifuge = False
+        hide screen centrifuge_screen
+        jump in_biology_lab
+    elif at_pcr_tray:
+        $ at_pcr_tray = False
+        jump in_biology_lab
+    elif at_pcr:
+        $ at_pcr = False
+        hide screen pcr_screen
+        jump in_biology_lab
+    elif at_amplifier_tray:
+        $ at_amplifier_tray = False
+        jump in_biology_lab
+    elif at_thermal_cycler:
+        $ at_thermal_cycler = False
+        hide screen thermal_cycler_screen
+        jump in_biology_lab
+    elif at_detection_plate:
+        $ at_detection_plate = False
+        jump in_biology_lab
+    elif at_plate_centrifuge:
+        $ at_plate_centrifuge = False
+        hide screen using_plate_centrifuge
+        jump in_biology_lab
+    elif at_miseq:
+        $ at_miseq = False
+        hide screen using_miseq
+        jump in_biology_lab
+    elif in_biology_lab:
+        $ in_biology_lab = False
+        show screen full_inventory
+        hide screen back_button
+        hide screen choose_dna_machine
+        jump enter_materials_lab
+    elif in_chemistry_lab:
+        $ in_chemistry_lab = False
+        show screen full_inventory
+        hide screen back_button
+        hide screen choose_machine
         jump enter_materials_lab
     elif in_materials_lab:
         show screen full_inventory
         $ in_materials_lab = False
         hide screen back_button
+        hide screen choose_lab
+        jump in_lab_hallway
+    elif in_data_analysis_lab:
+        show screen full_inventory
+        $ in_data_analysis_lab = False
+        hide screen choose_icon
+        hide screen back_button
         jump in_lab_hallway
 
 label took_photo:
+    # Code for the flash effect
+    show screen full_inventory
+    show transparent with flash
+    hide transparent
     hide screen camera_screen
     if holding_450nm_flashlight and photographing_knife:
         if inspecting_fingerprint:
@@ -297,11 +469,16 @@ label took_photo:
 
 label dont_need_flashlight:
     show screen full_inventory
-    call screen dont_need_light
+    call screen dont_need
     call screen full_inventory
 
 label enter_data_analysis_lab:
-
+    $ in_hallway = False
+    $ in_data_analysis_lab = True
+    scene data_analysis_bg
+    show screen back_button
+    show screen choose_icon
+    call screen full_inventory
 
 label enter_materials_lab:
     $ in_hallway = False
@@ -309,10 +486,28 @@ label enter_materials_lab:
     scene materials_lab_dim
     show screen full_inventory
     show screen back_button
-    call screen choose_machine
+    show screen choose_lab
+    call screen full_inventory
+
+label in_biology_lab:
+    hide screen choose_lab
+    scene materials_lab_dim
+    $ in_biology_lab = True
+    show screen back_button
+    show screen choose_dna_machine
+    call screen full_inventory
+
+label in_chemistry_lab:
+    hide screen choose_lab
+    scene materials_lab_dim
+    $ in_chemistry_lab = True
+    show screen back_button
+    show screen choose_machine
+    call screen full_inventory
 
 label lab_bench:
     scene empty_lab_bench
+    hide screen choose_lab
     hide screen collect_knife_from_lab_bench
     hide screen collect_towel_from_lab_bench
     show screen back_button
@@ -331,6 +526,7 @@ label towel_on_bench:
     call screen full_inventory
 
 label knife_on_bench:
+    hide screen place_knife_on_lab_bench
     scene knife_on_lab_bench
     hide screen back_button
     $ holding_knife = False
@@ -345,6 +541,7 @@ label something_on_bench:
     call screen full_inventory
 
 label fumehood:
+    hide screen choose_machine
     scene fumehood_bg
     show screen back_button
     $ at_fumehood = True
@@ -380,6 +577,8 @@ label collect_knife_from_fumehood:
 label photograph_knife:
     scene knife_without_als
     $ photographing_knife = True
+    show screen full_inventory
+    call screen scalebar_hint
     call screen full_inventory
 
 label update_scale_variable:
@@ -435,25 +634,35 @@ label incorrect_als_flashlight:
     else:
         scene knife_wrong_light
     show screen full_inventory
+    call screen wrong_light
     call screen back_button
 
+label already_using_light:
+    show screen full_inventory
+    call screen already_using_light
+    call screen full_inventory
+
 label cyanosafe_machine:
+    hide screen choose_machine
     $ at_cyanosafe_machine = True
 
     if cyanosafe_door_open:
         scene cyanosafe_far_open
-        call screen inspect_cyanosafe
+        show screen inspect_cyanosafe
     else:
         scene cyanosafe_far_closed
-        call screen open_cyanosafe_door
+        show screen open_cyanosafe_door
+    call screen full_inventory
 
 label open_cyanosafe:
     hide screen open_cyanosafe_door
     $ cyanosafe_door_open = True
     scene cyanosafe_far_open
-    call screen inspect_cyanosafe
+    show screen inspect_cyanosafe
+    call screen full_inventory
 
 label go_closer_to_cyanosafe:
+    hide screen inspect_cyanosafe
     $ close_to_cyanosafe = True
     if knife_in_cyanosafe:
         scene cyanosafe_knife
@@ -461,13 +670,12 @@ label go_closer_to_cyanosafe:
         scene cyanosafe_open
 
     if holding_knife:
-        call screen place_knife_in_cyanosafe
+        show screen place_knife_in_cyanosafe
     elif holding_superglue:
-        call screen add_superglue_to_cyanosafe
+        show screen add_superglue_to_cyanosafe
     elif holding_distilled_water:
-        call screen add_water_to_cyanosafe
-    else:
-        call screen full_inventory
+        show screen add_water_to_cyanosafe
+    call screen full_inventory
 
 label added_item_to_cyanosafe:
     hide screen place_knife_in_cyanosafe
@@ -564,13 +772,15 @@ label collected_knife:
     scene cyanosafe_open
     python:
         addToInventory(["knife_with_lifted_fingerprint"])
+    show screen full_inventory
     call screen successfully_lifted_print_from_knife
     $ at_cyanosafe_machine = False
+    $ clsoe_to_cyanosafe = False
     $ knife_in_cyanosafe = False
     $ added_superglue = False
     $ added_water = False
     $ print_lifted_from_knife = True
-    jump enter_materials_lab
+    jump in_chemistry_lab
 
 label give_stain_hint:
     call screen stain_hint_message
@@ -581,6 +791,7 @@ label give_stain_hint:
     $ print_lifted_from_knife = True
     jump enter_materials_lab
 
+# ------------------------------------------------ BEGINNING OF DNA CODE ---------------------------------------------------------------
 label selected_water:
     if holding_distilled_water:
         $ holding_distilled_water = False
@@ -611,6 +822,7 @@ label throw_out_hemastix:
             current_evidence.display_unused_hemastix = True
             current_evidence.display_negative_result = False
             current_evidence.display_positive_result = False
+            current_evidence.display_wet_hemastix = False
     call screen full_inventory
 
 label selected_hemastix:
@@ -620,9 +832,14 @@ label selected_hemastix:
         $ default_mouse = "default"
         python:
             current_evidence.wet_hemastix = True
+            current_evidence.display_wet_hemastix = True
+            current_evidence.display_unused_hemastix = False
         if not current_evidence.swabbed_object:
             python:
                 current_evidence.wet_before_swabbed = True
+        show screen full_inventory
+        show screen use_hemastix
+        call screen added_water_to_hemastix
     else:
         if current_evidence.wet_hemastix and current_evidence.swabbed_object and current_evidence.wet_before_swabbed:
             $ default_mouse = "positive_result"
@@ -637,9 +854,13 @@ label finished_hemastix_test:
     $ default_mouse = "default"
     show screen full_inventory
     hide screen use_hemastix
+    # Go through each piece of evidence that applies
     if current_evidence.name == "dish towel":
+        # update the scene to show the hemastix by the piece of evidence
         scene hemastix_by_towel 
+        # Update variable
         $ hemastix_next_to_towel = True
+        # If player hasn't taken a photo, call camera screen
         if not took_photo_hemastix_with_towel:
             call screen camera_screen
     else:
@@ -674,8 +895,10 @@ label collect_swab:
         hide screen swabbing
         $ default_mouse = "default"
         show screen full_inventory
+        # Go through each piece of evidence that applies
         if current_evidence.name == "dish towel":
             if current_evidence.wet_swab_first and current_evidence.swabbed_object_with_swab:
+                # Update the correspinding variable
                 $ sample_collected_from_towel = True
                 $ currently_swabbing = False
                 call screen swab_has_been_collected
@@ -708,6 +931,7 @@ label throw_out_swab:
             current_evidence.wet_swab_first = False
             current_evidence.swabbed_object_with_swab = False
             current_evidence.display_swab = True
+            current_evidence.display_wet_swab = False
     call screen full_inventory
 
 label selected_swab:
@@ -715,9 +939,13 @@ label selected_swab:
         $ holding_distilled_water = False
         $ default_mouse = "default"
         python:
-            current_evidence.wet_swab = True 
+            current_evidence.wet_swab = True
+            current_evidence.display_wet_swab = True
+            current_evidence.display_swab = False 
             if not current_evidence.swabbed_object_with_swab:
                 current_evidence.wet_swab_first = True
+        show screen full_inventory
+        call screen added_water_to_swab
     else:
         $ holding_swab = True
         $ default_mouse = "swab"
@@ -744,6 +972,8 @@ label use_hemastix_first:
     call screen full_inventory
 
 label add_swab_to_inventory:
+    # Just need to replace with your evidence. Add the sample from the evidence to your inventory 
+    # and then show the screen to collect the piece of evidence from the lab bench
     if current_evidence.name == "dish towel":
         python:
             addToInventory(["sample_from_towel"])
@@ -757,9 +987,19 @@ label add_swab_to_inventory:
     call screen full_inventory
 
 label collect_evidence_from_lab_bench:
+    # Go through each piece of evidence that applies to this
     if current_evidence.name == "dish towel":
+        # Call screen to display the incubated sample the player just collected
+        call screen display_incubated_towel_sample
+        python:
+            # Add the incubated sample to the player's inventory
+            addToInventory(["incubated_sample_from_towel"])
+        # Show screen to collect piece of evidence from lab bench
         show screen collect_towel_from_lab_bench
     elif current_evidence.name == "knife":
+        call screen display_incubated_knife_sample
+        python:
+            addToInventory(["incubated_sample_from_knife"])
         show screen collect_knife_from_lab_bench
     call screen full_inventory
 
@@ -770,15 +1010,33 @@ label ask_to_send_for_extraction:
 
 label sample_sent_for_extraction:
     show screen full_inventory
+    # Go through each piece of evidence that applies
     if swab_sample_being_looked_at == "floor":
         python:
+            # Remove the item from the player's inventory
             removeInventoryItem(inventory_sprites[inventory_items.index("sample_from_floor")])
+
+        # Display the screen to show the incubated sample the player collected
+        call screen display_incubated_floor_sample
+
+        python:
+            addToInventory(["incubated_sample_from_blood_pool"])
     elif swab_sample_being_looked_at == "towel":
         python:
             removeInventoryItem(inventory_sprites[inventory_items.index("sample_from_towel")])
-    elif swab_sample_being_looked_at == "knfie":
+
+        call screen display_incubated_towel_sample
+
+        python:
+            addToInventory(["incubated_sample_from_towel"])
+    elif swab_sample_being_looked_at == "knife":
         python:
             removeInventoryItem(inventory_sprites[inventory_items.index("sample_from_knife")])
+
+        call screen display_incubated_knife_sample
+
+        python:
+            addToInventory(["incubated_sample_from_knife"])
 
     call screen full_inventory
 
@@ -793,6 +1051,731 @@ label already_used_hemastix:
 label already_swabbed:
     show screen full_inventory
     call screen already_collected_swab
+    call screen full_inventory
+
+label using_centrifuge:
+    hide screen choose_dna_machine
+    $ at_centrifuge = True
+    scene centrifuge_bg
+    # If you do not have any samples with an insufficient concentration of DNA the following if statement should work:
+    # if not current_dna_evidence.finished_detection and current_dna_evidence.finished_centrifuge
+    if ((current_dna_evidence.name != "towel" and not current_dna_evidence.finished_detection) or (current_dna_evidence.name == "towel" and current_dna_evidence.continuing_with_amplification)) and current_dna_evidence.finished_centrifuge:
+        jump dont_need_to_use_machine
+    
+    show screen back_button
+    show screen centrifuge_screen
+    python:
+        current_dna_evidence.centrifuge_open = False
+    call screen full_inventory
+
+label need_to_add_counterweight:
+    show screen full_inventory
+    call screen add_balance
+    call screen full_inventory
+
+label holding_balance_tube:
+    $ default_mouse = "dna_tube"
+    python:
+        current_dna_evidence.holding_tube = True
+    show screen centrifuge_screen
+    call screen full_inventory
+
+label already_used_machine:
+    show screen full_inventory
+    call screen already_ran_machine
+    call screen full_inventory
+
+label update_centrifuge_image:
+    if current_dna_evidence.holding_incubated_sample:
+        hide screen back_button # hides back button, can change to your back button screen
+        python:
+            current_dna_evidence.holding_incubated_sample = False
+            # Go through each piece of evidence that applies
+            if current_dna_evidence.name == "knife":
+                # Remove the corresponding incubated sample from the player's inventory
+                removeInventoryItem(inventory_sprites[inventory_items.index("incubated_sample_from_knife")])
+            elif current_dna_evidence.name == "towel":
+                removeInventoryItem(inventory_sprites[inventory_items.index("incubated_sample_from_towel")])
+            elif current_dna_evidence.name == "floor":
+                removeInventoryItem(inventory_sprites[inventory_items.index("incubated_sample_from_blood_pool")])
+    if not current_dna_evidence.centrifuge_open:
+        scene centrifuge_bg
+        show screen back_button
+        if current_dna_evidence.in_centrifuge and current_dna_evidence.counterweight_in:
+            hide screen back_button
+            hide screen centrifuge_screen
+            hide screen full_inventory
+            hide screen toolbox
+            hide screen toolboxItemMenu
+            hide screen inventory
+            hide screen inventoryItemMenu
+            window hide
+            show timer_10_left:
+                xpos 0.45
+                ypos 0.4
+            $ renpy.pause(1.0)
+            hide timer_10_left
+            show timer_5_left:
+                xpos 0.45
+                ypos 0.4
+            $ renpy.pause(1.0)
+            hide timer_5_left
+            show timer_done:
+                xpos 0.45
+                ypos 0.4
+            $ renpy.pause(1.0)
+            hide timer_done
+            python:
+                current_dna_evidence.finished_centrifuge = True
+    elif current_dna_evidence.centrifuge_open:
+        hide screen back_button
+        if current_dna_evidence.in_centrifuge and current_dna_evidence.counterweight_in:
+            scene centrifuge_filled
+        elif current_dna_evidence.in_centrifuge:
+            scene centrifuge_only_top_filled
+        else:
+            $ at_open_centrifuge = True
+            scene centrifuge_open
+
+    show screen centrifuge_screen
+    call screen full_inventory
+
+label done_with_centrifuge:
+    scene centrifuge_only_bottom_filled
+    # Go through each piece of evidence that applies
+    if current_dna_evidence.name == "knife":
+        python:
+            # Add the corresponding extracted DNA tube to the player's inventory
+            addToInventory(["extracted_dna_from_knife"])
+    elif current_dna_evidence.name == "towel":
+        python:
+            addToInventory(["extracted_dna_from_towel"])
+    elif current_dna_evidence.name == "floor":
+        python:
+            addToInventory(["extracted_dna_from_floor"])
+    hide screen centrifuge_screen
+    python:
+        current_dna_evidence.centrifuge_open = False
+    show screen full_inventory
+    call screen finished_with_centrifuge
+    $ at_centrifuge = False
+    scene pcr_plate_bg
+    call screen give_pcr_plate_info
+    show screen fill_pcr_plate
+    $ at_pcr_tray = True
+    call screen full_inventory
+
+label busy_with_another_sample:
+    show screen full_inventory  
+    call screen already_using_centrifuge
+    call screen full_inventory 
+
+label update_pcr_plate_scene:
+    if current_dna_evidence.negative_solution_in:
+        $ default_mouse = "default"
+        scene pcr_plate_both_filled
+        show screen full_inventory
+        call screen fill_rest_with_water
+        scene pcr_plate_all_filled
+        python:
+            current_dna_evidence.holding_pipette = False
+            current_dna_evidence.all_pcr_wells_filled = True
+    elif current_dna_evidence.dna_sample_in:
+        if not current_dna_evidence.holding_pipette:
+            $ default_mouse = "default"
+        scene pcr_plate_one_filled
+        show screen full_inventory
+        if not current_dna_evidence.displayed_water_message:
+            call screen add_negative_control
+            python:
+                current_dna_evidence.displayed_water_message = True
+    elif current_dna_evidence.viewing_tray:
+        scene pcr_plate_close
+    call screen full_inventory
+
+label selected_pipette:
+    if current_dna_evidence.holding_pipette:
+        $ default_mouse = "default"
+        python:
+            current_dna_evidence.holding_pipette = False
+            current_dna_evidence.holding_distilled_water = False
+            current_dna_evidence.holding_extracted_dna = False
+            current_dna_evidence.holding_sample = False
+            current_dna_evidence.holding_positive_control = False
+    else:
+        if current_dna_evidence.viewing_tray or current_dna_evidence.viewing_amp_plate or current_dna_evidence.viewing_detection_plate:
+            $ default_mouse = "pipette"
+            python:
+                current_dna_evidence.holding_pipette = True
+        else:
+            show screen full_inventory
+            call screen dont_need
+    call screen full_inventory
+
+label amount_to_add_for_quantification:
+    show screen full_inventory
+    menu:
+
+        "What amount of our DNA sample should we pipette?"
+
+        "1µL":
+            jump incorrect_amount
+
+        "2µL":
+            jump correct_amount
+
+        "5µL":
+            jump incorrect_amount
+
+label incorrect_amount:
+    show screen full_inventory
+    call screen wrong_amount
+    jump amount_to_add_for_quantification
+
+label correct_amount:
+    show screen full_inventory
+    call screen correct_amount
+    call screen full_inventory
+
+label add_dna_first:
+    show screen full_inventory
+    call screen need_to_add_sample_first
+    call screen full_inventory
+
+label sample_already_in:
+    show screen full_inventory
+    call screen dna_already_added
+    call screen full_inventory
+
+label moving_to_pcr:
+    hide screen fill_pcr_plate
+    python:
+        addToInventory(["filled_plate"])
+    scene empty_lab_bench
+    show screen full_inventory
+    call screen move_to_pcr
+    show screen back_button
+    call screen full_inventory
+
+label using_pcr:
+    hide screen choose_dna_machine
+    $ at_pcr = True
+    scene pcr_bg 
+    if current_dna_evidence.finished_pcr:
+        jump dont_need_to_use_machine
+    elif not current_dna_evidence.finished_centrifuge:
+        jump dont_need_to_use_machine
+
+    show screen back_button
+    show screen pcr_screen
+    if current_dna_evidence.tray_in_pcr and current_dna_evidence.pcr_open:
+        hide screen back_button
+        scene filled_pcr
+        python:
+            current_dna_evidence.holding_tray = False
+            removeInventoryItem(inventory_sprites[inventory_items.index("filled_plate")])
+    elif current_dna_evidence.pcr_open and not current_dna_evidence.tray_in_pcr:
+        hide screen back_button
+        scene empty_pcr
+    elif not current_dna_evidence.pcr_open:
+        scene pcr_bg 
+        if current_dna_evidence.tray_in_pcr:
+            hide screen back_button
+            hide screen pcr_screen
+            hide screen full_inventory
+            hide screen toolbox
+            hide screen toolboxItemMenu
+            hide screen inventory
+            hide screen inventoryItemMenu
+            window hide
+            show timer_10_left:
+                xpos 0.45
+                ypos 0.4
+            $ renpy.pause(1.0)
+            hide timer_10_left
+            show timer_5_left:
+                xpos 0.45
+                ypos 0.4
+            $ renpy.pause(1.0)
+            hide timer_5_left
+            show timer_done:
+                xpos 0.45
+                ypos 0.4
+            $ renpy.pause(1.0)
+            hide timer_done
+            python:
+                current_dna_evidence.finished_pcr = True
+            jump quantification_calculation
+    call screen full_inventory
+
+label quantification_calculation:
+    # display message saying what the concentration of the DNA sample is and ask if player wants to proceed.
+    menu:
+        "The PCR has calculated the concentration of the DNA sample to be [current_dna_evidence.concentration_value]ng/µL. The industry standard concentration is 0.067ng/µL. Based on this do you wish to continue the process with this sample? If you select no, you will NOT be able to continue with this sample."
+
+        "Yes":
+            # If you do not have a sample with insufficient DNA concentration, this entire if statement block can be deleted
+            if current_dna_evidence.name == "towel":
+                show screen full_inventory
+                call screen cant_continue_with_sample
+                python:
+                    current_dna_evidence.continuing_with_amplification = False
+                jump back
+            python:
+                current_dna_evidence.continuing_with_amplification = True
+
+        "No":
+            python:
+                current_dna_evidence.continuing_with_amplification = False
+            jump back
+    label calculation:
+        python:
+            player_calculation = renpy.input("The PCR has calculated the concentration of the sample to be [current_dna_evidence.concentration_value]ng/µL. The standard concentration is 0.067ng/µL and the volume of the microcentrifuge is 15µL. What volume of the DNA sample should be used for amplification?")
+        if current_dna_evidence.required_volume == player_calculation:
+            python:
+                current_dna_evidence.did_correct_calculation = True
+            call screen correct_calculation
+            jump starting_amplification
+        else:
+            show screen full_inventory
+            call screen wrong_calculation
+            jump calculation
+
+            label give_formula:
+                call screen provide_formula
+                jump calculation
+
+label starting_amplification:
+    $ at_pcr = False
+    $ at_amplifier_tray = True
+    scene amplification_plate_bg
+    show screen full_inventory
+    call screen give_amplification_plate_info
+    show screen fill_amplification_plate
+    call screen full_inventory
+
+label update_amp_plate_scene:
+    if current_dna_evidence.added_sample_to_amp_plate:
+        $ default_mouse = "default"
+        scene amplification_plate_three_filled
+        show screen full_inventory
+        call screen fill_rest_with_water
+        scene amplification_plate_all_filled
+        python:
+            current_dna_evidence.holding_pipette = False
+            current_dna_evidence.all_plate_wells_filled = True
+    elif current_dna_evidence.added_positive_control and current_dna_evidence.added_negative_control:
+        if not current_dna_evidence.holding_pipette:
+            $ default_mouse = "default"
+        scene amplification_plate_two_filled
+        show screen full_inventory
+        if not current_dna_evidence.displayed_dna_message:
+            call screen add_dna_sample
+            python:
+                current_dna_evidence.displayed_dna_message = True
+    elif not current_dna_evidence.added_positive_control:
+        if not current_dna_evidence.holding_pipette:
+            $ default_mouse = "default"
+        scene amplification_plate_one_filled
+    elif not current_dna_evidence.added_negative_control:
+        if not current_dna_evidence.holding_pipette:
+            $ default_mouse = "default"
+        scene amplification_plate_one_filled
+
+    if not current_dna_evidence.added_positive_control and not current_dna_evidence.added_negative_control:
+        scene amplification_plate_close
+    call screen full_inventory
+
+label moving_to_thermal_cycler:
+    hide screen fill_amplification_plate
+    hide screen using_plate_centrifuge
+    python:
+        addToInventory(["filled_plate"])
+    scene empty_lab_bench
+    show screen full_inventory
+    call screen move_to_thermal_cycler
+    show screen back_button
+    call screen full_inventory
+
+label already_added_negative_control:
+    show screen full_inventory
+    call screen previously_added_negative_control
+    call screen full_inventory
+
+label already_added_positive_control:
+    show screen full_inventory
+    call screen previously_added_positive_control
+    call screen full_inventory
+
+label using_thermal_cycler:
+    hide screen choose_dna_machine
+    $ at_thermal_cycler = True
+    scene thermal_cycler_closed 
+    if current_dna_evidence.finished_detection_thermal_cycler and current_dna_evidence.plate_on_ice and not current_dna_evidence.plate_in_thermal_cycler and not current_dna_evidence.thermal_cycler_open:
+        jump dont_need_to_use_machine
+    elif current_dna_evidence.finished_amplification and not current_dna_evidence.plate_in_thermal_cycler and not current_dna_evidence.thermal_cycler_open and not current_dna_evidence.finished_detection_centrifuge and current_dna_evidence.added_sample_to_det_plate:
+        jump dont_need_to_use_machine
+    elif not current_dna_evidence.finished_pcr:
+        jump dont_need_to_use_machine
+
+    show screen thermal_cycler_screen
+    show screen back_button
+    if not current_dna_evidence.finished_detection_centrifuge:
+        if current_dna_evidence.plate_in_thermal_cycler and current_dna_evidence.thermal_cycler_open:
+            hide screen back_button
+            scene thermal_cycler_open_full
+            if not current_dna_evidence.finished_amplification:
+                python:
+                    current_dna_evidence.holding_tray = False
+                    removeInventoryItem(inventory_sprites[inventory_items.index("filled_plate")])
+        elif current_dna_evidence.thermal_cycler_open and not current_dna_evidence.plate_in_thermal_cycler:
+            hide screen back_button
+            scene thermal_cycler_open
+        elif not current_dna_evidence.thermal_cycler_open:
+            show screen back_button
+            scene thermal_cycler_closed
+            if current_dna_evidence.plate_in_thermal_cycler:
+                hide screen back_button
+                hide screen thermal_cycler_screen
+                hide screen full_inventory
+                hide screen toolbox
+                hide screen toolboxItemMenu
+                hide screen inventory
+                hide screen inventoryItemMenu
+                window hide
+                show timer_10_left:
+                    xpos 0.45
+                    ypos 0.4
+                $ renpy.pause(1.0)
+                hide timer_10_left
+                show timer_5_left:
+                    xpos 0.45
+                    ypos 0.4
+                $ renpy.pause(1.0)
+                hide timer_5_left
+                show timer_done:
+                    xpos 0.45
+                    ypos 0.4
+                $ renpy.pause(1.0)
+                hide timer_done
+                python:
+                    current_dna_evidence.finished_amplification = True
+                show screen full_inventory
+                call screen finished_amplification
+                show screen thermal_cycler_screen
+            elif not current_dna_evidence.plate_in_thermal_cycler and current_dna_evidence.finished_amplification:
+                hide screen back_button
+                $ at_thermal_cycler = False
+                show detection_plate_bg
+                $ at_detection_plate = True
+                show screen full_inventory
+                call screen give_detection_plate_info
+                show screen fill_detection_plate
+    elif current_dna_evidence.finished_detection_centrifuge:
+        if current_dna_evidence.plate_in_thermal_cycler and current_dna_evidence.thermal_cycler_open:
+            hide screen back_button
+            scene thermal_cycler_open_full
+            if not current_dna_evidence.finished_detection_thermal_cycler:
+                python:
+                    current_dna_evidence.holding_tray = False
+                    removeInventoryItem(inventory_sprites[inventory_items.index("filled_plate")])
+        elif current_dna_evidence.thermal_cycler_open and not current_dna_evidence.plate_in_thermal_cycler:
+            hide screen back_button
+            scene thermal_cycler_open
+        elif not current_dna_evidence.thermal_cycler_open:
+            scene thermal_cycler_closed
+            if current_dna_evidence.plate_in_thermal_cycler:
+                hide screen back_button
+                hide screen thermal_cycler_screen
+                hide screen full_inventory
+                hide screen toolbox
+                hide screen toolboxItemMenu
+                hide screen inventory
+                hide screen inventoryItemMenu
+                window hide
+                show timer_10_left:
+                    xpos 0.45
+                    ypos 0.4
+                $ renpy.pause(1.0)
+                hide timer_10_left
+                show timer_5_left:
+                    xpos 0.45
+                    ypos 0.4
+                $ renpy.pause(1.0)
+                hide timer_5_left
+                show timer_done:
+                    xpos 0.45
+                    ypos 0.4
+                $ renpy.pause(1.0)
+                hide timer_done
+                python:
+                    current_dna_evidence.finished_detection_thermal_cycler = True
+                show screen full_inventory
+                call screen put_on_ice
+                show screen thermal_cycler_screen
+            elif not current_dna_evidence.plate_in_thermal_cycler and current_dna_evidence.finished_detection_thermal_cycler:
+                hide screen back_button
+                show screen full_inventory
+                scene ice_box_bg
+                show screen put_plate_on_ice
+
+    call screen full_inventory
+
+label collected_plate_from_thermal_cycler:
+    scene thermal_cycler_open
+    python:
+        addToInventory(["filled_plate"])
+    call screen full_inventory
+
+label update_detection_plate_scene:
+    scene detection_plate_all_filled
+    if current_dna_evidence.added_sample_to_det_plate:
+        $ default_mouse = "default"
+        hide screen fill_detection_plate
+        show screen full_inventory
+        call screen finished_detection_plate
+        jump back
+    call screen full_inventory
+
+label dont_use_this_anymore:
+    show screen full_inventory
+    call screen dont_use_sample
+    call screen full_inventory
+
+label using_plate_centrifuge:
+    hide screen choose_dna_machine
+    $ at_plate_centrifuge = True
+    scene plate_centrifuge_bg
+    if current_dna_evidence.finished_detection_centrifuge and not current_dna_evidence.plate_in_centrifuge and not current_dna_evidence.plate_centrifuge_open:
+        jump dont_need_to_use_machine
+    elif not current_dna_evidence.finished_amplification:
+        jump dont_need_to_use_machine
+    show screen using_plate_centrifuge
+    call screen full_inventory
+
+label update_plate_centrifuge_scene:
+    scene plate_centrifuge_bg
+    show screen back_button
+    if current_dna_evidence.plate_in_centrifuge and current_dna_evidence.plate_centrifuge_open:
+        hide screen back_button
+        scene plate_centrifuge_open_full
+        if not current_dna_evidence.finished_detection_centrifuge:
+            python:
+                current_dna_evidence.holding_tray = False
+                removeInventoryItem(inventory_sprites[inventory_items.index("filled_plate")])
+    elif not current_dna_evidence.plate_in_centrifuge and current_dna_evidence.plate_centrifuge_open:
+        hide screen back_button
+        scene plate_centrifuge_open
+    elif not current_dna_evidence.plate_centrifuge_open:
+        scene plate_centrifuge_bg
+        if current_dna_evidence.plate_in_centrifuge:
+            hide screen back_button
+            hide screen using_plate_centrifuge
+            hide screen thermal_cycler_screen
+            hide screen full_inventory
+            hide screen toolbox
+            hide screen toolboxItemMenu
+            hide screen inventory
+            hide screen inventoryItemMenu
+            window hide
+            show timer_10_left:
+                xpos 0.45
+                ypos 0.4
+            $ renpy.pause(1.0)
+            hide timer_10_left
+            show timer_5_left:
+                xpos 0.45
+                ypos 0.4
+            $ renpy.pause(1.0)
+            hide timer_5_left
+            show timer_done:
+                xpos 0.45
+                ypos 0.4
+            $ renpy.pause(1.0)
+            hide timer_done
+            python:
+                current_dna_evidence.finished_detection_centrifuge = True
+            call screen finished_with_plate_centrifuge
+            show screen using_plate_centrifuge
+        elif not current_dna_evidence.plate_in_centrifuge and current_dna_evidence.finished_detection_centrifuge:
+            hide screen using_plate_centrifuge
+            show screen back_button
+    call screen full_inventory
+
+label collected_plate_from_plate_centrifuge:
+    scene plate_centrifuge_open
+    python:
+        addToInventory(["filled_plate"])
+    call screen full_inventory
+
+label plate_is_on_ice:
+    hide screen put_plate_on_ice
+    scene ice_box_with_plate
+    show screen full_inventory
+    call screen move_to_miseq_machine
+    jump back
+
+label using_miseq:
+    $ at_miseq = True
+    hide screen choose_dna_machine
+    scene miseq_bg
+    if current_dna_evidence.finished_detection:
+        jump dont_need_to_use_machine
+    elif not current_dna_evidence.finished_detection_thermal_cycler:
+        jump dont_need_to_use_machine
+    show screen full_inventory
+    call screen miseq_info
+    show screen using_miseq
+    call screen full_inventory
+
+label update_miseq_scene:
+    scene miseq_bg
+    show screen back_button
+    if current_dna_evidence.plate_in_miseq and current_dna_evidence.miseq_second_open:
+        hide screen back_button
+        scene plate_in_miseq
+        if not current_dna_evidence.finished_detection:
+            python:
+                current_dna_evidence.holding_tray = False
+                removeInventoryItem(inventory_sprites[inventory_items.index("filled_plate")])
+    elif not current_dna_evidence.plate_in_miseq and current_dna_evidence.miseq_second_open:
+        hide screen back_button
+        scene no_plate_miseq
+    elif not current_dna_evidence.miseq_second_open and current_dna_evidence.miseq_first_open:
+        hide screen back_button
+        scene close_miseq
+    else:
+        scene miseq_bg
+        if current_dna_evidence.plate_in_miseq:
+            hide screen back_button
+            hide screen using_miseq
+            show screen full_inventory
+            python:
+                current_dna_evidence.finished_detection = True
+            # Go through each piece of evidence that applies
+            if current_dna_evidence.name == "floor":
+                # Set the variable to keep track of the completion of analysis to be True
+                $ finished_analyzing_floor_sample = True
+                python:
+                    # Add the electropherogram to the player's inventory
+                    addToInventory(["electropherogram_of_floor_sample"])
+            elif current_dna_evidence.name == "knife":
+                $ finished_analyzing_knife_sample = True
+                python:
+                    addToInventory(["electropherogram_of_knife_sample"])
+            call screen finished_detection
+            show screen back_button
+    call screen full_inventory
+
+label dont_need_to_use_machine:
+    show screen full_inventory
+    call screen dont_need_to_use
+    jump back
+
+label display_table_of_findings:
+    $ viewing_table_of_findings = True
+    hide screen choose_icon
+    scene empty_table_of_figures
+    # Go through each combination of what the table of findings can look like
+    if table_of_findings.second_evidence == "knife":
+        # If floor profile was first, then knife profile
+        scene table_floor_knife
+    elif table_of_findings.second_evidence == "floor":
+        # If knife profile was first then floor profile
+        scene table_knife_floor
+    elif table_of_findings.first_evidence == "knife":
+        # If there is only a knife profile
+        scene table_knife
+    elif table_of_findings.first_evidence == "floor":
+        # If there is only a floor profile
+        scene table_floor
+    show screen profiles
+    call screen full_inventory
+
+label add_to_table:
+    if table_of_findings.first_evidence != None:
+        # Go through each possible electropherogram the player could be holding
+        if table_of_findings.holding_knife_electropherogram:
+            # change the scene for the table fo findings
+            scene table_floor_knife
+            python:
+                # Change value of holding the electropherogram to be False
+                table_of_findings.holding_knife_electropherogram = False
+                # Update the value of the second piece of evidence added
+                table_of_findings.second_evidence = "knife"
+                # Remove the electropherogram from the player's inventory
+                removeInventoryItem(inventory_sprites[inventory_items.index("electropherogram_of_knife_sample")])
+        elif table_of_findings.holding_floor_electropherogram:
+            scene table_knife_floor
+            python:
+                table_of_findings.holding_floor_electropherogram = False
+                table_of_findings.second_evidence = "floor"
+                removeInventoryItem(inventory_sprites[inventory_items.index("electropherogram_of_floor_sample")])
+
+        show screen full_inventory
+        # Explain the results of the table of findings
+        # Starting with the victim's profile:
+        show highlight_table_column:
+            xpos 0.36822917 # Can change according to how big your table of findings is
+            ypos 0.03240741
+        "This is the genetic profile of the victim, collected from their toothbrush in their home."
+        # Explain the suspect's profile
+        show highlight_table_column:
+            xpos 0.45416667
+            ypos 0.03240741
+        "This is the genetic profile of the suspect."
+        # Explain the next column in the table
+        show highlight_table_column:
+            xpos 0.54166667
+            ypos 0.03240741
+        # Go through every piece of evidence it could be
+        if table_of_findings.first_evidence == "floor":
+            "This is the genetic profile of the sample collected from the floor."
+            "Based on the likelihood ratio, it is 2.25 x 10^20 times more likely that the evidence originated from the victim, rather than an unknown individual."
+        elif table_of_findings.first_evidence == "knife":
+            "This is the genetic profile of the sample collected from the knife."
+            "The profile shows that the sample was contaminated. Based on the likelihood ratio, it is 2.46 x 10^20 times more likely that the evidence originated from the victim rather than an unknown individual."
+            "It is also 2.73 x 10^20 times more likely that the evidence originated from the suspect rather than an unknown individual."
+        # Explain the next colum in the table
+        show highlight_table_column:
+            xpos 0.628125
+            ypos 0.03240741
+        if table_of_findings.second_evidence == "floor":
+            "This is the genetic profile of the sample collected from the floor."
+            "Based on the likelihood ratio, it is 2.25 x 10^20 times more likely that the evidence originated from the victim, rather than an unknown individual."
+        elif table_of_findings.second_evidence == "knife":
+            "This is the genetic profile of the sample collected from the knife."
+            "The profile shows that the sample was contaminated. Based on the likelihood ratio, it is 2.46 x 10^20 times more likely that the evidence originated from the victim rather than an unknown individual."
+            "It is also 2.73 x 10^20 times more likely that the evidence originated from the suspect rather than an unknown individual."
+        hide highlight_table_column
+    else:
+        # Go through each possible electropherogram the player could be holding
+        if table_of_findings.holding_knife_electropherogram:
+            # Change the scene
+            scene table_knife
+            python:
+                # Update the variables for what electropherogram is being held by the player
+                table_of_findings.holding_knife_electropherogram = False
+                # Update the first piece if evidence that has been added
+                table_of_findings.first_evidence = "knife"
+                # Remove the elctropherogram from the player's inventory
+                removeInventoryItem(inventory_sprites[inventory_items.index("electropherogram_of_knife_sample")])
+        elif table_of_findings.holding_floor_electropherogram:
+            scene table_floor
+            python:
+                table_of_findings.holding_floor_electropherogram = False
+                table_of_findings.first_evidence = "floor"
+                removeInventoryItem(inventory_sprites[inventory_items.index("electropherogram_of_floor_sample")])
+    call screen full_inventory
+
+label already_analyzed_sample:
+    show screen full_inventory
+    call screen already_analyzed
+    call screen full_inventory
+
+label dont_need_tool:
+    show screen full_inventory
+    call screen dont_need
     call screen full_inventory
 
 # make sure to add this add the bottom of the setup labels to ensure that images are properly sized
