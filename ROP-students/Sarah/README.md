@@ -56,7 +56,7 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
 
 ## What Needs to be Developed/Bug Fixes:
 - Bug Fixes:
-  - Currnetly do not know of any bugs
+  - Currently do not know of any bugs
  
 # Lab Scene:
 
@@ -83,16 +83,17 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
   - The player can select the scalebar and place it by the fingerprint to take a scaled photo of the print
   - The player must take a scaled photo of the fingerprint under ALS and has the option to take a scaled photo of the fingerprint without ALS
 - When the player selects a sample swab, a message will appear asking the player if they would like to send the sample off to start the extraction process. Upon answering yes, the player will receive the extracted DNA (not implemented yet), if they answered no the sample remains in their inventory
+- Implemented the DNA analysis procedure
+  - Implemented the use of the DNA machines, the centrifuge, PCR, thermal cycler, plate centrifuge and MiSeq, and messages for when the player does not need to use them.
+  - Implemented comparing the genetic profiles in the data analysis lab, adding the profiles to the table of findings and the explanation once the table is complete.
 
 ## Feedback Recieved:
 - The amount of guiding messages so far is good
 
 ## What needs to be Developed/Bug Fixes:
 - Implement Janet's timer to use instead of a multiple choice question
-- Implement analyzing the DNA evidence to create DNA profiles
-- Implement comparing DNA profiles in the data analysis lab
 - Implement comparing fingerprints in the data analysis lab
-_
+
 
 # Scenario: Trespassing Gone Wrong
 ## Overview of Scenario:
