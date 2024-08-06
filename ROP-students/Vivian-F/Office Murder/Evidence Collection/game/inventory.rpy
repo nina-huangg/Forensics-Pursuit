@@ -307,9 +307,10 @@ init python:
                 toolbox_ub_enabled = False
             else:
                 toolbox_ub_enabled = True
-                
-            toolbox_SM.redraw(0)
-            renpy.restart_interaction
+            
+            if item != "":
+                toolbox_SM.redraw(0)
+                renpy.restart_interaction
 
     def toolboxPopArrows(button):
         # determines if arrow buttons should be enabled or disabled - might change to up and down
