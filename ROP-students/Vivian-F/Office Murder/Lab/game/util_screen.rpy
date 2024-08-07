@@ -78,7 +78,7 @@ screen show_case(name):
             xpos 0.46 ypos 0.2
             text(name)
         hbox:
-            xpos 0.3 ypos 0.2
+            xpos 0.25 ypos 0.2
             textbutton('Back'):
                 style "back_button" 
                 action [SetVariable('bool_show_case', False), SetVariable('show_case_files', True)]
@@ -115,7 +115,7 @@ screen show_case_evidence():
             xpos 0.05 ypos 0.08
             image "casefile_inventory"
         hbox:
-            xpos 0.3 ypos 0.2
+            xpos 0.25 ypos 0.2
             textbutton('Back'):
                 style "back_button" 
                 action [SetVariable('bool_show_case', True), SetVariable("show_physical", False)]
@@ -192,7 +192,7 @@ screen show_case_digi_evidence():
             xpos 0.05 ypos 0.08
             image "casefile_inventory"
         hbox:
-            xpos 0.3 ypos 0.2
+            xpos 0.25 ypos 0.2
             textbutton('Back'):
                 style "back_button" 
                 action [SetVariable('bool_show_case', True), SetVariable("show_digital", False)]
