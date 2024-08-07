@@ -1,4 +1,4 @@
-screen screen_finished_processing(evidence):
+screen screen_finished_processing(process):
     hbox:
         xpos 0.25 ypos 0.8
         textbutton('Store in case file'):
@@ -7,7 +7,7 @@ screen screen_finished_processing(evidence):
             Hide('case_files_screen', _layer='over_screens'), 
             Hide('toolbox_button_screen', _layer='over_screens'), 
             Hide('back_button_screen', _layer='over_screens'),
-            Function(set_state_to_processed, current_process), 
+            Function(set_state_to_processed, process), 
             SetVariable('current_process', ''), 
             SetVariable('current_evidence', no_evidence),
             SetVariable('process_fumehood', False), 
@@ -20,28 +20,32 @@ transform fumehood_zoom:
 
 screen hallway_screen():
     image "lab_hallway_dim"
-    showif not (show_case_files or bool_show_case or bool_show_case_evidence or bool_show_case_digi or bool_show_case_report):
+    showif not (show_case_files or bool_show_case or show_physical or show_digital):
         hbox:
             xpos 0.20 yalign 0.5
             imagebutton:
                 idle "data_analysis_lab_idle"
-                hover "data_analysis_lab_hover"
-                hovered Notify("Data Analysis Lab")
-                unhovered Notify('')     
+                hover "data_analysis_lab_hover"   
                 action Jump("data_analysis_lab")
         hbox:
             xpos 0.55 yalign 0.48
             imagebutton:
                 idle "materials_lab_idle"
                 hover "materials_lab_hover"
-                hovered Notify("Materials Lab")
-                unhovered Notify('')
                 action Jump("materials_lab")
+    
+        showif evidence_complete_process['gun_blue'] and cheque.afis_processed and deskfoot.afis_processed:
+            hbox:
+                xpos 0.2 ypos 0.8
+                textbutton('All 4 pieces of evidences have completed processing, click to proceed to courtroom'):
+                    style "custom_button"
+                    action [Jump("end")]
+    
 
 # Data Lab -- AFIS
 screen data_analysis_lab_screen:
     image "afis_interface"
-    showif not (show_case_files or bool_show_case or bool_show_case_evidence or bool_show_case_digi or bool_show_case_report):
+    showif not (show_case_files or bool_show_case or show_physical or show_digital):
         hbox:
             xpos 0.25 yalign 0.25
             imagebutton:
@@ -56,18 +60,21 @@ screen afis_screen:
     default interface_search = False
     
     image afis_bg
-    showif not (show_case_files or bool_show_case or bool_show_case_evidence or bool_show_case_digi or bool_show_case_report):
+    showif not (show_case_files or bool_show_case or show_physical or show_digital):
         hbox:
             xpos 0.35 ypos 0.145
             textbutton('Import'):
                 style "afis_button"
                 action [
                     ToggleLocalVariable('interface_import'),
-                    ToggleVariable('show_case_files'),
                     SetLocalVariable('interface_imported', False),
                     SetLocalVariable('interface_search', False),
                     SetLocalVariable('afis_bg', 'software_interface'),
-                    Function(set_cursor, '')]
+                    Function(set_cursor, ''),
+                    Hide('toolbox'),
+                    SetVariable('show_case_files', True),
+                    Show('inventory'),
+                    Show('case_files_screen')]
         hbox:
             xpos 0.55 ypos 0.145
             textbutton('Search'):
@@ -85,7 +92,8 @@ screen afis_screen:
                 SetLocalVariable('interface_import', False), 
                 SetLocalVariable('interface_imported', True),
                 Function(set_cursor, ''),
-                Function(add_afis, current_evidence)]
+                Function(add_afis, current_evidence)] sensitive current_cursor != ''    
+            
     # Note: line under does not work when placed into showif, hence the separate if statement
     if current_evidence != no_evidence:
         showif interface_imported:
@@ -110,156 +118,252 @@ screen afis_screen:
                     text("{color=#000000}No match found in records.{/color}")
 
 
-
-
-
-screen gloves():
-    imagebutton:
-        xalign 0.5
-        yalign 0.5
-        idle "gloves_box_idle"
-        hover "gloves_box_hover"
-        action Jump("fumehood_pick")
-
 screen materials_lab_screen:
     image "materials_lab"
-    showif not (show_case_files or bool_show_case or bool_show_case_evidence or bool_show_case_digi or bool_show_case_report):
+    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+        hbox:
+            xpos 0.36 yalign 0.5
+            imagebutton:
+                idle "fumehood_idle"
+                hover "fumehood_hover"
+                action [Jump('fumehood_lab')]
         hbox:
             xpos 0.15 yalign 0.5
             imagebutton:
-                idle "wet_lab_idle"
-                hover "wet_lab_hover"
-                hovered Notify("Fumehood")
-                unhovered Notify('')
-                action [Jump('fumehood_lab')]
-        hbox:
-            xpos 0.4 yalign 0.5
-            imagebutton:
-                idle "fingerprint_development_idle"
-                hover "fingerprint_development_hover"
-                hovered Notify("Cyanoacrylate Chamber")
-                unhovered Notify('')
+                idle "cyanoacrylate_chamber_idle"
                 action NullAction()
-        
         hbox:
-            xpos 0.62 yalign 0.5
+            xpos 0.58 yalign 0.5
             imagebutton:
                 idle "analytical_instruments_idle"
-                hover "analytical_instruments_hover"
-                hovered Notify("Analytical Instruments")
-                unhovered Notify('')
                 action NullAction()
 
-screen fumehood_screen():
+screen fumehood_idle:
     image "fumehood_bg"
-    showif not (show_case_files or bool_show_case or bool_show_case_evidence or bool_show_case_digi or bool_show_case_report):
-        imagemap:
-            xpos 0.0 ypos 0.0
-            idle "fumehood_bg"
-            hotspot(130,100,1230,880) action [SetVariable('current_process', 'gun_blue'), Function(set_cursor, ''), Show('gun_blue_screen')] sensitive current_evidence == bullet
-            hotspot(130,100,1230,880) action [SetVariable('current_process', 'ninhydrin'), Function(set_cursor, ''), Show('ninhydrin_screen')] sensitive current_evidence == cheque
-    
 
+# Show evidence that is selected placed on the fumehood table surface
+# Unselect first tool that is used and show evidence process screen
+screen fumehood_screen():
+    default camphor = False
+    default magnetic = False
+    
+    image "fumehood_bg"
+    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+        showif current_evidence == bullet:
+            imagemap:
+                idle "bullet_placed"
+                hover "bullet_placed_hover"
+                hotspot(1000,540,700,440) action [Function(set_tool, 'bottle'), Jump('bullet_prep')] sensitive tools['bottle']
+        showif current_evidence == cheque:
+            image 'cheque_placed'
+            frame:
+                style_group 'choice'
+                xalign 0.5 ypos 0.3
+                hbox:
+                    text "Which method should we use to develop this evidence?" color "#000000"
+            hbox:
+                xpos 0.15 ypos 0.4
+                textbutton('Camphor smoke'):
+                    style 'custom_button'
+                    action SetLocalVariable('camphor', True)
+            hbox:
+                xpos 0.15 ypos 0.5
+                textbutton('Magnetic powder'):
+                    style 'custom_button'
+                    action SetLocalVariable('magnetic', True) 
+            hbox:
+                xpos 0.15 ypos 0.6
+                textbutton('Ninhydrin'):
+                    style 'custom_button'
+                    action Jump('cheque_prep')          
+            showif camphor:
+                image 'cheque_placed'
+                hbox:
+                    xpos 0.15 ypos 0.5
+                    textbutton('That is not quite right! Camphor will not work on porous surfaces like paper.\n(click to try again)'):
+                        style 'custom_button'
+                        action [SetLocalVariable('camphor', False)]
+            showif magnetic:
+                image 'cheque_placed'
+                hbox:
+                    xpos 0.15 ypos 0.5
+                    textbutton('Nope! Try again! Magnetic powder will not work on porous surfaces like paper.\n(click to try again)'):
+                        style 'custom_button'
+                        action SetLocalVariable('magnetic', False)    
+
+            
 screen gun_blue_screen:
     # Note: will not reach here if process already done
-    # Ratio mistake tbi
-    default bottle_placed = False
     default water_poured = False
-    default gb_poured = False
-    default bullet_picked = False
-    default dipped_gb = False
-    default lift_gb = False
-    default dipped_water = False
-    default lift_water = False
-    default to_photo = False
-    default macro = False
+    default ten_per = False
 
     imagemap:
-        idle "bullet_placed"
-        hover "bullet_placed_hover"
-        hotspot(130,100,1230,880) action [SetLocalVariable('bottle_placed', True)] sensitive tools['bottle']
-    showif bottle_placed:
-        imagemap:
-            idle "bottle_placed_zoom"
-            hover "bottle_placed_zoom_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('water_poured', True)] sensitive tools['water']
+        idle "bottle_placed_zoom"
+        hover "bottle_placed_zoom_hover"
+        hotspot(500,360,900,610) action [SetLocalVariable('water_poured', True)] sensitive tools['water']
     showif water_poured:
         imagemap:
             idle "bottle_water"
             hover "bottle_water_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('gb_poured', True), Function(set_tool, 'gun_blue')] sensitive tools['gun_blue']
-    showif gb_poured:
-        image "bottle_gb"
-        imagebutton:
-            xpos 300 ypos 450
-            idle "bullet_photo_mouse" at Transform(zoom=8)
-            hovered Notify("Pick up bullet with tweezer")
-            unhovered Notify('')     
-            action [Function(set_cursor, 'tweezer_bullet'), SetLocalVariable('bullet_picked', True)]
+            hotspot(570,400,450,540) action [Show('gun_blue_ten')] sensitive tools['gun_blue']
+
+screen gun_blue_ten:
+    imagemap:
+        idle "gb_ten"
+        hover "gb_ten_hover"
+        hotspot(570,400,450,540) action [Show('gun_blue_fifty')] sensitive tools['gun_blue']
+    hbox:
+        xalign 0.5 ypos 0.8
+        textbutton('This makes a 10:90 Gun Blue to water ratio solution.\nClick to proceed if you think this is what you need.'):
+            style 'custom_button'
+            action [Jump('proceed_ten')]
+    
+screen gun_blue_fifty:
+    imagemap:
+        idle "gb_fifty"
+        hover "gb_fifty_hover"
+        hotspot(570,400,450,540) action [Function(set_cursor, 'gun_blue'), Jump('gun_blue_ninty')] sensitive tools['gun_blue']
+    hbox:
+        xalign 0.5 ypos 0.8
+        textbutton('This makes a 50:50 Gun Blue to water ratio solution.\nClick to proceed if you think this is what you need.'):
+            style 'custom_button'
+            action [Function(set_cursor, 'gun_blue'), Jump('proceed_fifty')]
+
+screen bullet_dip():
+    default bullet_picked = False
+    default dipped_gb = False
+    default threes = False
+    default onemin = False
+
+    image "bottle_gb"
+    imagebutton:
+        xpos 450 ypos 650
+        idle "bullet_photo_mouse" at Transform(zoom=2)   
+        action [Function(set_cursor, 'tweezer_bullet'), SetLocalVariable('bullet_picked', True)]
+        mouse "tweezer"
     showif bullet_picked:
         imagemap:
             idle "bottle_gb"
             hover "bottle_gb_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('dipped_gb', True)]
+            hotspot(570,400,450,540) action [Function(set_cursor, ''), SetLocalVariable('dipped_gb', True)]
     showif dipped_gb:
-        imagemap:
-            idle "bullet_dip_gb"
-            hover "bullet_dip_gb_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('lift_gb', True)]
+        image 'bullet_dip_gb'
+        frame:
+            style_group 'choice'
+            xalign 0.5 ypos 0.3
+            hbox:
+                text "Wait for the Gun Blue to react and develop print" color "#000000"
+        hbox:
+            xpos 0.15 ypos 0.4
+            textbutton('~ 3 seconds'):
+                style 'custom_button'
+                action SetLocalVariable('threes', True)
+        hbox:
+            xpos 0.15 ypos 0.5
+            textbutton('~ 10 seconds'):
+                style 'custom_button'
+                action [Jump('bullet_to_water')]
+        hbox:
+            xpos 0.15 ypos 0.6
+            textbutton('~ 1 minute'):
+                style 'custom_button'
+                action SetLocalVariable('onemin', True)          
+    showif threes:
+        image 'bullet_dip_gb'
+        hbox:
+            xpos 0.15 ypos 0.5
+            textbutton('That is too short, the print has not fully appeared yet!\n(click to try again)'):
+                style 'custom_button'
+                action [SetLocalVariable('threes', False)]
+    showif onemin:
+        image 'bullet_dip_gb'
+        hbox:
+            xpos 0.15 ypos 0.5
+            textbutton('That is too long, you would have over-developed the print and make it non-visible!\n(click to try again)'):
+                style 'custom_button'
+                action SetLocalVariable('onemin', False)    
+
+screen bullet_water():
+    default lift_gb = False
+    default dipped_water = False
+    default lift_water = False
+    
+    imagemap:
+        idle "bullet_dip_gb"
+        hover "bullet_dip_gb_hover"
+        hotspot(570,400,450,540) action [SetLocalVariable('lift_gb', True)]
     showif lift_gb:
         imagemap:
             idle "bullet_lift_gb"
             hover "bullet_lift_gb_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('dipped_water', True)]
+            hotspot(910,400,440,540) action [SetLocalVariable('dipped_water', True)]
     showif dipped_water:
         imagemap:
             idle "bullet_dip_water"
             hover "bullet_dip_water_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('lift_water', True), Function(set_cursor, '')]
-    showif lift_water:
-        image "bullet_lift_water"
-        hbox:
-            xpos 0.25 ypos 0.8
-            textbutton('Set up for photo (white background, evidence clipped\nto stand with ruler on side)'):
-                style 'custom_button'
-                action [SetLocalVariable('to_photo', True)]
-    showif to_photo:
-        image 'bullet_ruler'
-        hbox:
-            xpos 0.25 ypos 0.8
-            textbutton('Change camera to macro lens to better photograph the print'):
-                style 'custom_button'
-                action [SetLocalVariable('macro', True)]
-    showif macro:
-        image 'bullet_ruler'
-        image 'bullet_print' at Transform(zoom=0.5, xalign=0.5, yalign=0.45)
+            hotspot(910,400,440,540) action [Function(set_cursor, ''), Jump('bullet_to_photo')]
+
+screen bullet_set_photo():
+    default macroed = False
+    
+    image 'bullet_ruler'
+    hbox:
+        xpos 0.25 ypos 0.8
+        textbutton('Change camera to macro lens to better photograph the print'):
+            style 'custom_button'
+            action [SetLocalVariable('macroed', True)]
+    showif macroed:
+        image 'bullet_take_photo'
         hbox:
             xpos 0.25 ypos 0.8
             textbutton('Take photo (this will be your digital evidence)'):
                 style 'custom_button'
-                action [Hide('gun_blue_screen'), Jump('take_bullet')]
+                action [Jump('take_bullet')]
 
 screen gun_blue_tobag:
     default bagged = False
     default taped = False
     imagemap:
         idle "bullet_ruler"
-        hotspot(130,100,1230,880) action [SetLocalVariable('bagged', True)] sensitive tools['bag']
+        hover "bullet_ruler_hover"
+        hotspot(400,100,1000,880) action [SetLocalVariable('bagged', True)] sensitive tools['bag']
     showif bagged:
         imagemap:
             idle "bin_bagged"
-            hotspot(710,210,510,680) action [SetLocalVariable('taped', True), Function(set_tool, 'tape'),
-                Show('screen_finished_processing', evidence='bullet',_layer='over_screens')] sensitive tools['tape']
+            hover "bin_bagged_hover"
+            hotspot(400,100,1000,880) action [SetLocalVariable('taped', True), Function(set_tool, 'tape'),
+                Show('screen_finished_processing', process='gun_blue', _layer='over_screens')] sensitive tools['tape']
     showif taped:
         image 'bin_taped'
 
 
 screen ninhydrin_screen:
     # Note: will not reach here if process already done
-    default poured = False
+    default nin = False
     default to_dip = False
     default dipped = False
-    default lift = False
+
+    imagemap:
+        idle "cheque_placed"
+        hover "cheque_placed_hover"
+        hotspot(320,510,770,490) action [SetLocalVariable('nin', True), Function(set_tool, 'ninhydrin')] sensitive tools['ninhydrin']
+    showif nin:
+        imagemap:
+            idle "cheque_ninhydrin"
+            hover "cheque_ninhydrin_hover"
+            hotspot(1020,560,630,390) action [SetLocalVariable('to_dip', True), Function(set_cursor, 'cheque_mouse')]
+    showif to_dip:
+        imagemap:
+            idle "cheque_pickup"
+            hover "cheque_pickup_hover"
+            hotspot(130,100,1230,880) action [SetLocalVariable('dipped', True), Function(set_cursor, '')]
+    showif dipped:
+        imagemap:
+            idle "cheque_dipped"
+            hover "cheque_dipped_hover"
+            hotspot(320,510,770,490) action [Jump('cheque_to_cabinet')]
+    
+screen ninhydrin_cabinets:
     default choice = False
     default dry = False
     default humidified = False
@@ -270,47 +374,25 @@ screen ninhydrin_screen:
     default wait = False
     default takeout = False
     default to_photo = False
-
-    imagemap:
-        idle "cheque_placed"
-        hover "cheque_placed_hover"
-        hotspot(130,100,1230,880) action [SetLocalVariable('poured', True), Function(set_tool, 'ninhydrin')] sensitive tools['ninhydrin']
-    showif poured:
-        imagemap:
-            idle "cheque_ninhydrin"
-            hover "cheque_ninhydrin_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('to_dip', True), Function(set_cursor, 'cheque_mouse')]
-    showif to_dip:
-        imagemap:
-            idle "cheque_pickup"
-            hover "cheque_pickup_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('dipped', True), Function(set_cursor, '')]
-    showif dipped:
-        imagemap:
-            idle "cheque_dipped"
-            hover "cheque_dipped_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('lift', True), Function(set_cursor, 'tray_cheque')]
-    showif lift:
-        image "cheque_pickup"
-        imagebutton:
-            xpos 1100 ypos 70
-            idle "cabinet" at Transform(zoom=0.5)
-            hovered Notify("Proceed to the heated cabinets")
-            unhovered Notify('')     
-            action [SetLocalVariable('choice', True), Function(set_cursor, '')]
+    
+    image "cheque_pickup"
+    imagebutton:
+        xpos 1100 ypos 70
+        idle "cabinet" at Transform(zoom=0.5)  
+        action [SetLocalVariable('choice', True), Function(set_cursor, '')]
     showif choice:
         image 'cheque_pickup'
         hbox:
             xpos 1100 ypos 70
             image "cabinet" at Transform(zoom=0.5)
         hbox:
-            xpos 0.15 ypos 0.6
-            textbutton('Dry'):
+            xpos 0.2 ypos 0.65
+            textbutton('Dry heating cabinet'):
                 style 'custom_button'
                 action SetLocalVariable('dry', True)
         hbox:
-            xpos 0.15 ypos 0.7
-            textbutton('Humidified'):
+            xpos 0.2 ypos 0.75
+            textbutton('Humidified heating cabinet'):
                 style 'custom_button'
                 action SetLocalVariable('humidified', True)
     showif dry:
@@ -331,17 +413,17 @@ screen ninhydrin_screen:
         imagemap:
             idle "cabinet_humidified"
             hover "cabinet_humidified_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('opened', True), Function(set_cursor, 'tray_cheque')]
+            hotspot(350,10,1120,850) action [SetLocalVariable('opened', True), Function(set_cursor, 'tray_cheque')]
     showif opened:
         imagemap:
             idle "cabinet_open"
             hover "cabinet_open_hover"
-            hotspot(130,100,1230,880) action [SetLocalVariable('placed', True), Function(set_cursor, '')]
+            hotspot(660,360,760,380) action [SetLocalVariable('placed', True), Function(set_cursor, '')]
     showif placed:
         image 'cabinet_placed'
         hbox:
             xpos 0.2 ypos 0.75
-            textbutton('Set temperature to 80 degrees celcius with 65%\ relative humidity'):
+            textbutton('Set temperature to 80 degrees celcius with 65% relative humidity'):
                 style 'custom_button'
                 action [SetLocalVariable('setting', True)]
     showif setting:
@@ -350,32 +432,28 @@ screen ninhydrin_screen:
             xpos 0.2 ypos 0.75
             textbutton('Wait for 5 minutes'):
                 style 'custom_button'
-                action [SetLocalVariable('wait', True)]
-    showif wait:
-        image 'cabinet_done'
-        hbox:
-            xpos 0.2 ypos 0.75
-            textbutton('Set up exhibit behind white background for photograph'):
-                style 'custom_button'
-                action [SetLocalVariable('takeout', True)]
-    showif takeout:
-        image 'ninhydrin_take_photo'
-        hbox:
-            xpos 0.2 ypos 0.8
-            textbutton('Take Photo'):
-                style 'custom_button'
-                action [Hide('ninhydrin_screen'), Jump("take_cheque")]
+                action [Jump('cheque_to_photo')]
+
+screen ninhydrin_set_photo:
+    image 'ninhydrin_take_photo'
+    hbox:
+        xpos 0.2 ypos 0.8
+        textbutton('Take Photo'):
+            style 'custom_button'
+            action [Jump("take_cheque")]
     
 screen ninhydrin_tobag:
     default bagged = False
     default taped = False
     imagemap:
         idle "ninhydrin_tophoto"
-        hotspot(130,100,1230,880) action [SetLocalVariable('bagged', True)] sensitive tools['bag']
+        hover "ninhydrin_tophoto_hover"
+        hotspot(400,400,1200,580) action [SetLocalVariable('bagged', True)] sensitive tools['bag']
     showif bagged:
         imagemap:
             idle "bin_bagged"
-            hotspot(710,210,510,680) action [SetLocalVariable('taped', True), Function(set_tool, 'tape'),
-                Show('screen_finished_processing', evidence='cheque',_layer='over_screens')] sensitive tools['tape']
+            hover "bin_bagged_hover"
+            hotspot(400,100,1000,880) action [SetLocalVariable('taped', True), Function(set_tool, 'tape'),
+                Show('screen_finished_processing', process='ninhydrin', _layer='over_screens')] sensitive tools['tape']
     showif taped:
         image 'bin_taped'

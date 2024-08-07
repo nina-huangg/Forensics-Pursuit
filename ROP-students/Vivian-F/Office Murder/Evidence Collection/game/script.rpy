@@ -1,6 +1,4 @@
-﻿# track current mouse position
-default mousepos = (0.0, 0.0) 
-# whether the screen in the main screen (office)
+﻿# whether the screen in the main screen (office)
 default on_main_screen = True
 # whether casefiles are currently displayed
 default case_file_show = False
@@ -197,8 +195,6 @@ label take_deskfoot:
 label show_blood:
     hide screen scene_office
     $ on_main_screen = False
-    hide screen camera_screen onlayer over_camera
-    hide screen case_files_screen onlayer over_screens
     if 'blood' not in processed:
         scene blood_zoom
         "First, place down the ruler in preparation of an initial photo of the blood stain before proceeding to develop print."
@@ -229,8 +225,6 @@ label take_blood_sprayed:
 label show_bullet:
     hide screen scene_office
     $ on_main_screen = False
-    hide screen camera_screen onlayer over_camera
-    hide screen case_files_screen onlayer over_screens
     if 'bullet' not in processed:
         scene bullet_zoom
         "Record this evidence and send it to lab for further investigation. (click anywhere to proceed)"
@@ -248,8 +242,6 @@ label take_bullet:
 label show_cheque:
     hide screen scene_office
     $ on_main_screen = False
-    hide screen camera_screen onlayer over_camera
-    hide screen case_files_screen onlayer over_screens
     if 'cheque' not in processed:
         scene cheque_zoom
         "Record this evidence and send it to lab for further investigation. (click anywhere to proceed)"
@@ -266,8 +258,6 @@ label take_cheque:
 # Here from screen scene_office once all evidence processed and user pressed to proceed to lab
 label end:
     # Turn off all crime scene layers (back to bahen for now as lab is to be implemented)
-    hide screen camera_screen onlayer over_camera
-    hide screen case_files_screen onlayer over_screens
     hide screen scene_office
     scene bahen
     "Lab to be implemented"

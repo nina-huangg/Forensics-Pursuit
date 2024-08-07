@@ -243,6 +243,7 @@ init python:
         global inventory_db_enabled
 
         if len(inventory_sprites) > 4:
+            citem = "" # current item
             # iterate through inventory items
             for i, item in enumerate(inventory_sprites):
                 # up button 
@@ -252,14 +253,16 @@ init python:
                         # shift inventory items up
                         item.y -= distance_slot
                         item.original_y = item.y # added
+                        citem = item
                 elif button == "up" and inventory_ub_enabled == True:
                     if inventory_sprites[0].visible == False:
                         item.y += distance_slot
                         item.original_y = item.y # added
+                        citem = item
                 # checks if item was moved beyond first or beyond last item in inventory slots
-                if item != "" and (item.y < first_slot_y or item.y > (first_slot_y + (item.height * 4)) + (slot_padding * 3)):
+                if citem != "" and (citem.y < first_slot_y or citem.y > (first_slot_y + (item.height * 4)) + (slot_padding * 4)):
                     setItemVisibility(item = item, visible = False)
-                elif item != "": # prevent errors
+                elif citem != "": # prevent errors
                     setItemVisibility(item = item, visible = True)
 
             if inventory_sprites[-1].visible == True:
@@ -307,10 +310,9 @@ init python:
                 toolbox_ub_enabled = False
             else:
                 toolbox_ub_enabled = True
-            
-            if item != "":
-                toolbox_SM.redraw(0)
-                renpy.restart_interaction
+                
+            toolbox_SM.redraw(0)
+            renpy.restart_interaction
 
     def toolboxPopArrows(button):
         # determines if arrow buttons should be enabled or disabled - might change to up and down
@@ -376,8 +378,8 @@ screen full_inventory:
     image "UI/inv-icon-bg.png" xpos 0.014 ypos -0.03 at half_size
     imagebutton auto "UI/inventory-icon-%s.png" action If(renpy.get_screen("inventory") == None, true= [Show("inventory"), Hide("toolbox"), Hide("toolboxpop")], 
                                                         false= [Hide("inventory"), Hide("toolboxpop"), Hide("toolboxpop")]) xpos 0.087 ypos 0.02 at half_size
-    imagebutton auto "UI/tool-inventory-icon-%s.png" action If(renpy.get_screen("toolbox") == None, true= [Function(repositionToolboxItems), Show("toolbox"), Hide("inventory"), Hide("toolboxpop"), Hide('case_files_screen', _layer='over_screens'), Hide('camera_screen', _layer='over_camera')], 
-                                                            false= [Hide("toolbox"), Hide("toolboxpop"), Hide("toolboxpop"), Hide('case_files_screen', _layer='over_screens'), Hide('camera_screen', _layer='over_camera')]) xpos 0.037 ypos 0.02 at half_size
+    imagebutton auto "UI/tool-inventory-icon-%s.png" action If(renpy.get_screen("toolbox") == None, true= [Function(repositionToolboxItems), Show("toolbox"), Hide("inventory"), Hide("toolboxpop"), Hide('case_files_screen', _layer='over_screens')], 
+                                                            false= [Hide("toolbox"), Hide("toolboxpop"), Hide("toolboxpop"), Hide('case_files_screen', _layer='over_screens')]) xpos 0.037 ypos 0.02 at half_size
 
 # Evidence box:
 screen inventory:
@@ -417,10 +419,8 @@ screen inventoryItemMenu(item):
         imagebutton auto "UI/view-inventory-item-%s.png" align (0.0, 0.5) at half_size action [Show("inspectItem", items = [item.type]), Hide("inventoryItemMenu")]
         if item.type == "bag" or item.type == "tape":
             imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [Function(set_tool, item.type), Hide("inventoryItemMenu")]
-        elif item.type == "camera":
-            imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [ToggleVariable('camera_photo_show'), Show('camera_screen', _layer='over_camera'), Hide('case_files_screen', _layer='over_screens'), Hide("inventoryItemMenu")]
-        elif item.type == "evidences":
-            imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [ToggleVariable('case_file_show'), Show('case_files_screen', _layer='over_screens'), Hide('camera_screen', _layer='over_camera'), Hide("inventoryItemMenu")]
+        elif item.type == "case_files":
+            imagebutton auto "UI/expand-inventory-item-%s.png" align (1.0, 0.5) at half_size action [ToggleVariable('show_case_files'), Show('case_files_screen', _layer='over_screens'), Hide("inventoryItemMenu")]
 
 # Toolbox item menu
 screen toolboxItemMenu(item):
@@ -431,10 +431,7 @@ screen toolboxItemMenu(item):
         xpos int(item.x)
         ypos int(item.y)
         imagebutton auto "UI/view-inventory-item-%s.png" align (0.0, 0.5) at half_size action [Hide("toolboxpop"), Show("inspectItem", items = [item.type])]
-        if item.type == "applicator":
-            imagebutton auto "UI/expand-inventory-item-%s.png" align (1.0, 0.5) at half_size action If(renpy.get_screen("toolboxpop") == None, true= Show("toolboxpop"), false= Hide("toolboxpop")) 
-        else:
-            imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [Hide("toolboxpop"), Function(set_tool, item.type)]
+        imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [Hide("toolboxpop"), Function(set_tool, item.type)]
 
 
 # Secondary toolbox item menu

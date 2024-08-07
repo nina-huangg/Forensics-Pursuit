@@ -25,19 +25,19 @@ screen scene_office():
     # All imagemaps should show when casefile and camera are both not open
     # This avoid hoverin or clicking changes happen when looking throuh file/camera
     
-    # Before markers are set, tool can be marker, allow hotspot to place
-    if tools['marker']:
-        # Store current marker number (check if bigger numbers already taken for an evidence)
-        if num_deskfoot == 'numthree' or num_blood == 'numthree' or num_bullet == 'numthree' or num_cheque == 'numthree':
-            $ curr_num = 'numfour'
-        elif num_deskfoot == 'numtwo' or num_blood == 'numtwo' or num_bullet == 'numtwo' or num_cheque == 'numtwo':
-            $ curr_num = 'numthree'
-        elif num_deskfoot == 'numone' or num_blood == 'numone' or num_bullet == 'numone' or num_cheque == 'numone':
-            $ curr_num = 'numtwo'
-        else:
-            $ curr_num = 'numone'
-        
-        showif not case_file_show and not camera_photo_show:
+    showif not case_file_show and not camera_photo_show:
+        # Before markers are set, tool can be marker, allow hotspot to place
+        if tools['marker']:
+            # Store current marker number (check if bigger numbers already taken for an evidence)
+            if num_deskfoot == 'numthree' or num_blood == 'numthree' or num_bullet == 'numthree' or num_cheque == 'numthree':
+                $ curr_num = 'numfour'
+            elif num_deskfoot == 'numtwo' or num_blood == 'numtwo' or num_bullet == 'numtwo' or num_cheque == 'numtwo':
+                $ curr_num = 'numthree'
+            elif num_deskfoot == 'numone' or num_blood == 'numone' or num_bullet == 'numone' or num_cheque == 'numone':
+                $ curr_num = 'numtwo'
+            else:
+                $ curr_num = 'numone'
+            
             imagemap:
                 idle "office_bg"
                 hover "office_bg_hover"
@@ -50,16 +50,15 @@ screen scene_office():
                     hotspot(580,830,240,190) action [SetDict(evidence_marker_set,'bullet', True), SetVariable('num_bullet', curr_num)] sensitive tools['marker']
                 if evidence_marker_set['cheque'] == False:
                     hotspot(1450,650,380,300) action [SetDict(evidence_marker_set,'cheque', True), SetVariable('num_cheque', curr_num)] sensitive tools['marker']
-        
-        showif all(evidence_marker_set[evidence] for evidence in evidence_marker_set):
-            hbox:
-                xpos 0.35 ypos 0.1        
-                text "Unselect the marker tool to proceed\nafter placing all markers"
+            
+            showif all(evidence_marker_set[evidence] for evidence in evidence_marker_set):
+                hbox:
+                    xpos 0.35 ypos 0.1        
+                    text "Unselect the marker tool to proceed\nafter placing all markers"
 
-    # When tool not marker but markers not all placed
-    # Show magnify hovering but clicking has no actions so markers are forced
-    elif not all(evidence_marker_set[evidence] for evidence in evidence_marker_set):
-        showif not case_file_show and not camera_photo_show:
+        # When tool not marker but markers not all placed
+        # Show magnify hovering but clicking has no actions so markers are forced
+        elif not all(evidence_marker_set[evidence] for evidence in evidence_marker_set):
             imagemap:
                 idle "office_bg"
                 hover "office_bg_hover"
@@ -74,18 +73,18 @@ screen scene_office():
                     xpos 0.35 ypos 0.1        
                     text "You have not yet marked all evidence \nlocations! Do so before analyzing them"
                 $ missing = False
-    
-    # When all markers placed, hover with magnify and clicking jumps to detail scene
-    else:
-        imagemap:
-            idle "office_bg"
-            hover "office_bg_hover"
+        
+        # When all markers placed, hover with magnify and clicking jumps to detail scene
+        else:
+            imagemap:
+                idle "office_bg"
+                hover "office_bg_hover"
 
-            hotspot(10,520,450,430) action [Jump("show_deskfoot")] mouse "magnify"
-            hotspot(590,280,490,320) action [Jump("show_blood")] mouse "magnify"
-            hotspot(580,830,240,190) action [Jump("show_bullet")] mouse "magnify"
-            hotspot(1450,650,380,300) action [Jump("show_cheque")] mouse "magnify"
-    
+                hotspot(10,520,450,430) action [Jump("show_deskfoot")] mouse "magnify"
+                hotspot(590,280,490,320) action [Jump("show_blood")] mouse "magnify"
+                hotspot(580,830,240,190) action [Jump("show_bullet")] mouse "magnify"
+                hotspot(1450,650,380,300) action [Jump("show_cheque")] mouse "magnify"
+        
     # Place images of post-evidence collection (evidence not in place)
     # Note: office_deskfoot/blood has pixel overlap, blood must appear after
     if 'deskfoot' in processed: 
@@ -684,47 +683,14 @@ screen case_files_screen():
             xpos 0.05 ypos 0.08
             image "casefile_inventory"
         hbox:
-            xpos 0.49 ypos 0.2
-            text title
-        
-        if all(evidence not in processed for evidence in should_be_examined):
-            hbox:
-                xalign 0.5 ypos 0.42
-                text "no evidence collected yet"
-        
-        # Only display evidence once processed (collected)
-        showif 'deskfoot' in processed:
-            hbox:
-                xpos 0.25 ypos 0.5
-                image 'casefile_deskfoot' at casefile_small
-        showif 'blood' in processed:
-            hbox:
-                xpos 0.55 ypos 0.2
-                image 'casefile_blood' at casefile_small
-        showif 'bullet' in processed:
-            hbox:
-                xpos 0.25 ypos 0.2
-                image 'casefile_bullet' at casefile_small
-        showif 'cheque' in processed:
-            hbox:
-                xpos 0.55 ypos 0.5
-                image 'casefile_cheque' at casefile_small
-
-
-# Casefile Evidences
-transform casefile_small():
-    zoom 0.2
-
-screen case_files_screen():
-    # Contents
-    showif case_file_show:
-        default title = 'Evidence Collected'
-        hbox:
-            xpos 0.05 ypos 0.08
-            image "casefile_inventory"
-        hbox:
             xpos 0.46 ypos 0.2
             text title
+        hbox:
+            xpos 0.25 ypos 0.2
+            textbutton('Close'):
+                style "back_button" 
+                action [SetVariable('case_file_show', False)]
+        
         
         if all(evidence not in processed for evidence in should_be_examined):
             hbox:
@@ -734,19 +700,19 @@ screen case_files_screen():
         # Only display evidence once processed (collected)
         showif 'deskfoot' in processed:
             hbox:
-                xpos 0.3 ypos 0.6
+                xpos 0.3 ypos 0.62
                 image 'casefile_deskfoot' at casefile_small
         showif 'blood' in processed:
             hbox:
-                xpos 0.6 ypos 0.3
+                xpos 0.6 ypos 0.34
                 image 'casefile_blood' at casefile_small
         showif 'bullet' in processed:
             hbox:
-                xpos 0.3 ypos 0.3
+                xpos 0.3 ypos 0.34
                 image 'casefile_bullet' at casefile_small
         showif 'cheque' in processed:
             hbox:
-                xpos 0.6 ypos 0.6
+                xpos 0.6 ypos 0.62
                 image 'casefile_cheque' at casefile_small
         
         
@@ -765,52 +731,57 @@ screen camera_screen():
         hbox:
             xpos 0.49 ypos 0.2
             text title
+        hbox:
+            xpos 0.25 ypos 0.2
+            textbutton('Close'):
+                style "back_button" 
+                action [SetVariable('camera_photo_show', False)]
         # Photos of collected evidence will display in gallery 
         # (show one at a time and press arrow to change -- same as Nina Level 1 prototype)
         hbox:   # Left arrow
             xpos 0.22 ypos 0.47         
             imagebutton:
                 idle 'inventory-arrow-left-enabled-idle' at Transform(zoom=0.7)
-                hover 'inventory-arrow-left-enabled-hover'
+                hover If(photo_counter - 1 > 0, true= 'inventory-arrow-left-enabled-hover')
 
                 action [Function(photo_switch, 'next')]
         hbox:   # Right arrow
             xpos 0.82 ypos 0.47
             imagebutton:
                 idle 'inventory-arrow-right-enabled-idle' at Transform(zoom=0.7)
-                hover 'inventory-arrow-right-enabled-hover'
+                hover If(photo_counter + 1 < len(photoed), true= 'inventory-arrow-right-enabled-hover')
                 
                 action [Function(photo_switch, 'prev')]
         
         # When there are photos, display one at counter index 
         # account for image name by storing in photo_name
         # Must code for hbox under each if, muliple if then hbox only shows one
-        if len(processed) != 0:
+        if len(photoed) != 0:
             default photo_name = ''
             if photoed[photo_counter] == 'deskfoot':
                 $ photo_name = 'camera_deskfoot'
                 hbox:
-                    xalign 0.6 yalign 0.55
+                    xalign 0.6 yalign 0.57
                     image '[photo_name]' at camera_photo
             if photoed[photo_counter] == 'blood':
                 $ photo_name = 'blood_' + num_blood
                 hbox:
-                    xalign 0.6 yalign 0.55
+                    xalign 0.6 yalign 0.57
                     image '[photo_name]' at camera_photo
             if photoed[photo_counter] == 'blood_sprayed':
                 $ photo_name = 'blood_sprayed_' + num_blood
                 hbox:
-                    xalign 0.6 yalign 0.55
+                    xalign 0.6 yalign 0.57
                     image '[photo_name]' at camera_photo
             if photoed[photo_counter] == 'bullet':
                 $ photo_name = 'bullet_' + num_bullet
                 hbox:
-                    xalign 0.6 yalign 0.55
+                    xalign 0.6 yalign 0.57
                     image '[photo_name]' at camera_photo
             if photoed[photo_counter] == 'cheque':
                 $ photo_name = 'cheque_' + num_cheque
                 hbox:
-                    xalign 0.6 yalign 0.55
+                    xalign 0.6 yalign 0.57
                     image '[photo_name]' at camera_photo
         # Display when no photos taken yet
         else:
