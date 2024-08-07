@@ -378,8 +378,10 @@ screen full_inventory:
     image "UI/inv-icon-bg.png" xpos 0.014 ypos -0.03 at half_size
     imagebutton auto "UI/inventory-icon-%s.png" action If(renpy.get_screen("inventory") == None, true= [Show("inventory"), Hide("toolbox"), Hide("toolboxpop")], 
                                                         false= [Hide("inventory"), Hide("toolboxpop"), Hide("toolboxpop")]) xpos 0.087 ypos 0.02 at half_size
-    imagebutton auto "UI/tool-inventory-icon-%s.png" action If(renpy.get_screen("toolbox") == None, true= [Function(repositionToolboxItems), Show("toolbox"), Hide("inventory"), Hide("toolboxpop"), Hide('case_files_screen', _layer='over_screens')], 
-                                                            false= [Hide("toolbox"), Hide("toolboxpop"), Hide("toolboxpop"), Hide('case_files_screen', _layer='over_screens')]) xpos 0.037 ypos 0.02 at half_size
+    imagebutton auto "UI/tool-inventory-icon-%s.png" action If(renpy.get_screen("toolbox") == None, true= [Function(repositionToolboxItems), Show("toolbox"), Hide("inventory"), Hide("toolboxpop"), 
+                                                                                                            Hide('physical_screen', _layer='over_screens'), Hide('digital_screen', _layer='over_screens')],
+                                                            false= [Hide("toolbox"), Hide("toolboxpop"), Hide("toolboxpop"), Hide('physical_screen', _layer='over_screens'), 
+                                                                    Hide('digital_screen', _layer='over_screens')]) xpos 0.037 ypos 0.02 at half_size
 
 # Evidence box:
 screen inventory:
@@ -419,8 +421,10 @@ screen inventoryItemMenu(item):
         imagebutton auto "UI/view-inventory-item-%s.png" align (0.0, 0.5) at half_size action [Show("inspectItem", items = [item.type]), Hide("inventoryItemMenu")]
         if item.type == "bag" or item.type == "tape":
             imagebutton auto "UI/use-inventory-item-%s.png" align (1.0, 0.5) at half_size action [Function(set_tool, item.type), Hide("inventoryItemMenu")]
-        elif item.type == "case_files":
-            imagebutton auto "UI/expand-inventory-item-%s.png" align (1.0, 0.5) at half_size action [ToggleVariable('show_case_files'), Show('case_files_screen', _layer='over_screens'), Hide("inventoryItemMenu")]
+        elif item.type == "physical_evidence":
+            imagebutton auto "UI/expand-inventory-item-%s.png" align (1.0, 0.5) at half_size action [ToggleVariable('show_physical'), Hide("inventoryItemMenu"), Show('physical_screen', _layer='over_screens')]
+        elif item.type == "digital_evidence":
+            imagebutton auto "UI/expand-inventory-item-%s.png" align (1.0, 0.5) at half_size action [ToggleVariable('show_digital'), Hide("inventoryItemMenu"), Show('digital_screen', _layer='over_screens')]
 
 # Toolbox item menu
 screen toolboxItemMenu(item):

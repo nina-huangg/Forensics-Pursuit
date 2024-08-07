@@ -1,11 +1,13 @@
 screen screen_finished_processing(process):
     hbox:
         xpos 0.25 ypos 0.8
-        textbutton('Store in case file'):
+        textbutton('Store in physical evidences'):
             style "custom_button"
             action [Hide('screen_finished_processing', _layer='over_screens'),
-            Hide('case_files_screen', _layer='over_screens'), 
+            Hide('physical_screen', _layer='over_screens'), 
+            Hide('digital_screen', _layer='over_screens'), 
             Hide('toolbox_button_screen', _layer='over_screens'), 
+            Hide('backtrack', _layer='over_screens'),
             Hide('back_button_screen', _layer='over_screens'),
             Function(set_state_to_processed, process), 
             SetVariable('current_process', ''), 
@@ -20,7 +22,7 @@ transform fumehood_zoom:
 
 screen hallway_screen():
     image "lab_hallway_dim"
-    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+    showif not (show_physical or show_digital):
         hbox:
             xpos 0.20 yalign 0.5
             imagebutton:
@@ -45,7 +47,7 @@ screen hallway_screen():
 # Data Lab -- AFIS
 screen data_analysis_lab_screen:
     image "afis_interface"
-    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+    showif not (show_physical or show_digital):
         hbox:
             xpos 0.25 yalign 0.25
             imagebutton:
@@ -60,7 +62,7 @@ screen afis_screen:
     default interface_search = False
     
     image afis_bg
-    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+    showif not (show_physical or show_digital):
         hbox:
             xpos 0.35 ypos 0.145
             textbutton('Import'):
@@ -70,11 +72,12 @@ screen afis_screen:
                     SetLocalVariable('interface_imported', False),
                     SetLocalVariable('interface_search', False),
                     SetLocalVariable('afis_bg', 'software_interface'),
+                    SetVariable('importing', True),
                     Function(set_cursor, ''),
                     Hide('toolbox'),
-                    SetVariable('show_case_files', True),
+                    SetVariable('show_digital', True),
                     Show('inventory'),
-                    Show('case_files_screen')]
+                    Show('digital_screen')]
         hbox:
             xpos 0.55 ypos 0.145
             textbutton('Search'):
@@ -83,7 +86,7 @@ screen afis_screen:
                 action [
                     ToggleLocalVariable('interface_search'),
                     SetLocalVariable('afis_bg', 'software_search'),
-                    Function(set_cursor, '')]
+                    Function(set_cursor, ''), Function(add_afis, current_evidence)]
     showif interface_import:
         imagemap:
             idle "software_interface"
@@ -91,8 +94,7 @@ screen afis_screen:
             hotspot (282,241,680,756) action [
                 SetLocalVariable('interface_import', False), 
                 SetLocalVariable('interface_imported', True),
-                Function(set_cursor, ''),
-                Function(add_afis, current_evidence)] sensitive current_cursor != ''    
+                Function(set_cursor, '')] sensitive current_cursor != ''    
             
     # Note: line under does not work when placed into showif, hence the separate if statement
     if current_evidence != no_evidence:
@@ -120,7 +122,7 @@ screen afis_screen:
 
 screen materials_lab_screen:
     image "materials_lab"
-    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+    showif not (show_physical or show_digital):
         hbox:
             xpos 0.36 yalign 0.5
             imagebutton:
@@ -148,7 +150,7 @@ screen fumehood_screen():
     default magnetic = False
     
     image "fumehood_bg"
-    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+    showif not (show_physical or show_digital):
         showif current_evidence == bullet:
             imagemap:
                 idle "bullet_placed"

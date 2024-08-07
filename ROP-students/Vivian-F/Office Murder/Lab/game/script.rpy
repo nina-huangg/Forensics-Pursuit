@@ -1,6 +1,6 @@
-﻿default show_evidence = False
+﻿# Needed global variables and default values
+default show_evidence = False
 default show_toolbox = False
-default show_case_files = False
 
 default evidence_complete_process = {'gun_blue': False, 'ninhydrin': False, 'bullet_AFIS': False, 'cheque_AFIS': False, 'deskfoot_AFIS': False}
 
@@ -9,14 +9,8 @@ default current_process = ''
 default process_fumehood = False
 default process_afis = False
 
-default case_file_dict = {'bullet': False, 'cheque': False, 'deskfoot': False, 'blood': False}
-default current_casefile = {'evidence': False, 'digi_evidence': False}
-default casefile_title = {'evidence': 'Physical Evidence', 'digi_evidence': 'Digital Evidence'}
-
-default bool_show_case = False
 default show_physical = False
 default show_digital = False
-default case_type_selected = ''
 
 default inventory_item_names = ["Gun Blue", "Water", "Bottle", "Ninhydrin", "Bag", "Tape", "Physical Evidence", "Digital Evidence"] # holds names for inspect pop-up text 
 default tools = {'gun_blue': False, 'water': False, 'bottle': False, 'ninhydrin': False, 'bag': False, 'tape': False}
@@ -24,6 +18,7 @@ default tools = {'gun_blue': False, 'water': False, 'bottle': False, 'ninhydrin'
 # entries on afis when search
 default afis_search = []
 default afis_search_coordinates = {'score_xpos': 0.53, 'xpos':0.61, 'ypos':0.505}
+default importing = False
 
 # transition for photo taking flash (0 in/out so middle screen don't last long)
 define flash = Fade(.25, 0, 0, color="#fff")
@@ -62,21 +57,6 @@ init python:
         global evidence_complete_process
         evidence_complete_process[process] = True
 
-    def set_current_casefile(type_case):
-        global current_casefile
-        global case_type_selected
-        for case in current_casefile:
-            if case == type_case:
-                current_casefile[case] = True
-                case_type_selected = casefile_title[case]
-            else:
-                current_casefile[case] = False
-    
-    def set_case_file_dict(evidence):
-        for key in case_file_dict:
-            case_file_dict[key] = False
-        case_file_dict[evidence] = True
-    
     def add_afis(evidence):
         afis_search.append(evidence)
         evidence.afis_processed = True

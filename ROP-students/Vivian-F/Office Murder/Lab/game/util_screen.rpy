@@ -6,7 +6,7 @@ screen back_button_screen(location):
         imagebutton:
             idle "back_button" at Transform(zoom=0.2)
             hover "back_button_hover"
-            action [SetVariable('process_fumehood', False), SetVariable('process_afis', False), Hide('afis_screen'), Jump(location)]
+            action [SetVariable('process_fumehood', False), SetVariable('process_afis', False), SetVariable('importing', False), Hide('afis_screen'), Jump(location)]
             sensitive current_cursor == ''
 
 # Rollback to last step (last screen or label) -- cannot use if disable rollback
@@ -20,245 +20,167 @@ screen backtrack():
             sensitive current_cursor == ''
     
 
-# Casefile
-transform case_evidence:
-    zoom 0.2
-
-screen case_files_screen():
-    showif show_case_files:
-        hbox:
-            xpos 0.05 ypos 0.08
-            image "casefile_inventory"
-        hbox:
-            xpos 0.5 ypos 0.2
-            text("Case Files")
-        hbox:
-            xpos 0.25 ypos 0.2
-            textbutton('Close'):
-                style "back_button" 
-                action [SetVariable('show_case_files', False)]
-        
-        hbox:
-            xpos 0.3 ypos 0.62
-            imagebutton:
-                idle "casefile_bullet" at case_evidence
-                action [ToggleVariable('show_case_files'), Function(set_case_file_dict, 'bullet'), 
-                SetVariable("bool_show_case", True), Show("show_case", name='Bullet Casing', _layer="over_screens")]
-        hbox:
-            xpos 0.6 ypos 0.34
-            imagebutton:
-                idle "casefile_cheque" at case_evidence
-                action [ToggleVariable('show_case_files'), Function(set_case_file_dict, 'cheque'),
-                SetVariable("bool_show_case", True), Show("show_case", name='Cheque', _layer="over_screens")]
-        hbox:
-            xpos 0.3 ypos 0.34
-            imagebutton:
-                idle "casefile_deskfoot" at case_evidence
-                action [ToggleVariable('show_case_files'), Function(set_case_file_dict, 'deskfoot'),
-                SetVariable("bool_show_case", True), Show("show_case", name='KNAAP Footprint', _layer="over_screens")]
-        hbox:
-            xpos 0.6 ypos 0.62
-            imagebutton:
-                idle "casefile_blood" at case_evidence
-                action [ToggleVariable('show_case_files'), Function(set_case_file_dict, 'blood'),
-                SetVariable("bool_show_case", True), Show("show_case", name='Bloody Carpet', _layer="over_screens")]
-
-
-# Options for physical/digital casefile type_case 
-# Each set current_casefile[type_case] to True and make case_type_selected = type_case
-# then deselect bool_show_case before leaving this screen
-# set show_physical to True in prep of new screen
-# then show new screen show_case_evidence given current process to be sensitive to
-screen show_case(name):
-    showif bool_show_case:
-        hbox:
-            xpos 0.05 ypos 0.08
-            image "casefile_inventory"
-        hbox:
-            xpos 0.46 ypos 0.2
-            text(name)
-        hbox:
-            xpos 0.25 ypos 0.2
-            textbutton('Back'):
-                style "back_button" 
-                action [SetVariable('bool_show_case', False), SetVariable('show_case_files', True)]
-        hbox:
-            xpos 0.3 ypos 0.35
-            imagebutton:
-                idle "casefile_evidence" at Transform(zoom=0.4)
-                hover "casefile_evidence_hover"
-                action [Function(set_current_casefile, 'evidence'), SetVariable("bool_show_case", False),
-                SetVariable('show_physical', True), Show("show_case_evidence", _layer="over_screens")]
-        hbox:
-            xpos 0.32 ypos 0.65
-            text("{size=-5}Physical Evidence{/size}")
-    
-        hbox:
-            xpos 0.5 ypos 0.32
-            imagebutton:
-                idle "casefile_digi_evidence" at Transform(zoom=0.5)
-                hover "casefile_digi_evidence_hover"
-                action [Function(set_current_casefile, 'digi_evidence'), SetVariable("bool_show_case", False),
-                SetVariable('show_digital', True), Show('show_case_digi_evidence', _layer="over_screens")]
-        hbox:
-            xpos 0.55 ypos 0.65
-            text("{size=-5}Digital Evidence{/size}")
-
+# current_casefile, set_current_casefile, casefile_title, type_case, case_type_selected, bool_show_case
+# screen show_case
+# Align things
 
 transform evidence_small():
     zoom 0.2
 
-# Physical Evidence
-screen show_case_evidence():
-    showif show_physical:
-        hbox:
-            xpos 0.05 ypos 0.08
-            image "casefile_inventory"
-        hbox:
-            xpos 0.25 ypos 0.2
-            textbutton('Back'):
-                style "back_button" 
-                action [SetVariable('bool_show_case', True), SetVariable("show_physical", False)]
-        hbox:
-            xpos 0.46 ypos 0.2
-            text(case_type_selected)
-
-        if case_file_dict['bullet']:
-            showif not evidence_complete_process['gun_blue']:
-                showif process_fumehood:
-                    hbox:
-                        xpos 0.55 ypos 0.5
-                        textbutton('Process bullet casing'):
-                            style "custom_button"
-                            action [SetVariable('current_evidence', bullet), SetVariable("show_physical", False), Hide('fumehood_idle'), Jump('process_prompt')]
-                else:
-                    hbox:
-                        xpos 0.55 ypos 0.5
-                        text 'Requires further processing' color "#1f1da7"
-                hbox:
-                    xalign 0.4 yalign 0.5
-                    image "casefile_bullet" at evidence_small
-            else:
-                hbox:
-                    xpos 0.55 ypos 0.5
-                    text 'Bullet casing processed'
-                hbox:
-                    xalign 0.4 yalign 0.5
-                    image "casefile_bullet_processed" at evidence_small
-        
-        if case_file_dict['cheque']:
-            showif not evidence_complete_process['ninhydrin']:
-                showif process_fumehood:
-                    hbox:
-                        xpos 0.55 ypos 0.5
-                        textbutton('Process cheque'):
-                            style "custom_button"
-                            action [SetVariable('current_evidence', cheque), SetVariable("show_physical", False), Hide('fumehood_idle'), Jump('process_prompt')]
-                else:
-                    hbox:
-                        xpos 0.55 ypos 0.5
-                        text 'Requires further processing' color "#1f1da7"                           
-                hbox:
-                    xalign 0.4 yalign 0.5
-                    image "casefile_cheque" at evidence_small
-            else:
-                hbox:
-                    xpos 0.55 ypos 0.5
-                    text 'Cheque processed'
-                hbox:
-                    xalign 0.4 yalign 0.5
-                    image "casefile_cheque_processed" at evidence_small
-        
-        if case_file_dict['deskfoot']:
-            hbox:
-                xpos 0.54 ypos 0.5
-                text 'Footprint processed (KNAAP)'
-            hbox:
-                xalign 0.4 yalign 0.5
-                image "casefile_deskfoot" at evidence_small
-
-        if case_file_dict['blood']:
-            hbox:
-                xpos 0.55 ypos 0.5
-                text 'Bloody carpet processed\n(Hungarian Red)'
-            hbox:
-                xalign 0.4 yalign 0.5
-                image "casefile_blood" at evidence_small
-
 # Digital Evidence        
-screen show_case_digi_evidence():
+screen digital_screen():
     showif show_digital:
         hbox:
             xpos 0.05 ypos 0.08
             image "casefile_inventory"
         hbox:
-            xpos 0.25 ypos 0.2
-            textbutton('Back'):
-                style "back_button" 
-                action [SetVariable('bool_show_case', True), SetVariable("show_digital", False)]
+            xpos 0.5 ypos 0.2
+            text("Physical Evidence")
         hbox:
-            xpos 0.46 ypos 0.2
-            text(case_type_selected)
+            xpos 0.25 ypos 0.2
+            textbutton('Close'):
+                style "back_button" 
+                action [SetVariable("show_digital", False)]
         
-        if case_file_dict['bullet']:
-            showif evidence_complete_process['gun_blue']:
-                hbox:
-                    xpos 0.55 ypos 0.5
-                    text 'No visible complete print to process'
-                hbox:
-                    xalign 0.4 yalign 0.5
-                    image "bullet_print" at evidence_small
+        # Bullet only shows after fumehood process, and no print to afis
+        showif evidence_complete_process['gun_blue']:
+            hbox:
+                xpos 0.31 ypos 0.6
+                image "bullet_print" at evidence_small
+            hbox:
+                xpos 0.29 ypos 0.82
+                text 'No complete print to process'
         
-        if case_file_dict['cheque']:
-            showif evidence_complete_process['ninhydrin']:
-                showif not cheque.afis_processed:
-                    showif process_afis:
-                        hbox:
-                            xpos 0.55 ypos 0.5
-                            textbutton('Process fingerprint'):
-                                style "custom_button"
-                                action [Function(set_cursor, 'cheque_fingerprint'), SetVariable('current_evidence', cheque), SetVariable('show_digital', False)]
-                    else:
-                        hbox:
-                            xpos 0.55 ypos 0.5
-                            text 'Requires comparison analysis' color "#1f1da7"
+        # Cheque show after fumehood and can compare in afis
+        showif evidence_complete_process['ninhydrin']:
+            hbox:
+                xpos 0.61 ypos 0.3
+                image "cheque_print" at evidence_small
+            # Before afis compared, show needing comparison and allow button if in afis scene
+            showif not cheque.afis_processed:
+                showif importing:
+                    hbox:
+                        xpos 0.61 ypos 0.52
+                        textbutton('Process fingerprint'):
+                            style "custom_button"
+                            action [SetVariable('importing', False), Function(set_cursor, 'cheque_fingerprint'), SetVariable('current_evidence', cheque), SetVariable('show_digital', False)]
                 else:
                     hbox:
-                        xpos 0.55 ypos 0.5
-                        text 'Fingerprint searched'
-                hbox:
-                    xalign 0.4 yalign 0.5
-                    image "cheque_print" at evidence_small
-
-        if case_file_dict['deskfoot']:
-            showif not deskfoot.afis_processed:
-                hbox:
-                    xalign 0.4 yalign 0.5
-                    image "casefile_deskfoot" at evidence_small
-                showif process_afis:
-                    hbox:
-                        xpos 0.55 ypos 0.5
-                        textbutton('Process footprint'):
-                            style "custom_button"
-                            action [Function(set_cursor, 'deskfoot_footprint'), SetVariable('current_evidence', deskfoot), SetVariable('show_digital', False)]
-                else:    
-                    hbox:
-                        xpos 0.55 ypos 0.5
-                        text 'Requires comparison analysis' color "#1f1da7"    
+                        xpos 0.58 ypos 0.52
+                        text 'Requires comparison analysis' color "#1f1da7"
+            # After afis searched, show text to reflect
             else:
                 hbox:
-                    xpos 0.55 ypos 0.5
-                    text 'Footprint searched'
+                    xpos 0.61 ypos 0.52
+                    text 'Fingerprint searched' 
+
+        # Deskfoot default shows, can compare in afis
+        showif not deskfoot.afis_processed:
+            hbox:
+                xpos 0.3 ypos 0.3
+                image "casefile_deskfoot" at evidence_small
+            showif importing:
                 hbox:
-                    xalign 0.4 yalign 0.5
-                    image "casefile_deskfoot" at evidence_small
+                    xpos 0.32 ypos 0.52
+                    textbutton('Process footprint'):
+                        style "custom_button"
+                        action [SetVariable('importing', False), Function(set_cursor, 'deskfoot_footprint'), SetVariable('current_evidence', deskfoot), SetVariable('show_digital', False)]
+            else:    
+                hbox:
+                    xpos 0.27 ypos 0.52
+                    text 'Requires comparison analysis' color "#1f1da7"    
+        else:
+            hbox:
+                xpos 0.3 ypos 0.3
+                image "casefile_deskfoot" at evidence_small
+            hbox:
+                xpos 0.32 ypos 0.52
+                text 'Footprint searched'
+
+        # Carpet default shows, cannot be processed in afis  
+        hbox:
+            xpos 0.6 ypos 0.6
+            image "casefile_blood" at evidence_small
+        hbox:
+            xpos 0.59 ypos 0.82
+            text 'No visible print to process'
+
+
+# Physical Evidence -- need position adjust according to digital
+screen physical_screen():
+    showif show_physical:
+        hbox:
+            xpos 0.05 ypos 0.08
+            image "casefile_inventory"
+        hbox:
+            xpos 0.5 ypos 0.2
+            text("Physical Evidence")
+        hbox:
+            xpos 0.25 ypos 0.2
+            textbutton('Close'):
+                style "back_button" 
+                action [SetVariable('show_physical', False)]
         
-        if case_file_dict['blood']:
+        # Bullet without gun blue - image same as eivdence collection
+        #   Then if in fumehood scene, allow process button, if not just text         
+        showif not evidence_complete_process['gun_blue']:
             hbox:
-                xpos 0.55 ypos 0.5
-                text 'No visible print to process'
+                xpos 0.3 ypos 0.6
+                image "casefile_bullet" at evidence_small
+            showif process_fumehood:
+                hbox:
+                    xpos 0.3 ypos 0.82
+                    textbutton('Process bullet casing'):
+                        style "custom_button"
+                        action [SetVariable('current_evidence', bullet), SetVariable("show_physical", False), Hide('fumehood_idle'), Jump('process_prompt')]
+            else:
+                hbox:
+                    xpos 0.27 ypos 0.82
+                    text 'Requires further processing' color "#1f1da7"
+        # Bullet after gun blue - image from photo
+        else:
             hbox:
-                xalign 0.4 yalign 0.5
-                image "casefile_blood" at evidence_small
+                xpos 0.3 ypos 0.6
+                image "casefile_bullet_processed" at evidence_small
+            hbox:
+                xpos 0.3 ypos 0.82
+                text 'Bullet casing processed'
 
+        # Cheque - same format as bullet
+        showif not evidence_complete_process['ninhydrin']:
+            hbox:
+                xpos 0.6 ypos 0.3
+                image "casefile_cheque" at evidence_small
+            showif process_fumehood:
+                hbox:
+                    xpos 0.61 ypos 0.52
+                    textbutton('Process cheque'):
+                        style "custom_button"
+                        action [SetVariable('current_evidence', cheque), SetVariable("show_physical", False), Hide('fumehood_idle'), Jump('process_prompt')]
+            else:
+                hbox:
+                    xpos 0.58 ypos 0.52
+                    text 'Requires further processing' color "#1f1da7"                               
+        else:
+            hbox:
+                xpos 0.61 ypos 0.3
+                image "casefile_cheque_processed" at evidence_small 
+            hbox:
+                xpos 0.62 ypos 0.52
+                text 'Cheque processed'
 
+        # Footprint on desk 
+        hbox:
+            xpos 0.3 ypos 0.3
+            image "casefile_deskfoot" at evidence_small
+        hbox:
+            xpos 0.28 ypos 0.52
+            text 'Footprint processed (KNAAP)'
+        
+        # Carpet
+        hbox:
+            xpos 0.6 ypos 0.6
+            image "casefile_blood" at evidence_small
+        hbox:
+            xpos 0.59 ypos 0.82
+            text 'Bloody carpet processed\n(Hungarian Red)'
