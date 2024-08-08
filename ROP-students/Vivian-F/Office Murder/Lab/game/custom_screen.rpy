@@ -1,11 +1,13 @@
 screen screen_finished_processing(process):
     hbox:
         xpos 0.25 ypos 0.8
-        textbutton('Store in case file'):
+        textbutton('Store in physical evidences'):
             style "custom_button"
             action [Hide('screen_finished_processing', _layer='over_screens'),
-            Hide('case_files_screen', _layer='over_screens'), 
+            Hide('physical_screen', _layer='over_screens'), 
+            Hide('digital_screen', _layer='over_screens'), 
             Hide('toolbox_button_screen', _layer='over_screens'), 
+            Hide('backtrack', _layer='over_screens'),
             Hide('back_button_screen', _layer='over_screens'),
             Function(set_state_to_processed, process), 
             SetVariable('current_process', ''), 
@@ -20,7 +22,7 @@ transform fumehood_zoom:
 
 screen hallway_screen():
     image "lab_hallway_dim"
-    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+    showif not (show_physical or show_digital):
         hbox:
             xpos 0.20 yalign 0.5
             imagebutton:
@@ -45,7 +47,7 @@ screen hallway_screen():
 # Data Lab -- AFIS
 screen data_analysis_lab_screen:
     image "afis_interface"
-    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+    showif not (show_physical or show_digital):
         hbox:
             xpos 0.25 yalign 0.25
             imagebutton:
@@ -60,7 +62,7 @@ screen afis_screen:
     default interface_search = False
     
     image afis_bg
-    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+    showif not (show_physical or show_digital):
         hbox:
             xpos 0.35 ypos 0.145
             textbutton('Import'):
@@ -70,11 +72,12 @@ screen afis_screen:
                     SetLocalVariable('interface_imported', False),
                     SetLocalVariable('interface_search', False),
                     SetLocalVariable('afis_bg', 'software_interface'),
+                    SetVariable('importing', True),
                     Function(set_cursor, ''),
                     Hide('toolbox'),
-                    SetVariable('show_case_files', True),
+                    SetVariable('show_digital', True),
                     Show('inventory'),
-                    Show('case_files_screen')]
+                    Show('digital_screen')]
         hbox:
             xpos 0.55 ypos 0.145
             textbutton('Search'):
@@ -83,7 +86,7 @@ screen afis_screen:
                 action [
                     ToggleLocalVariable('interface_search'),
                     SetLocalVariable('afis_bg', 'software_search'),
-                    Function(set_cursor, '')]
+                    Function(set_cursor, ''), Function(add_afis, current_evidence)]
     showif interface_import:
         imagemap:
             idle "software_interface"
@@ -91,8 +94,7 @@ screen afis_screen:
             hotspot (282,241,680,756) action [
                 SetLocalVariable('interface_import', False), 
                 SetLocalVariable('interface_imported', True),
-                Function(set_cursor, ''),
-                Function(add_afis, current_evidence)] sensitive current_cursor != ''    
+                Function(set_cursor, '')] sensitive current_cursor != ''    
             
     # Note: line under does not work when placed into showif, hence the separate if statement
     if current_evidence != no_evidence:
@@ -120,7 +122,7 @@ screen afis_screen:
 
 screen materials_lab_screen:
     image "materials_lab"
-    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+    showif not (show_physical or show_digital):
         hbox:
             xpos 0.36 yalign 0.5
             imagebutton:
@@ -138,6 +140,8 @@ screen materials_lab_screen:
                 idle "analytical_instruments_idle"
                 action NullAction()
 
+# Idle screen while in fumehood but player has not chosen an evidence 
+# (if without, others screens will jump to each other)
 screen fumehood_idle:
     image "fumehood_bg"
 
@@ -148,7 +152,7 @@ screen fumehood_screen():
     default magnetic = False
     
     image "fumehood_bg"
-    showif not (show_case_files or bool_show_case or show_physical or show_digital):
+    showif not (show_physical or show_digital):
         showif current_evidence == bullet:
             imagemap:
                 idle "bullet_placed"
@@ -195,7 +199,6 @@ screen fumehood_screen():
 screen gun_blue_screen:
     # Note: will not reach here if process already done
     default water_poured = False
-    default ten_per = False
 
     imagemap:
         idle "bottle_placed_zoom"
@@ -286,7 +289,6 @@ screen bullet_dip():
 screen bullet_water():
     default lift_gb = False
     default dipped_water = False
-    default lift_water = False
     
     imagemap:
         idle "bullet_dip_gb"
@@ -370,10 +372,6 @@ screen ninhydrin_cabinets:
     default at_cabinet = False
     default opened = False
     default placed = False
-    default setting = False
-    default wait = False
-    default takeout = False
-    default to_photo = False
     
     image "cheque_pickup"
     imagebutton:
@@ -425,14 +423,7 @@ screen ninhydrin_cabinets:
             xpos 0.2 ypos 0.75
             textbutton('Set temperature to 80 degrees celcius with 65% relative humidity'):
                 style 'custom_button'
-                action [SetLocalVariable('setting', True)]
-    showif setting:
-        image 'cabinet_humidified'
-        hbox:
-            xpos 0.2 ypos 0.75
-            textbutton('Wait for 5 minutes'):
-                style 'custom_button'
-                action [Jump('cheque_to_photo')]
+                action [Hide('ninhydrin_cabinets'), Jump('timer')]
 
 screen ninhydrin_set_photo:
     image 'ninhydrin_take_photo'

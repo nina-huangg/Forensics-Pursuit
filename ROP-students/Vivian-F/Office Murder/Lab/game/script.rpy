@@ -1,6 +1,6 @@
-﻿default show_evidence = False
+﻿# Needed global variables and default values
+default show_evidence = False
 default show_toolbox = False
-default show_case_files = False
 
 default evidence_complete_process = {'gun_blue': False, 'ninhydrin': False, 'bullet_AFIS': False, 'cheque_AFIS': False, 'deskfoot_AFIS': False}
 
@@ -9,14 +9,8 @@ default current_process = ''
 default process_fumehood = False
 default process_afis = False
 
-default case_file_dict = {'bullet': False, 'cheque': False, 'deskfoot': False, 'blood': False}
-default current_casefile = {'evidence': False, 'digi_evidence': False}
-default casefile_title = {'evidence': 'Physical Evidence', 'digi_evidence': 'Digital Evidence'}
-
-default bool_show_case = False
 default show_physical = False
 default show_digital = False
-default case_type_selected = ''
 
 default inventory_item_names = ["Gun Blue", "Water", "Bottle", "Ninhydrin", "Bag", "Tape", "Physical Evidence", "Digital Evidence"] # holds names for inspect pop-up text 
 default tools = {'gun_blue': False, 'water': False, 'bottle': False, 'ninhydrin': False, 'bag': False, 'tape': False}
@@ -24,6 +18,7 @@ default tools = {'gun_blue': False, 'water': False, 'bottle': False, 'ninhydrin'
 # entries on afis when search
 default afis_search = []
 default afis_search_coordinates = {'score_xpos': 0.53, 'xpos':0.61, 'ypos':0.505}
+default importing = False
 
 # transition for photo taking flash (0 in/out so middle screen don't last long)
 define flash = Fade(.25, 0, 0, color="#fff")
@@ -62,21 +57,6 @@ init python:
         global evidence_complete_process
         evidence_complete_process[process] = True
 
-    def set_current_casefile(type_case):
-        global current_casefile
-        global case_type_selected
-        for case in current_casefile:
-            if case == type_case:
-                current_casefile[case] = True
-                case_type_selected = casefile_title[case]
-            else:
-                current_casefile[case] = False
-    
-    def set_case_file_dict(evidence):
-        for key in case_file_dict:
-            case_file_dict[key] = False
-        case_file_dict[evidence] = True
-    
     def add_afis(evidence):
         afis_search.append(evidence)
         evidence.afis_processed = True
@@ -183,7 +163,7 @@ label data_analysis_lab:
     scene afis_interface
     show screen back_button_screen('hallway') onlayer over_screens
     $ set_tool('')
-    "Pick digital evidence data in case files to compare prints against known prints using the print comparison software.\n(click anywhere to proceed)"
+    "Pick digital evidence data in the digital evidences to compare prints against known prints using the print comparison software.\n(click anywhere to proceed)"
     call screen data_analysis_lab_screen
 
 label materials_lab:
@@ -197,7 +177,7 @@ label fumehood_lab:
     scene fumehood_bg
     show screen back_button_screen('hallway') onlayer over_screens
     "Analyze your evidence using chemical methods here inside the fumehood."
-    "Now pick an evidence to analyze\n(click anywhere to proceed)"
+    "Now pick an evidence from the physical evidences to analyze\n(click anywhere to proceed)"
     hide gloved_hands
     $ process_fumehood = True
     show screen inventory
@@ -310,6 +290,51 @@ label cheque_to_cabinet:
     $ set_cursor('tray_cheque')
     call screen ninhydrin_cabinets
 
+label timer_set:
+    scene cabinet_humidified
+    
+    # Min and max time allowed as correct
+    $ min_hours = 0 
+    $ min_minutes = 4
+    $ min_seconds = 0
+    $ max_hours = 0
+    $ max_minutes = 7
+    $ max_seconds = 0
+
+    # Calculations
+    $ min_time = min_hours * 3600 + min_minutes * 60 + min_seconds
+    $ max_time = max_hours * 3600 + max_minutes * 60 + max_seconds
+    $ true_time = time_numbers[5] + time_numbers[4] * 10 + time_numbers[3] * 60 + time_numbers[2] * 600 + time_numbers[1] * 3600 + time_numbers[0] * 36000
+
+    # Default messsages, customize to your liking
+    if true_time >= min_time and true_time <= max_time:
+        "That's correct."
+        $ string_min_1 = "%d" % time_numbers[2]
+        $ string_min_2 = "%d" % time_numbers[3]
+        $ string_sec_1 = "%d" % time_numbers[4]
+        $ string_sec_2 = "%d" % time_numbers[5]
+        if string_min_1 == "0":
+            if string_sec_1 != "0":
+                "Waiting for [string_min_2] minutes and [string_sec_1][string_sec_2] seconds... (click anywhere to continue)"
+            elif string_sec_2 != "0":
+                "Waiting for [string_min_2] minutes and [string_sec_2] seconds... (click anywhere to continue)"
+            else:
+                "Waiting for [string_min_2] minutes... (click anywhere to continue)"
+        else:
+            if string_sec_1 != "0" and string_sec_2 != "0":
+                "Waiting for [string_min_1][string_min_2] minutes and [string_sec_1][string_sec_2] seconds... (click anywhere to continue)"
+            elif string_sec_2 != "0":
+                "Waiting for [string_min_1][string_min_2] minutes and [string_sec_2] seconds... (click anywhere to continue)"
+            else:
+                "Waiting for [string_min_1][string_min_2] minutes... (click anywhere to continue)"
+        jump cheque_to_photo
+    elif true_time < min_time:
+        "That's not enough time, try again (remember to first clear the timer)."
+        jump timer
+    elif true_time > max_time:
+        "That's too much time, try again (remember to first clear the timer)."
+        jump timer
+
 label cheque_to_photo:
     hide ninhydrin_cabinets
     show screen backtrack onlayer over_screens
@@ -341,3 +366,4 @@ label end:
     scene enter_courtroom_screen 
 
     return
+
