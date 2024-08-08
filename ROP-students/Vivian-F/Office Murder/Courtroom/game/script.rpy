@@ -3,6 +3,7 @@ default inventory_item_names = ["KNAAP Footprint", "Cheque Fingerprint", "Bullet
 
 default q_a_bank = []
 default score = 0
+default name = ''
 
 init python:
     def check_answer(correct_answer, choice):
@@ -189,14 +190,21 @@ label start:
 
 label enter:
     scene courtroom_bg
+    python:
+        # maybe: pixel_width: If not None, the input is limited to being this many pixels wide, in the font used by the input to display text.
+        name = renpy.input("Please enter your first and last name")
+        name = name.strip()
+        if not name:
+            name = "John Doe"
     show screen full_inventory
-    "Welcome to the courtroom!"
+    "[name], welcome to the courtroom!"
     "In this scene, you will give a testimony with regards to the evidence you've analyzed."
     show screen arrow_screen
     "Remember, you can click on the evidence button to remind you of your analysis results."
     hide screen arrow_screen
     "Let's get started!"
     window hide # hides dialogue box
+    
     call screen swear
 
 label start_questions:
