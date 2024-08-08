@@ -329,10 +329,10 @@ label timer_set:
                 "Waiting for [string_min_1][string_min_2] minutes... (click anywhere to continue)"
         jump cheque_to_photo
     elif true_time < min_time:
-        "That's not enough time, try again (remember to first clear the timer)."
+        "That's not enough time, try again."
         jump timer
     elif true_time > max_time:
-        "That's too much time, try again (remember to first clear the timer)."
+        "That's too much time, try again."
         jump timer
 
 label cheque_to_photo:
