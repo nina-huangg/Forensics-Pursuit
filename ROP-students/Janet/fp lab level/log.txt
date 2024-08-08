@@ -1,0 +1,216 @@
+2024-08-07 05:01:45 UTC
+Windows-10-10.0.22631
+Ren'Py 8.2.1.24030407
+
+Early init took 0.15s
+Loading error handling took 0.18s
+Loading script took 1.99s
+Loading save slot metadata took 0.17s
+Loading persistent took 0.00s
+
+File "game/script.rpy", line 407: reached end of line when expecting ':'.
+    if (true_time => min_time and true_time <= max_time)
+                                                        ^
+
+File "game/script.rpy", line 429: expected statement.
+    else:
+        ^
+DPI scale factor: 3.000000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: b"Couldn't load nvlib." (can be ignored)
+Interface start took 0.17s
+
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 3840, 2400)
+swap interval: 1 frames
+Windowed mode.
+Vendor: "b'Intel'"
+Renderer: b'Intel(R) Iris(R) Xe Graphics'
+Version: b'4.6.0 - Build 31.0.101.5186'
+Display Info: None
+Screen sizes: virtual=(1920, 1080) physical=(3840, 2160) drawable=(3840, 2160)
+Maximum texture size: 4096x4096
+Resetting cache.
+Early init took 13.50s
+Loading error handling took 0.03s
+Loading script took 0.16s
+Loading save slot metadata took 0.02s
+Loading persistent took 0.00s
+Running init code took 0.31s
+Loading analysis data took 0.02s
+Analyze and compile ATL took 0.00s
+Reloading save slot metadata took 0.14s
+Index archives took 0.00s
+Backing up script files to 'C:\\Users\\Janet\\AppData\\Roaming/RenPy/backups\\fp lab level':
+Dump and make backups took 0.05s
+Cleaning cache took 0.00s
+Making clean stores took 0.00s
+Initial gc took 0.04s
+DPI scale factor: 3.000000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: b"Couldn't load nvlib." (can be ignored)
+Creating interface object took 0.00s
+Cleaning stores took 0.00s
+Init translation took 0.04s
+Build styles took 0.00s
+Load screen analysis took 0.01s
+Analyze screens took 0.02s
+Save screen analysis took 0.02s
+Prepare screens took 0.08s
+Save pyanalysis. took 0.02s
+Save bytecode. took 0.02s
+Running _start took 0.00s
+Interface start took 0.08s
+
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 3840, 2400)
+swap interval: 1 frames
+Windowed mode.
+Vendor: "b'Intel'"
+Renderer: b'Intel(R) Iris(R) Xe Graphics'
+Version: b'4.6.0 - Build 31.0.101.5186'
+Display Info: None
+Screen sizes: virtual=(1920, 1080) physical=(3840, 2160) drawable=(3840, 2160)
+Maximum texture size: 4096x4096
+
+Full traceback:
+  File "game/script.rpy", line 404, in script
+    $ max_time = max_hours * 3600 + max_minutes * 60 + max_seconds
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\ast.py", line 823, in execute
+    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\python.py", line 1178, in py_exec_bytecode
+    exec(bytecode, globals, locals)
+  File "game/script.rpy", line 404, in <module>
+    $ max_time = max_hours * 3600 + max_minutes * 60 + max_seconds
+NameError: name 'max_hours' is not defined
+
+While running game code:
+  File "game/script.rpy", line 404, in script
+    $ max_time = max_hours * 3600 + max_minutes * 60 + max_seconds
+  File "game/script.rpy", line 404, in <module>
+    $ max_time = max_hours * 3600 + max_minutes * 60 + max_seconds
+NameError: name 'max_hours' is not defined
+Resetting cache.
+Early init took 53.57s
+Loading error handling took 0.02s
+Loading script took 0.18s
+Loading save slot metadata took 0.02s
+Loading persistent took 0.00s
+Running init code took 0.03s
+Loading analysis data took 0.02s
+Analyze and compile ATL took 0.00s
+Reloading save slot metadata took 0.02s
+Index archives took 0.00s
+Backing up script files to 'C:\\Users\\Janet\\AppData\\Roaming/RenPy/backups\\fp lab level':
+Dump and make backups took 0.05s
+Cleaning cache took 0.00s
+Making clean stores took 0.00s
+Initial gc took 0.06s
+DPI scale factor: 3.000000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: b"Couldn't load nvlib." (can be ignored)
+Creating interface object took 0.00s
+Cleaning stores took 0.00s
+Init translation took 0.04s
+Build styles took 0.00s
+Load screen analysis took 0.00s
+Analyze screens took 0.01s
+Save screen analysis took 0.02s
+Prepare screens took 0.06s
+Save pyanalysis. took 0.00s
+Save bytecode. took 0.01s
+Running _start took 0.00s
+Interface start took 0.08s
+
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 3840, 2400)
+swap interval: 1 frames
+Windowed mode.
+Vendor: "b'Intel'"
+Renderer: b'Intel(R) Iris(R) Xe Graphics'
+Version: b'4.6.0 - Build 31.0.101.5186'
+Display Info: None
+Screen sizes: virtual=(1920, 1080) physical=(3840, 2160) drawable=(3840, 2160)
+Maximum texture size: 4096x4096
+
+Full traceback:
+  File "game/script.rpy", line 407, in script
+    if true_time => min_time and true_time <= max_time:
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\ast.py", line 1842, in execute
+    if renpy.python.py_eval(condition):
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\python.py", line 1207, in py_eval
+    code = py_compile(code, 'eval')
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\python.py", line 1144, in py_compile
+    raise e
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\python.py", line 1081, in py_compile
+    raise orig_e
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\python.py", line 1073, in py_compile
+    tree = compile(source, filename, py_mode, ast.PyCF_ONLY_AST | flags, 1)
+SyntaxError: invalid syntax (game/script.rpy, line 407)
+
+While running game code:
+  File "game/script.rpy", line 407, in script
+    if true_time => min_time and true_time <= max_time:
+SyntaxError: invalid syntax (game/script.rpy, line 407)
+
+Full traceback:
+  File "game/script.rpy", line 407, in script
+    if true_time => min_time and true_time <= max_time:
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\ast.py", line 1842, in execute
+    if renpy.python.py_eval(condition):
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\python.py", line 1207, in py_eval
+    code = py_compile(code, 'eval')
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\python.py", line 1144, in py_compile
+    raise e
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\python.py", line 1081, in py_compile
+    raise orig_e
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\python.py", line 1073, in py_compile
+    tree = compile(source, filename, py_mode, ast.PyCF_ONLY_AST | flags, 1)
+SyntaxError: invalid syntax (game/script.rpy, line 407)
+
+While running game code:
+  File "game/script.rpy", line 407, in script
+    if true_time => min_time and true_time <= max_time:
+SyntaxError: invalid syntax (game/script.rpy, line 407)
+Resetting cache.
+Early init took 72.46s
+Loading error handling took 0.02s
+Loading script took 0.14s
+Loading save slot metadata took 0.02s
+Loading persistent took 0.00s
+Running init code took 0.03s
+Loading analysis data took 0.02s
+Analyze and compile ATL took 0.00s
+Reloading save slot metadata took 0.02s
+Index archives took 0.00s
+Backing up script files to 'C:\\Users\\Janet\\AppData\\Roaming/RenPy/backups\\fp lab level':
+Dump and make backups took 0.04s
+Cleaning cache took 0.00s
+Making clean stores took 0.00s
+Initial gc took 0.05s
+DPI scale factor: 3.000000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: b"Couldn't load nvlib." (can be ignored)
+Creating interface object took 0.00s
+Cleaning stores took 0.00s
+Init translation took 0.04s
+Build styles took 0.00s
+Load screen analysis took 0.00s
+Analyze screens took 0.01s
+Save screen analysis took 0.02s
+Prepare screens took 0.07s
+Save pyanalysis. took 0.00s
+Save bytecode. took 0.01s
+Running _start took 0.00s
+Interface start took 0.08s
+
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 3840, 2400)
+swap interval: 1 frames
+Windowed mode.
+Vendor: "b'Intel'"
+Renderer: b'Intel(R) Iris(R) Xe Graphics'
+Version: b'4.6.0 - Build 31.0.101.5186'
+Display Info: None
+Screen sizes: virtual=(1920, 1080) physical=(3840, 2160) drawable=(3840, 2160)
+Maximum texture size: 4096x4096
