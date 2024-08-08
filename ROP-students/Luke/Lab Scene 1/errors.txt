@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/script.rpy", line 92: invalid syntax
+            elif evidence == 'swab_from_vase' and lab = 'bio_lab':
+                                                       ^
+
+Ren'Py Version: Ren'Py 8.2.3.24061702
+Thu Aug  8 11:01:04 2024
