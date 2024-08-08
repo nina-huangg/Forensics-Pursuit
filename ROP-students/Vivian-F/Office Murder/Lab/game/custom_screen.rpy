@@ -140,6 +140,8 @@ screen materials_lab_screen:
                 idle "analytical_instruments_idle"
                 action NullAction()
 
+# Idle screen while in fumehood but player has not chosen an evidence 
+# (if without, others screens will jump to each other)
 screen fumehood_idle:
     image "fumehood_bg"
 
@@ -197,7 +199,6 @@ screen fumehood_screen():
 screen gun_blue_screen:
     # Note: will not reach here if process already done
     default water_poured = False
-    default ten_per = False
 
     imagemap:
         idle "bottle_placed_zoom"
@@ -288,7 +289,6 @@ screen bullet_dip():
 screen bullet_water():
     default lift_gb = False
     default dipped_water = False
-    default lift_water = False
     
     imagemap:
         idle "bullet_dip_gb"
@@ -372,10 +372,6 @@ screen ninhydrin_cabinets:
     default at_cabinet = False
     default opened = False
     default placed = False
-    default setting = False
-    default wait = False
-    default takeout = False
-    default to_photo = False
     
     image "cheque_pickup"
     imagebutton:
@@ -427,14 +423,7 @@ screen ninhydrin_cabinets:
             xpos 0.2 ypos 0.75
             textbutton('Set temperature to 80 degrees celcius with 65% relative humidity'):
                 style 'custom_button'
-                action [SetLocalVariable('setting', True)]
-    showif setting:
-        image 'cabinet_humidified'
-        hbox:
-            xpos 0.2 ypos 0.75
-            textbutton('Wait for 5 minutes'):
-                style 'custom_button'
-                action [Jump('cheque_to_photo')]
+                action [Hide('ninhydrin_cabinets'), Jump('timer')]
 
 screen ninhydrin_set_photo:
     image 'ninhydrin_take_photo'
