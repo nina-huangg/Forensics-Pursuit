@@ -1,0 +1,14 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/script.rpy", line 407: reached end of line when expecting ':'.
+    if (true_time => min_time and true_time <= max_time)
+                                                        ^
+
+File "game/script.rpy", line 429: expected statement.
+    else:
+        ^
+
+Ren'Py Version: Ren'Py 8.2.1.24030407
+Wed Aug  7 01:01:48 2024
