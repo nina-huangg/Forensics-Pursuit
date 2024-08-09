@@ -419,7 +419,7 @@ label back:
         hide screen pcr_info
         hide screen thermal_cycler_info
         hide screen plate_centrifuge_info
-        hide screen miseq_info
+        hide screen miseq_machine_info
         jump enter_materials_lab
     elif in_chemistry_lab:
         $ in_chemistry_lab = False
@@ -1087,7 +1087,7 @@ label using_centrifuge:
     hide screen pcr_info
     hide screen thermal_cycler_info
     hide screen plate_centrifuge_info
-    hide screen miseq_info
+    hide screen miseq_machine_info
     $ at_centrifuge = True
     scene centrifuge_bg
     # If you do not have any samples with an insufficient concentration of DNA the following if statement should work:
@@ -1296,7 +1296,7 @@ label using_pcr:
     hide screen pcr_info
     hide screen thermal_cycler_info
     hide screen plate_centrifuge_info
-    hide screen miseq_info
+    hide screen miseq_machine_info
     $ at_pcr = True
     scene pcr_bg 
     if current_dna_evidence.finished_pcr:
@@ -1451,7 +1451,7 @@ label using_thermal_cycler:
     hide screen pcr_info
     hide screen thermal_cycler_info
     hide screen plate_centrifuge_info
-    hide screen miseq_info
+    hide screen miseq_machine_info
     $ at_thermal_cycler = True
     scene thermal_cycler_closed 
     if current_dna_evidence.finished_detection_thermal_cycler and current_dna_evidence.plate_on_ice and not current_dna_evidence.plate_in_thermal_cycler and not current_dna_evidence.thermal_cycler_open:
@@ -1591,7 +1591,7 @@ label using_plate_centrifuge:
     hide screen pcr_info
     hide screen thermal_cycler_info
     hide screen plate_centrifuge_info
-    hide screen miseq_info
+    hide screen miseq_machine_info
     $ at_plate_centrifuge = True
     scene plate_centrifuge_bg
     if current_dna_evidence.finished_detection_centrifuge and not current_dna_evidence.plate_in_centrifuge and not current_dna_evidence.plate_centrifuge_open:
@@ -1670,7 +1670,7 @@ label using_miseq:
     hide screen pcr_info
     hide screen thermal_cycler_info
     hide screen plate_centrifuge_info
-    hide screen miseq_info
+    hide screen miseq_machine_info
     scene miseq_bg
     if current_dna_evidence.finished_detection:
         jump dont_need_to_use_machine
