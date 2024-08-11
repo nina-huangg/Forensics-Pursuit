@@ -1,56 +1,60 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
-After initialization, but before game start.
-  File "game/scripts/custom_screens.rpy", line 177, in prepare_screen
-    screen toolbox_presumptive():
-  File "game/scripts/custom_screens.rpy", line 177, in prepare
-    screen toolbox_presumptive():
-  File "game/scripts/custom_screens.rpy", line 179, in prepare
-    hbox:
-  File "game/scripts/custom_screens.rpy", line 179, in prepare
-    hbox:
-  File "game/scripts/custom_screens.rpy", line 181, in prepare
-    imagebutton:
-  File "game/scripts/custom_screens.rpy", line 181, in prepare
-    imagebutton:
-SyntaxError: invalid syntax (game/scripts/custom_screens.rpy, line 183)
+While running game code:
+  File "game/scripts/script.rpy", line 123, in script
+    call screen front_corridor
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "renpy/common/00action_other.rpy", line 586, in __call__
+    rv = self.callable(*self.args, **self.kwargs)
+TypeError: 'str' object is not callable
 
 -- Full Traceback ------------------------------------------------------------
 
 Full traceback:
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\bootstrap.py", line 359, in bootstrap
-    renpy.main.main()
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\main.py", line 635, in main
-    run(restart)
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\main.py", line 94, in run
-    renpy.display.screen.prepare_screens()
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\screen.py", line 1026, in prepare_screens
-    s.ast.prepare_screen()
-  File "game/scripts/custom_screens.rpy", line 177, in prepare_screen
-    screen toolbox_presumptive():
-  File "game/scripts/custom_screens.rpy", line 177, in prepare
-    screen toolbox_presumptive():
-  File "game/scripts/custom_screens.rpy", line 179, in prepare
-    hbox:
-  File "game/scripts/custom_screens.rpy", line 179, in prepare
-    hbox:
-  File "game/scripts/custom_screens.rpy", line 181, in prepare
-    imagebutton:
-  File "game/scripts/custom_screens.rpy", line 181, in prepare
-    imagebutton:
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\py3analysis.py", line 803, in ast_eval
-    return self.ast_eval_literal(expr)[0]
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\py3analysis.py", line 785, in ast_eval_literal
-    expr = py_compile(expr, 'eval', ast_node=True)
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\python.py", line 1144, in py_compile
-    raise e
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\python.py", line 1081, in py_compile
-    raise orig_e
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\python.py", line 1073, in py_compile
-    tree = compile(source, filename, py_mode, ast.PyCF_ONLY_AST | flags, 1)
-SyntaxError: invalid syntax (game/scripts/custom_screens.rpy, line 183)
+  File "game/scripts/script.rpy", line 123, in script
+    call screen front_corridor
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 1968, in execute
+    self.call("execute")
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 1950, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\statements.py", line 349, in call
+    return method(parsed, *args, **kwargs)
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\exports.py", line 3413, in call_screen
+    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ui.py", line 301, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\core.py", line 2165, in interact
+    repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, pause_modal=pause_modal, **kwargs) # type: ignore
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\core.py", line 3201, in interact_core
+    rv = root_widget.event(ev, x, y, 0)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\screen.py", line 793, in event
+    rv = self.child.event(ev, x, y, st)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\transform.py", line 984, in event
+    rv = d.event(ev, cx, cy, st)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\behavior.py", line 1174, in event
+    return handle_click(self.clicked)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\behavior.py", line 1095, in handle_click
+    rv = run(action)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\behavior.py", line 395, in run
+    return action(*args, **kwargs)
+  File "renpy/common/00action_other.rpy", line 586, in __call__
+    rv = self.callable(*self.args, **self.kwargs)
+TypeError: 'str' object is not callable
 
 Windows-10-10.0.22631 AMD64
 Ren'Py 8.2.1.24030407
 evidence collection v3 1.0
-Wed Jul  3 15:36:59 2024
+Sun Jul 14 20:43:54 2024

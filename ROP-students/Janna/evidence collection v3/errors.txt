@@ -2,9 +2,17 @@
 errors listed below, and try again.
 
 
-File "game/scripts/print_analysis.rpy", line 105: elif clause expects a non-empty block.
-    elif analyzing["gin"]:
-                          ^
+File "game/scripts/script.rpy", line 106: expected 'image_name_component' not found.
+    show "marker 4" at Transform(xpos=0.63, ypos=0.74, zoom=0.3)
+         ^
+
+File "game/scripts/script.rpy", line 107: expected 'image_name_component' not found.
+    show "marker 2" at Transform(xpos=0.32, ypos=0.83, zoom=0.33)
+         ^
+
+File "game/scripts/script.rpy", line 108: expected 'image_name_component' not found.
+    show "marker 1" at Transform(xpos=0.54, ypos=0.77, zoom= 0.32)
+         ^
 
 Ren'Py Version: Ren'Py 8.2.1.24030407
-Wed Jul 10 14:57:57 2024
+Sun Jul 14 19:16:19 2024
