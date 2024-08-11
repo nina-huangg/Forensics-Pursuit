@@ -1,4 +1,4 @@
-afis.rpy contains all code related to the AFIS system. evidence.rpy contains all code related to the evidence bag on the lefthand side.
+afis.rpy contains all code related to the AFIS system. afis_guide.rpy contains a guide on how to customize afis.rpy. evidence.rpy contains all code related to the evidence bag on the lefthand side.
 oven.rpy contains all code related to the oven interactions. script.rpy and util_screens.rpy contains the navigation code Nina created.
 wet_lab.rpy contains all code related to wet lab interactions - most notably the DFO mixture and the gin label removal.
 
@@ -10,7 +10,7 @@ wet_lab.rpy contains all code related to wet lab interactions - most notably the
     - ~~Remove the measurement menu selection~~
     - ~~Add narrative that tells the player the DFO recipe~~
   - ~~Add more educational narrative~~
-  - Integrate Janet's timer UI
+  - ~~Integrate Janet's timer UI~~
   - Integrate Vivian's inventory UI
   - Modify the AFIS UI
     - Make Prev and Next buttons smaller and closer to the rightmost print to make usage intuitive to player
