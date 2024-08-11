@@ -640,6 +640,9 @@ label start:
                     $ currently_spraying_luminol = False
                     scene floor_idle
                     show screen kitchen_floor
+
+                    if collected_knife and collected_dish_towel and collected_swab and collected_fingerprint and captured_luminol:
+                        jump finished_collecting
                 elif not took_photo_mid_range_stove and not blood_marked and not fingerprint_marked and not knife_marked and not dish_towel_marked and not collected_knife and not collected_dish_towel and not at_stove and not viewing_dish_towel and not viewing_floor:
                     $ taken_photos[i] = "mid_range_stove.jpg"
                     $ took_photo_mid_range_stove = True
@@ -1394,16 +1397,26 @@ label start:
             show screen full_inventory
             call screen fingerprint_has_been_collected
             $ added_fingerprint_to_evidence = True
+
+            if collected_knife and collected_dish_towel and collected_swab and collected_fingerprint and captured_luminol:
+                jump finished_collecting
+
             python:
                 addToInventory(["fingerprint_in_bag"])
+            
         if put_towel_in_bag: # If towel has just been collected, display appropriate message
             $ put_towel_in_bag = False
             $ collected_dish_towel = True
             show screen full_inventory
             call screen dish_towel_has_been_collected
             $ added_towel_to_evidence = True
+
+            if collected_knife and collected_dish_towel and collected_swab and collected_fingerprint and captured_luminol:
+                jump finished_collecting
+
             python:
                 addToInventory(["towel_in_bag"])
+            
         if put_knife_in_bag: # If knife has just been collected, display appropriate message
             $ put_knife_in_bag = False
             $ collected_knife = True
@@ -1412,8 +1425,13 @@ label start:
             show screen full_inventory
             call screen knife_has_been_collected
             $ added_knife_to_evidence = True
+
+            if collected_knife and collected_dish_towel and collected_swab and collected_fingerprint and captured_luminol:
+                jump finished_collecting
+
             python:
                 addToInventory(["knife_in_bag"])
+
         if put_swab_in_bag: # If swab has just been collected, display appropriate message
             $ put_swab_in_bag = False
             $ put_swab_in_tube = False
@@ -1860,6 +1878,11 @@ label start:
             scene dark_floor
             show screen spraying_luminol
             call screen full_inventory
+
+label finished_collecting:
+    show screen full_inventory
+    call screen finished_collecting_evidence
+    $ renpy.quit()
 
 # make sure to add this add the bottom of the setup labels to ensure that images are properly sized
 transform half_size:

@@ -918,3 +918,11 @@ screen kitchen_530nm():
             hover "back_button_hover"
 
             action Jump("selected_530nm")
+
+screen finished_collecting_evidence():
+    frame:
+        xpos 0.2 ypos 0.4
+        vbox:
+            text "You've finished collecting all the evidence! It's now time to analyze it in the lab."
+            textbutton "Okay":
+                action Return(True)
