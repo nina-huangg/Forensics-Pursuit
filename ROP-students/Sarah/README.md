@@ -86,14 +86,16 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
 - Implemented the DNA analysis procedure
   - Implemented the use of the DNA machines, the centrifuge, PCR, thermal cycler, plate centrifuge and MiSeq, and messages for when the player does not need to use them.
   - Implemented comparing the genetic profiles in the data analysis lab, adding the profiles to the table of findings and the explanation once the table is complete.
+- Implemented info buttons for each of the machines that provide a description of the machine when clicked on
+- Implemented Janet's timer
+- Implemented Janna's AFIS code to allow the player to analyze the two fingerprints collected
 
 ## Feedback Recieved:
 - The amount of guiding messages so far is good
 
 ## What needs to be Developed/Bug Fixes:
-- Implement Janet's timer to use instead of a multiple choice question
-- Implement comparing fingerprints in the data analysis lab
-
+- Bug Fixes:
+  - Currently do not know of any
 
 # Scenario: Trespassing Gone Wrong
 ## Overview of Scenario:
