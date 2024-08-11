@@ -61,7 +61,7 @@ screen choose_icon():
             idle "afis_icon_idle"
             hover "afis_icon_hover"
 
-            action NullAction()
+            action Jump("computer")
 
     hbox:
         xpos 0.3078125 ypos 0.19814815
@@ -473,5 +473,13 @@ screen already_lifted_print():
         xpos 0.3 ypos 0.4
         vbox:
             text "You already lifted the print off the knife."
+            textbutton "Okay":
+                action Return(True)
+
+screen analyzed_all_evidence():
+    frame:
+        xpos 0.2 ypos 0.4
+        vbox:
+            text "You've analyzed all the evidence! It's now time to head to the courtroom."
             textbutton "Okay":
                 action Return(True)

@@ -1062,6 +1062,15 @@ screen move_to_pcr():
             textbutton "Okay":
                 action Return(True)
 
+screen wrong_decision():
+    zorder 52
+    frame:
+        xpos 0.25 ypos 0.4
+        vbox:
+            text "Take a look at the concentration value provided and try again."
+            textbutton "Okay":
+                action Jump("quantification_calculation")
+
 screen wrong_calculation:
     zorder 52
     frame:
