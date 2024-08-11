@@ -15,7 +15,8 @@ init python:
     config.mouse = {
         "default": [("cursor.png", 0, 0)],
         "dropper": [("dropper.png", 0, 49)],
-        "dropper filled": [("dropper filled.png", 0, 49)]
+        "dropper filled": [("dropper filled.png", 0, 49)],
+        "hand": [("hand.png", 0, 47)]
     }
 
     default_mouse = "default"
@@ -29,6 +30,9 @@ init python:
         else:
             default_mouse = cursor
             current_cursor = cursor
+    
+    def analyzed_everything() -> None:
+        return prints["print_1"].processed and prints["print_4"].processed
     
     def set_timer(item: str):
         item = False
@@ -88,38 +92,68 @@ label start:
 
 label lab_hallway_intro:  
     scene lab_hallway_idle
-    show ema normal
+    show ema normal as character
     s "Officer, good to see you again."
-    show ema holding glasses
+    show ema glasses as character
     s "Great job processing the scene! I knew I could count on you"
     # s "While you’ve been busy, I talked to the other officers who were on the scene that day. They collected this."
     s "Welcome to the lab! Here, you can analyze all the evidence you collected from the crime scene."
-    show ema normal
+    show ema normal as character
+    s "I need you to perform a pattern analysis on the fingerprint you found on the door and on the gin bottle you collected."
+    s "For the gin bottle, you'll have to remove the label and use DFO to actually get a print to load into the fingerprint pattern analysis application."
     s "You can go wherever you want - but I suggest beginning with the oven first so we won't have to waste time waiting for it to heat up."
 
 label hallway:
     $ location = ""
-    hide screen back_button_screen
+    scene lab_hallway_idle
+    python:
+        if analyzed_everything():
+            renpy.jump("end")
+    hide screen back_button_screen onlayer over_screens
     call screen lab_hallway_screen
 
 label data_analysis_lab:
     $ location = ""
+    python:
+        if analyzed_everything():
+            renpy.jump("end")
     show screen back_button_screen('hallway') onlayer over_screens  
     call screen data_analysis_lab_screen
 
 label afis:
+    hide screen back_button_screen onlayer over_screens
+    show screen back_button_screen('data_analysis_lab') onlayer over_screens  
     call screen afis_screen
 
 label materials_lab:
     $ location = ""
+    python:
+        if analyzed_everything():
+            renpy.jump("end")
+    hide screen back_button_screen onlayer over_screens
     show screen back_button_screen('hallway') onlayer over_screens
     call screen materials_lab_screen
 
 label wet_lab:
     $ location = ""
+    python:
+        if analyzed_everything():
+            renpy.jump("end")
     show screen back_button_screen('materials_lab') onlayer over_screens
     call screen wet_lab_screen
 
 label analytical_instruments:
+    python:
+        if analyzed_everything():
+            renpy.jump("end")
     show screen back_button_screen('materials_lab') onlayer over_screens
     call screen analytical_instruments_screen
+
+label end:
+    hide screen back_button_screen onlayer over_screens
+    show ema normal as character
+    s "It looks like you've analyzed all the evidence. Great work!"
+    s "I hope you took note of the results. Tomorrow, you'll be testifying in court about your findings."
+    show ema glasses as character
+    s "But for now, give yourself a pat on the back and go get some rest!"
+    return

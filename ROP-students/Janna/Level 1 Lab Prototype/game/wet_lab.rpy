@@ -65,7 +65,8 @@ screen toolbox_dfo():
             # sensitive methanol.available
             idle "methanol" at Transform(zoom=0.5)
             action Jump("methanol")
-            
+        text "Methanol" xpos 0.5 ypos 0.5 xanchor 0.5 yanchor 0.5
+
     hbox:
         xpos 0.89 ypos 0.27
         imagebutton:
@@ -232,7 +233,7 @@ screen interactive_gin:
         action Jump("label_collected")
 
 label fumehood_bottle:
-    hide screen back_button_screen
+    hide screen back_button_screen onlayer over_screens
     hide screen casefile_physical
     hide screen ui
     "Let's remove the label."

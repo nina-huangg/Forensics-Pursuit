@@ -1,37 +1,22 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
 While running game code:
-  File "renpy/common/00keymap.rpy", line 487, in script
-    python hide:
-  File "renpy/common/00keymap.rpy", line 487, in <module>
-    python hide:
-  File "renpy/common/00keymap.rpy", line 511, in _execute_python_hide
-    renpy.save("_reload-1", "reload save game")
-PicklingError: Can't pickle <class 'store.director.AddStatement'>: it's not the same object as store.director.AddStatement
+  File "game/oven.rpy", line 172, in script
+    jump timer_completed
+ScriptError: could not find label 'timer_completed'.
 
 -- Full Traceback ------------------------------------------------------------
 
 Full traceback:
-  File "renpy/common/00keymap.rpy", line 487, in script
-    python hide:
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 823, in execute
-    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\python.py", line 1178, in py_exec_bytecode
-    exec(bytecode, globals, locals)
-  File "renpy/common/00keymap.rpy", line 487, in <module>
-    python hide:
-  File "renpy/common/00keymap.rpy", line 511, in _execute_python_hide
-    renpy.save("_reload-1", "reload save game")
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\loadsave.py", line 431, in save
-    reraise(t, e, tb)
-  File "lib/python3.9/future/utils/__init__.py", line 444, in raise_
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\loadsave.py", line 417, in save
-    dump((roots, renpy.game.log), logf)
-  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\compat\pickle.py", line 103, in dump
-    pickle.dump(o, f, pickle.HIGHEST_PROTOCOL if highest else PROTOCOL)
-PicklingError: Can't pickle <class 'store.director.AddStatement'>: it's not the same object as store.director.AddStatement
+  File "game/oven.rpy", line 172, in script
+    jump timer_completed
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 1698, in execute
+    rv = renpy.game.script.lookup(target)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\script.py", line 1103, in lookup
+    raise ScriptError("could not find label '%s'." % str(original))
+ScriptError: could not find label 'timer_completed'.
 
 Windows-10-10.0.22631 AMD64
 Ren'Py 8.2.1.24030407
 Forensics Lab L1 Prototype 1.0
-Wed Jul 31 22:28:17 2024
+Sun Aug 11 13:59:08 2024

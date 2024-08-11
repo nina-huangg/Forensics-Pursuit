@@ -1,24 +1,3 @@
-"""This file contains ALL code related to the fingerpring processing system.
-In order to add/remove a new print, there are three things you need to do:
-    (1) Change the value of NUM_PRINTS below. Right now, it's 7 because
-    I have 7 different kinds of fingerprints that I want to show for the
-    right comparison image.
-    (2) If you're adding a print (or adding closeup images), you must STICK
-    TO THE SAME NAMING CONVENTION. All prints should be named print_i where
-    i is an integer between 1 and NUM_PRINTS inclusive. All closeup images of
-    prints should be named print_i_closeup_j where j is either 1, 2, or 3. You
-    can only have 3 closeup images per print.
-    (3) If you're adding a print, you must modify the .scores attribute to
-    accomodate the new print.
-    (4) You must modify the function file_exists depending on where you store
-    all of your prints. I suggest having a dedicated folder for all your
-    fingerprint photos. All of my photos are in images/data_analysis_lab. You
-    can change this to whatever you like.
-    (5) If you're creating an importable print, set the scores attribute. If
-    you're creating a non-importable print, you may optionally set the multiple
-    choice question attribute.
-"""
-
 init python:
     import os
     from typing import Optional, List, Dict, Tuple
@@ -28,7 +7,7 @@ init python:
     imported_print = ""
     current_print = ""
     NUM_PRINTS = 7
-    i = 0
+    i = 5
     prints = {}
     
     class MCQ:
@@ -124,7 +103,13 @@ init python:
             return True
         else:
             return False
+# ---------------------------------------------------------------------------------------
+    """The code in this section defines all the fingerprints - importable and 
+    non-importable! Feel free to play around with the existing code and/or 
+    define more fingerprints here!
+    """
 
+    # This for loop defines all non-importable print classes!
     for k in range(1, NUM_PRINTS + 1):
         image = f"print_{k}"
         prints[image] = Print(image=image)
@@ -141,6 +126,11 @@ init python:
             else:
                 continue
     
+    """All code below defines/assigns the .mcq and .scores for the non-importable
+    and importable prints respectively. Note that I define .mcq and .scores for
+    print_1 because I use print_1 as both an importable and non-importable
+    print for testing purposes.
+    """
     var_scores = {"print_1": (True, 99), 
                 "print_2": (False, 15), 
                 "print_3": (False, 37),
@@ -182,6 +172,8 @@ init python:
     
     set_scores(print_name="print_4", scores=var_scores)
 
+# ---------------------------------------------------------------------------------------
+
 screen afis:
     imagebutton:
         auto "afis_button_%s" at Transform(xpos=0.18, ypos=0.76)
@@ -205,6 +197,9 @@ screen afis:
         auto "afis_button_%s" at Transform(xpos=0.69, ypos=0.76)
         action Jump("compare")
     text "Compare" xpos 0.7 ypos 0.785 size 50
+
+screen analyzing:
+    text "Analyzing..." xpos 0.425 ypos 0.785 size 50
 
 label computer:
     scene afis_plain_with_bar
@@ -230,6 +225,8 @@ label import_print:
         show print_bg as print_bg_r at Transform(xpos=0.37, ypos=0.25)
         $ print_imported = True
         $ renpy.show(name="print_l", at_list=[Transform(xpos=0.175, ypos=0.25, zoom=0.83)], what=imported_print)
+        $ current_print = f"print_{i}"
+        $ renpy.show(name="print_r", at_list=[Transform(xpos=0.375, ypos=0.25, zoom=0.83)], what=current_print)
         call screen afis
     else:
         "We've already processed this print."
@@ -250,8 +247,9 @@ label show_prev:
     call screen afis
 
 label compare:
+    hide screen back_button_screen onlayer over_screens
+    show screen analyzing
     python:
-        renpy.hide_screen("back_button_screen")
         renpy.show(name="print_bg_l", at_list=[Transform(xpos=0.3, ypos=0.25)], what="print_bg")
         renpy.show(name="print_bg_r", at_list=[Transform(xpos=0.5, ypos=0.25)], what="print_bg")
 
@@ -295,6 +293,7 @@ label show_results:
                 renpy.show(name="print_r", at_list=[Transform(zoom=0.83, xpos=0.5, ypos=0.25)], what=prints[current_print].image)
             renpy.pause(1.0)
 
+    hide screen analyzing
     "[prints[imported_print].scores[current_print][1]]%% consistency."
 
     if prints[imported_print].scores[current_print][0]:
@@ -302,8 +301,8 @@ label show_results:
         "This looks like the print with the highest consistency!"
         if imported_print == "print_1":
             s "Who does this print belong to?"
-            "According to the database... it belongs to a certain Dorag Deelar."
-            s "Dorag Deelar, huh? I'll pass that information onto the officers."
+            "According to the database... it belongs to a certain Doorag Deelar."
+            s "Doorag Deelar, huh? I'll pass that information onto the officers."
             s "They can track him down for us."
             if oven.state == "preheating" or oven.state == "baking":
                 s "Meanwhile, it looks like the oven is finished [oven.state]!"
@@ -312,7 +311,7 @@ label show_results:
             $ fingerprint.process_evidence()
         else: # imported_print == "print_4"
             s "Who does this print belong to?"
-            "Looks like it belongs to Mark Thompson."
+            "Looks like it belongs to Alex Deere."
             s "That's the victim's boyfriend. He was found unconscious at the scene."
             s "Currently, he's being held for questioning at the local precinct."
             s "We'll be sure to question him some more."

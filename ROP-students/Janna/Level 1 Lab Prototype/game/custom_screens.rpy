@@ -109,9 +109,10 @@ screen materials_lab_screen:
         xpos 0.26 yalign 0.5
         imagebutton:
             auto "oven_%s" at Transform(zoom=0.7)
-            hovered Notify("Oven")
+            hovered Notify("Dry Oven")
             unhovered Notify('')
             action [SetVariable("location", "oven"), Jump("oven")]
+    text "Dry Oven" xpos 0.31 ypos 0.66
     
     hbox:
         xpos 0.52 yalign 0.5
@@ -120,6 +121,7 @@ screen materials_lab_screen:
             hovered Notify("Fumehood")
             unhovered Notify('')
             action [SetVariable("location", "fumehood"), Jump("fumehood")]
+    text "Fumehood" xpos 0.59 ypos 0.67
 
 screen wet_lab_screen:
     image "fumehood"
