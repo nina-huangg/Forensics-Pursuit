@@ -157,7 +157,7 @@ init python:
 
     print_11_question = MCQ(
         question = "What kind of pattern is this fingerprint?",
-        choices = [("Loop", True), ("Arch", False), ("Whorl", True)],
+        choices = [("Loop", True), ("Arch", False), ("Whorl", False)],
         responses = [["This is a loop pattern!", "Let's finish the rest of the comparison"],
                     ["This is not an arch pattern.", "Let's try again!"],
                     ["This is not a whorl pattern.", "Let's try again!"]]
@@ -169,7 +169,7 @@ init python:
         question = "What kind of pattern is shown in this fingerprint?",
         choices = [("Double whorl", False), ("Whorl", True), ("Loop", False)],
         responses = [["Hmm . . . I don't see two whorls", "Look at the print and try again."],
-                    ["This is a whorl pattern!", "", "Let's move on!"],
+                    ["This is a whorl pattern!", "Let's move on!"],
                     ["This is not a loop pattern.", "Let's try again."]]
     )
 
@@ -270,17 +270,6 @@ label compare:
             renpy.show(name="print_r", at_list=[Transform(zoom=0.83, xpos=0.5, ypos=0.25)], what=prints[current_print].image)
         renpy.pause(1.0)
 
-label quiz:
-    python:
-        if prints[current_print].mcq is not None:
-            renpy.say(None, prints[current_print].mcq.question)
-            choice = renpy.display_menu(prints[current_print].mcq.__items__)
-            prints[current_print].mcq.say_responses(choice)
-            if prints[current_print].mcq.is_correct(choice):
-                renpy.jump("show_results")
-            else:
-                renpy.jump("quiz")
-
 label show_results:
     python:
         for m in range(1, 4):
@@ -296,28 +285,49 @@ label show_results:
                 renpy.show(name="print_r", at_list=[Transform(zoom=0.83, xpos=0.5, ypos=0.25)], what=prints[current_print].image)
             renpy.pause(1.0)
 
-    "[prints[imported_print].scores[current_print][1]]%% consistency."
+    label quiz:
+        python:
+            if imported_print == "print_11":
+                renpy.say(None, prints["print_11"].mcq.question)
+                choice = renpy.display_menu((prints["print_11"].mcq).create_items())
+                prints["print_11"].mcq.say_responses(choice)
+                if prints["print_11"].mcq.is_correct(choice):
+                    renpy.jump("continue_results")
+                else:
+                    renpy.jump("quiz")
+            elif imported_print == "print_12":
+                renpy.say(None, prints["print_12"].mcq.question)
+                choice = renpy.display_menu((prints["print_12"].mcq).create_items())
+                prints["print_12"].mcq.say_responses(choice)
+                if prints["print_12"].mcq.is_correct(choice):
+                    renpy.jump("continue_results")
+                else:
+                    renpy.jump("quiz")
 
-    if prints[imported_print].scores[current_print][0]:
-        $ prints[imported_print].process_print()
-        "This looks like the print with the highest consistency!"
-        if imported_print == "print_11":
-            "Based on the elimination prints, this seems to be the right thumb print of Jenny Adams."
-            "Doesn't seem very suspicious though since this was collected at the Adams residence."
-            $ processed_stove_fingerprint = True
-        else: # imported_print == "print_12"
-            "Based on the elimination prints, this seems to be the right index print of Jenny Adams."
-            "I wonder why her fingerprint would be on the blade of this knife?"
-            $ processed_knife_fingerprint = True
-        $ print_imported = False
-        $ imported_print = ""
-        if processed_stove_fingerprint and processed_knife_fingerprint and filled_table_of_findings and finished_analyzing_towel_sample:
-            jump analyzed_all
-        jump back
-    else:
-        $ renpy.show(name="print_r", at_list=[Transform(xpos=0.375, ypos=0.25, zoom=0.83)], what=closeups_r[m])
-        jump import_print
-        call screen afis
+    label continue_results:
+
+        "[prints[imported_print].scores[current_print][1]]%% consistency."
+
+        if prints[imported_print].scores[current_print][0]:
+            $ prints[imported_print].process_print()
+            "This looks like the print with the highest consistency!"
+            if imported_print == "print_11":
+                "Based on the elimination prints, this seems to be the right thumb print of Jenny Adams."
+                "Doesn't seem very suspicious though since this was collected at the Adams residence."
+                $ processed_stove_fingerprint = True
+            else: # imported_print == "print_12"
+                "Based on the elimination prints, this seems to be the right index print of Jenny Adams."
+                "I wonder why her fingerprint would be on the blade of this knife?"
+                $ processed_knife_fingerprint = True
+            $ print_imported = False
+            $ imported_print = ""
+            if processed_stove_fingerprint and processed_knife_fingerprint and filled_table_of_findings and finished_analyzing_towel_sample:
+                jump analyzed_all
+            jump back
+        else:
+            $ renpy.show(name="print_r", at_list=[Transform(xpos=0.375, ypos=0.25, zoom=0.83)], what=closeups_r[m])
+            jump import_print
+            call screen afis
 
 # ------------------------ AFIS SCREENS --------------------------------
 screen afis_screen:
