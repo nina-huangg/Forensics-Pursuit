@@ -53,7 +53,7 @@ screen case_files_screen(case_files):
                     text (file) size 15
             else:
                 hbox:
-                    xpos i * 0.15 + 0.20 ypos 0.50
+                    xpos (i % 4) * 0.15 + 0.20 ypos 0.50
                     imagebutton:
                         idle "/case_files/" + file + ".png" at Transform(zoom=0.35)
 
@@ -62,7 +62,7 @@ screen case_files_screen(case_files):
 
                         action [ToggleVariable('show_case_files'), Function(check_valid_evidence, file, current_lab)]
                 hbox:
-                    xalign i*0.15 + 0.24 ypos 0.60
+                    xalign (i % 4) * 0.15 + 0.24 ypos 0.70
                     text (file) size 15
 
 
@@ -161,3 +161,48 @@ screen incorrect_time_message():
             text "Hmm . . . that doesn't seem like the correct time. Try again."
             textbutton "Okay":
                 action Return(True) 
+
+screen dna_score_screen(score):
+    zorder 10
+    frame:
+        xalign 0.5
+        yalign 0.8
+        vbox:
+            text "The DNA profiles are [score]% consistent."
+            textbutton "Okay" action [Hide("dna_score_screen"), Function(set_cursor, '')]
+
+
+screen fingerprint_score_screen(score):
+    zorder 10
+    frame:
+        xalign 0.5
+        yalign 0.8
+        vbox:
+            text "The fingerprints are [score]% consistent."
+            textbutton "Okay" action [Hide("fingerprint_score_screen"), Function(set_cursor, '')]
+
+
+screen error_score_screen():
+    zorder 10
+    frame:
+        xalign 0.5
+        yalign 0.8
+        vbox:
+            text "ERROR: type mismatch"
+            textbutton "Okay" action [Hide("error_score_screen"), Function(set_cursor, '')]
+
+screen text_screen(dialouge):
+    frame:
+        xalign 0.5
+        yalign 0.85
+        vbox:
+            text dialouge
+            textbutton "Okay" action [Hide("text_screen"), Function(set_cursor, ''), Return("")]
+
+screen correct_screen(dialouge):
+    frame:
+        xalign 0.5
+        yalign 0.85
+        vbox:
+            text dialouge
+            textbutton "Okay" action [Hide("correct_screen"), Function(set_cursor, '')]

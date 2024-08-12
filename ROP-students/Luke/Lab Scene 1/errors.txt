@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 92: invalid syntax
-            elif evidence == 'swab_from_vase' and lab = 'bio_lab':
-                                                       ^
+File "game/custom_screens.rpy", line 45: Line is indented, but the preceding action statement does not expect a block. Please check this line's indentation. You may have forgotten a colon (:).
+    SetLocalVariable('interface_imported', False)
+    ^
 
 Ren'Py Version: Ren'Py 8.2.3.24061702
-Thu Aug  8 11:01:04 2024
+Sun Aug 11 15:06:15 2024

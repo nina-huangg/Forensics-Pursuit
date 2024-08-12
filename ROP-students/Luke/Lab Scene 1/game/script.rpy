@@ -5,7 +5,16 @@ default default_mouse = None
 define flash = Fade(0.1, 0.0, 0.5, color="#fff")
 ### entries on afis when search
 default afis_search = []
+default afis_bg = "software_interface"
 default afis_search_coordinates = [{'score_xpos': 0.53, 'xpos':0.61, 'ypos':0.505}]
+default interface_import = False
+default interface_imported = False
+default interface_search = False
+default afis_image_idx = 0
+default afis_images = ["blank", "print_1", "print_2", "print_3", "print_4", "print_5", "print_6", "print_7"]
+default dna_image_idx = 0
+default dna_images = ["blank", "dna_1", "dna_2", "dna_3", "dna_4", "dna_5", "dna_6", "dna_7"]
+
 
 default case_files = ["bottle", "vase", "swab_from_wall"]
 
@@ -15,7 +24,7 @@ default ca_tools = ["vase_ca", "swab", "glue", "water"]
 default headspace_tools = ["bottle_headspace", "pipette"]
 default wet_lab_tools = ["vase_wet_lab", "spray", "scalebar", "camera"]
 
-default current_evidence  = ""
+# default current_evidence = ""
 default current_lab = ""
 
 default process = ["vase_ca_fuming", "bottle_fingerprint", "bottle_headspace", "swab_vase", "vial_gc", "vase_wet_lab", "swab_wall"]
@@ -26,7 +35,7 @@ transform shrink:
     anchor (0.5, 0.5)
     xalign 0.5
     yalign 0.4
-    linear 2.0 xzoom 0.35 yzoom 0.35
+    linear 2.0 xzoom 0.9 yzoom 0.9
 
 transform vase_swab:
     xalign 0.5
@@ -38,15 +47,84 @@ transform drop_box:
     zoom 0.25
 
 init python:
-    global current_evidence 
+    import random
+    global interface_import 
+    global interface_imported 
+    global interface_search
+    global afis_bg
+    global afis_image_idx 
+
+    # global current_evidence 
     global user_step
     user_step = 0
 
     def function_restart_interaction():
         renpy.restart_interaction()
+    
+    def set_image_idx(software, direction):
+        global afis_image_idx, dna_image_idx
+        if software == 'afis':
+            if direction == 'next':
+                afis_image_idx = (afis_image_idx + 1) %  6
+            else:
+                afis_image_idx = (afis_image_idx - 1) % 6
+        else:
+            if direction == 'next':
+                dna_image_idx = (dna_image_idx + 1) %  6
+            else:
+                dna_image_idx = (dna_image_idx - 1) % 6
+        renpy.restart_interaction()
+    
+    def compare_evidence(evidence):
+        global current_evidence
+        if current_lab == 'dna':
+            if not interface_imported or evidence.name == 'bottle_fingerprint' or evidence.name == 'vase_fingerprint':
+                renpy.show_screen('error_score_screen')
+            elif evidence.name == 'dna_vase' and dna_images[dna_image_idx] == 'dna_1':
+                renpy.show_screen("correct_screen", f"The DNA profiles are 100% consistent. Additionally the DNA belongs to John Doe. This is the victim.")
+            elif evidence.name == 'dna_wall' and dna_images[dna_image_idx] == 'dna_2':
+                renpy.show_screen("correct_screen", f"The DNA profiles are 100% consistent. Additionally the DNA belongs to John Doe. This is the victim.")
+            else:
+                renpy.show_screen("dna_score_screen", random.randint(dna_image_idx*10, dna_image_idx*10+5))
+        else:
+            if not interface_imported or evidence.name == 'dna_wall' or evidence.name == 'dna_vase':
+                renpy.show_screen('error_score_screen')
+            elif evidence.name == 'vase_fingerprint' and afis_images[afis_image_idx] == 'print_1':
+                renpy.show_screen("correct_screen", f"The fingerprints are 100% consistent. Additionally the fingerprint belongs to Alex Parker.")
+            elif evidence.name == 'bottle_fingerprint' and afis_images[afis_image_idx] == 'print_2':
+                renpy.show_screen("correct_screen", f"The fingerprints are 100% consistent. Additionally the fingerprint belongs to Jordan Taylor.")
+            else:
+                renpy.show_screen("fingerprint_score_screen", random.randint(afis_image_idx*10, afis_image_idx*10+5))
+
 
     def check_valid_evidence(evidence, lab):
-        if evidence in case_files:
+        global interface_import, interface_imported, interface_search, afis_bg, afis_image_idx, current_evidence
+        if lab == "afis" or lab == 'dna':
+            found = False
+            for e in afis_evidence:
+                if evidence == e.name:
+                    current_evidence = e 
+                    found = True
+                    interface_imported = False
+                    interface_search = False 
+                    afis_bg = 'software_interface'
+                    interface_import = True
+                    if evidence == 'dna_wall':
+                        set_cursor('dna_wall')
+                    elif evidence == 'dna_vase':
+                        set_cursor('dna_vase')
+                    elif evidence == 'vase_fingerprint':
+                        set_cursor('vase_fingerprint')
+                    elif evidence == 'bottle_fingerprint':
+                        set_cursor('bottle_fingerprint')
+                    renpy.restart_interaction()
+            
+            # if found:
+            #         renpy.show_screen("afis_screen")
+            if not found:
+                renpy.show_screen("invalid_evidence_screen")
+
+        elif evidence in case_files:
             if evidence == "bottle" and lab == "lab_bench":
                 if "bottle_fingerprint" in process:
                     process.remove("bottle_fingerprint")
@@ -141,35 +219,50 @@ init python:
         for e in afis_evidence:
             if e.processed and e!= evidence:
                 afis_search.append(e)
+
     
     class Evidence:
         def __init__(self, name, afis_details):
             self.name = name
             self.afis_details = afis_details
             self.processed = False
+         
+    def set_evidence(name):
+        for evidence in afis_evidence:
+            if evidence.name == name:
+                current_evidence = evidence 
     
     ### declare each piece of evidence
-    bottle = Evidence(name = 'bottle',
-                                afis_details = {
-                                    'image': 'bottle-idle',
-                                    'xpos':0.18, 'ypos':0.25,
-                                    'score': '70'})
-    vase = Evidence(name = 'vase',
-                                afis_details = {
-                                    'image': 'vase-idle',
-                                    'xpos':0.18, 'ypos':0.3,
-                                    'score': '70'})
-    swab = Evidence(name = 'swab',
-                                afis_details = {
-                                    'image': 'swab',
-                                    'xpos':0.18, 'ypos':0.3,
-                                    'score': '70'})
     
+    dna_wall = Evidence(name = 'dna_wall',
+                                afis_details = {
+                                    'image': '/images/data_analysis_lab/dna_wall.png',
+                                    'xpos': 0.18, 'ypos': 0.3,
+                                    'score': '70'
+                                })
+    dna_vase = Evidence(name = 'dna_vase',
+                                afis_details = {
+                                    'image': '/images/data_analysis_lab/dna_vase.png',
+                                    'xpos': 0.18, 'ypos': 0.3,
+                                    'score': '70'
+                                })
+    bottle_fingerprint = Evidence(name = 'bottle_fingerprint',
+                                afis_details = {
+                                    'image': '/images/data_analysis_lab/bottle_fingerprint.png',
+                                    'xpos': 0.18, 'ypos': 0.3,
+                                    'score': '70'
+                                })
+    vase_fingerprint = Evidence(name = 'vase_fingerprint',
+                                afis_details = {
+                                    'image': '/images/data_analysis_lab/vase_fingerprint.png',
+                                    'xpos': 0.18, 'ypos': 0.3,
+                                    'score': '70'
+                                })
     ### declare afis relevant evidence
-    afis_evidence = [bottle, vase, swab]
+    afis_evidence = [dna_wall, dna_vase, vase_fingerprint, bottle_fingerprint]
 
     ### set current_evidence to track which evidence is currently active
-    # current_evidence = None
+    current_evidence = dna_wall
     
     
     config.mouse = {
@@ -191,6 +284,11 @@ init python:
         "swab": [('/images/mouse/swab_resized.png', 0, 50)],
         "swab_from_wall": [('/images/mouse/swab_from_wall_resized.png', 20, 20)],
         "swab_from_vase": [('/images/mouse/swab_from_vase_resized.png', 20, 20)],
+
+        "dna_wall": [('/images/mouse/dna_wall.png', 20, 20)],
+        "dna_vase": [('/images/mouse/dna_vase.png', 20, 20)],
+        "vase_fingerprint": [('/images/mouse/vase_fingerprint.png', 20, 20)],
+        "bottle_fingerprint": [('/images/mouse/bottle_fingerprint.png', 20, 20)]
     }
 
 
@@ -215,7 +313,16 @@ label data_analysis_lab:
     call screen data_analysis_lab_screen
 
 label afis:
+    hide screen back_button_screen onlayer over_screens
+    show screen back_button_screen('data_analysis_lab') onlayer over_screens
+    $ current_lab = 'afis'
     call screen afis_screen
+
+label dna:
+    hide screen back_button_screen onlayer over_screens
+    show screen back_button_screen('data_analysis_lab') onlayer over_screens
+    $ current_lab = 'dna'
+    call screen dna_screen
 
 label materials_lab:
     show screen back_button_screen('hallway') onlayer over_screens
@@ -316,7 +423,7 @@ label bottle_fingerprint_complete:
     hide screen toolbox_button_screen onlayer over_screens
     show screen toolbox_button_screen(default_tools) onlayer over_screens
     "Great now it is ready to be sent off to the data analysis lab. You may leave this lab."
-    $ case_files.append("fingerprint")
+    $ case_files.append("bottle_fingerprint")
     $ show_toolbox = False
     $ renpy.restart_interaction()
     window hide  
@@ -742,6 +849,9 @@ label gc_complete:
     $ show_toolbox = False
     window hide
     $ renpy.pause(hard=True)
+
+
+# label 
 
 
     

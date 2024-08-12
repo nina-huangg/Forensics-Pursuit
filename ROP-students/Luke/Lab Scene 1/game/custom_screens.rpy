@@ -27,35 +27,57 @@ screen data_analysis_lab_screen:
             idle "afis_software_idle"
             hover "afis_software_hover"
             action Jump('afis')
+    hbox:
+        xpos 0.325 yalign 0.25
+        imagebutton:
+            idle "dna_software_idle"
+            hover "dna_software_hover"
+            action Jump('dna')
 
 screen afis_screen:
-    default afis_bg = "software_interface"
-    default interface_import = False
-    default interface_imported = False
-    default interface_search = False
+    # default afis_bg = "software_interface"
+    # default interface_import = False
+    # default interface_imported = False
+    # default interface_search = False
     image afis_bg
 
     hbox:
-        xpos 0.35 ypos 0.145
+        xpos 0.15 ypos 0.145
         textbutton('Import'):
             style "afis_button"
             action [
-                ToggleLocalVariable('interface_import'),
                 ToggleVariable('show_case_files'),
-                SetLocalVariable('interface_imported', False),
-                SetLocalVariable('interface_search', False),
-                SetLocalVariable('afis_bg', 'software_interface'),
+                Function(set_cursor, '')
+                # SetLocalVariable('interface_imported', False),
+                # SetLocalVariable('interface_search', False),
+                # SetLocalVariable('afis_bg', 'software_interface'),
+                # ToggleLocalVariable('interface_import')
+            ]
+                
+    hbox:
+        xpos 0.35 ypos 0.145
+        textbutton('Prev'):
+            style "afis_button"
+            action [
+                ToggleVariable('interface_search'),
+                Function(set_image_idx, 'afis', 'prev'),
                 Function(set_cursor, '')]
     
     hbox:
         xpos 0.55 ypos 0.145
-        textbutton('Search'):
-            sensitive not interface_search
+        textbutton('Next'):
             style "afis_button"
             action [
-                ToggleLocalVariable('interface_search'),
-                SetLocalVariable('afis_bg', 'software_search'),
-                Function(calculate_afis, current_evidence),
+                ToggleVariable('interface_search'),
+                Function(set_image_idx, 'afis', 'next'),
+                Function(set_cursor, '')]
+    hbox:
+        xpos 0.75 ypos 0.145
+        textbutton('Compare'):
+            style "afis_button"
+            action [
+                ToggleVariable('interface_search'),
+                Function(compare_evidence, current_evidence),
                 Function(set_cursor, '')]
     
     showif interface_import:
@@ -63,8 +85,8 @@ screen afis_screen:
             idle "software_interface"
             hover "software_import_hover"
             hotspot (282,241,680,756) action [
-                SetLocalVariable('interface_import', False), 
-                SetLocalVariable('interface_imported', True),
+                SetVariable('interface_import', False), 
+                SetVariable('interface_imported', True),
                 Function(set_cursor, '')]
 
     showif interface_imported:
@@ -72,23 +94,65 @@ screen afis_screen:
             xpos current_evidence.afis_details['xpos'] ypos current_evidence.afis_details['ypos']
             image current_evidence.afis_details['image']
     
-    showif interface_search:
-        if afis_search:
-            for i in range(len(afis_search)):
-                hbox:
-                    xpos afis_search_coordinates[i]['xpos'] ypos afis_search_coordinates[i]['ypos']
-                    hbox:
-                        text("{color=#000000}"+afis_search[i].name+"{/color}")
-                hbox:
-                    xpos afis_search_coordinates[i]['score_xpos'] ypos afis_search_coordinates[i]['ypos']
-                    hbox:
-                        text("{color=#000000}"+afis_search[i].afis_details['score']+"{/color}")
-            
-        else:
-            hbox:
-                xpos 0.57 yalign 0.85
-                hbox:
-                    text("{color=#000000}No match found in records.{/color}")
+    hbox:
+        xpos 0.55 ypos 0.3
+        image afis_images[afis_image_idx]
+
+screen dna_screen:
+    image afis_bg
+
+    hbox:
+        xpos 0.15 ypos 0.145
+        textbutton('Import'):
+            style "afis_button"
+            action [
+                ToggleVariable('show_case_files'),
+                Function(set_cursor, '')
+            ]
+                
+    hbox:
+        xpos 0.35 ypos 0.145
+        textbutton('Prev'):
+            style "afis_button"
+            action [
+                ToggleVariable('interface_search'),
+                Function(set_image_idx, 'dna', 'prev'),
+                Function(set_cursor, '')]
+    
+    hbox:
+        xpos 0.55 ypos 0.145
+        textbutton('Next'):
+            style "afis_button"
+            action [
+                ToggleVariable('interface_search'),
+                Function(set_image_idx, 'dna', 'next'),
+                Function(set_cursor, '')]
+    hbox:
+        xpos 0.75 ypos 0.145
+        textbutton('Compare'):
+            style "afis_button"
+            action [
+                ToggleVariable('interface_search'),
+                Function(compare_evidence, current_evidence),
+                Function(set_cursor, '')]
+    
+    showif interface_import:
+        imagemap:
+            idle "software_interface"
+            hover "software_import_hover"
+            hotspot (282,241,680,756) action [
+                SetVariable('interface_import', False), 
+                SetVariable('interface_imported', True),
+                Function(set_cursor, '')]
+
+    showif interface_imported:
+        hbox:
+            xpos current_evidence.afis_details['xpos'] ypos current_evidence.afis_details['ypos']
+            image current_evidence.afis_details['image']
+    
+    hbox:
+        xpos 0.5 ypos 0.3
+        image dna_images[dna_image_idx]
 
     
 
@@ -462,11 +526,3 @@ screen vase_after_swabbed():
         hover "vase_after_swab_hover"
         action [Return(""), Function(set_cursor, "vase")]
 
-screen text_screen(dialouge):
-    frame:
-        xalign 0.5
-        yalign 0.85
-        vbox:
-            text dialouge
-            textbutton "Okay" action [Hide("text_screen"), Function(set_cursor, ''), Return("")]
-    
