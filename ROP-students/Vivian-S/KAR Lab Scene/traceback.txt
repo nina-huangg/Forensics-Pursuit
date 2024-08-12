@@ -1,0 +1,26 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 882, in script
+    python:
+  File "game/script.rpy", line 884, in <module>
+    removeEnvironmentItem(environment_sprites[environment_items.index("silver_tray")])
+ValueError: 'silver_tray' is not in list
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 882, in script
+    python:
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 823, in execute
+    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\python.py", line 1178, in py_exec_bytecode
+    exec(bytecode, globals, locals)
+  File "game/script.rpy", line 884, in <module>
+    removeEnvironmentItem(environment_sprites[environment_items.index("silver_tray")])
+ValueError: 'silver_tray' is not in list
+
+Windows-10-10.0.19045 AMD64
+Ren'Py 8.2.1.24030407
+Forensics Lab L1 Prototype 1.0
+Sun Aug 11 23:32:50 2024
