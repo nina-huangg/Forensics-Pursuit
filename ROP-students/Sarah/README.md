@@ -97,6 +97,16 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
 - Bug Fixes:
   - Currently do not know of any
 
+# Testimony Scene
+
+## What is currently completed
+- The player's name is collected and they are sworn in (code for player being sworn in is from Vivian F.)
+- Player is asked 19 questions
+- Player is told their score and then go over what questions they answered incorrectly
+
+## What needs to be developed
+- Need to add the explanations for why the player got the answer wrong (still waiting to receive the explanations)
+
 # Scenario: Trespassing Gone Wrong
 ## Overview of Scenario:
 A neighbour reported seeing someone entering the abandoned house nextdoor. When police arrive at the house, they find nobody but notice the door is unlocked. Upon entering the house, they find human skeletal remains along with a gun and some used syringes, evidence that someone is currently living there. Your job is to collect all the available forensic evidence to help solve this potential homicide.
