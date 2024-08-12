@@ -12,33 +12,149 @@ init python:
     def load_q_a():
         global q_a_bank
         q_a_bank.append({
-            'question': "What method did you use to develop fingerprints on the firearm and why?",
-            'choice_1': "Cyanoacrylate fuming, abbreviated as CA fuming",
-            'choice_2': "Ninhydrin powder",
-            'choice_3': "Fluorescent powder",
-            'answer': 'choice_1'
-        })
-        q_a_bank.append({
-            'question': "What were your findings based on the evidence collected?",
-            'choice_1': "The fingerprints on the firearm were different from those collected on the stove top.",
-            'choice_2': "The fingerprints on the firearm showed similarity to those on the stove top.",
-            'choice_3': "Inconclusive analysis.",
+            'question': "Why were the dented vase and alcohol bottle bagged instead of being examined on the scene?",
+            'choice_1': "To preserve the alcohol in the bottle from evaporating into the environment",
+            'choice_2': "To prevent contamination of the evidence and ensure further examination is done in a controlled environment",
+            'choice_3': "To remove bulky items from the crime scene to allow investigators to focus on more critical areas with minimal distraction",
             'answer': 'choice_2'
         })
         q_a_bank.append({
-            'question': "what level of certainty do you have regrading the match of the fingerprints?",
-            'choice_1': "100%",
-            'choice_2': "80%",
-            'choice_3': "30%",
+            'question': "Why was an Alternate Light Source (ALS) used to detect the pool of blood and not Luminol?",
+            'choice_1': "ALS is a non-destructive and non-invasive method of detection and ensures DNA integrity which can be altered or destroyed after Luminol",
+            'choice_2': "ALS is more specific than Luminol and does not produce false positives",
+            'choice_3': "ALS is more cost-effective as Luminol is more expensive",
+            'answer': 'choice_1'
+        })
+        q_a_bank.append({
+            'question': "How does blood react under ALS for it to be detected?",
+            'choice_1': "Blood fluoresces under ALS and appears bright",
+            'choice_2': "Blood absorbs the ALS and appears dark",
+            'choice_3': "Blood changes color under ALS and turns black",
             'answer': 'choice_2'
         })
         q_a_bank.append({
-            'question': "What conclusions can be drawn from the forensic evidence?",
-            'choice_1': "The evidence strongly suggests a single perpetrator.",
-            'choice_2': "There may be more than one person involved in the crime.",
-            'choice_3': "Inconclusive analysis, more procedure is needed.",
+            'question': "Why is it critical to perform a presumptive test on the blood splatter on the wall, and any biological sample in general, before collecting a sample for DNA analysis?",
+            'choice_1': "To determine the blood type of the sample for a preliminary report",
+            'choice_2': "To enhance the visual appearance of the blood sample, making it easier to photograph for court records",
+            'choice_3': "To confirm the presence of blood and ensure the sample is not a contaminant",
+            'answer': 'choice_3'
+        })
+        q_a_bank.append({
+            'question': "Why is it important to close the curtains and darken the room when using ALS?",
+            'choice_1': "To protect the ALS flashlights from potential damage caused by natural light",
+            'choice_2': "To limit false positive reactions that can be caused with the interference of natural light",
+            'choice_3': "To provide a clearer visualization of the reactions from substances, which may be diluted by natural light",
+            'answer': 'choice_3'
+        })
+        q_a_bank.append({
+            'question': "Was the vase processed for DNA sample collection first or fingerprint enhancement, and why?",
+            'choice_1': "DNA sample collection; Ensures biological evidence was not degraded or compromised by fingerprint enhancement chemicals",
+            'choice_2': "Fingerprint enhancement; Ensures fingerprint was not damaged  by DNA swabs and presumptive tests, ensuring they were still visible",
+            'choice_3': "One of the two processes were chosen randomly",
             'answer': 'choice_1'
         })
+        q_a_bank.append({
+            'question': "Why was cyanoacrylate fuming (CA) used to develop and visualize the fingerprint on the vase rather than a traditional powder?",
+            'choice_1': "Traditional powders can damage the vase’s surface due to its antique material",
+            'choice_2': "CA fuming is more effective for non-porous surfaces like metal blades since traditional powders may not adhere well, which allows for better visualization of fingerprints",
+            'choice_3': "CA fuming provides a more detailed and enhanced prints than traditional powders due to the superglue used",
+            'answer': 'choice_2'
+        })
+        q_a_bank.append({
+            'question': "Why was an orange filter used when photographing the fingerprint on the vase?",
+            'choice_1': "To protect the fingerprint from UV light while photographing",
+            'choice_2': "To enhance the visibility of the fingerprint by adding more background brightness",
+            'choice_3': "To block out unnecessary wavelengths of light and only capture those that enhance the fingerprint",
+            'answer': 'choice_3'
+        })
+        q_a_bank.append({
+            'question': "What were the findings from the DNA analysis performed on the swab taken from the vase?",
+            'choice_1': "The DNA profile generated was consistent with the profile of the victim",
+            'choice_2': "The DNA profile generated was consistent with the profile of the victim’s friend",
+            'choice_3': "The DNA profile generated was consistent with the profiles of both the victim and his friend",
+            'answer': 'choice_1'
+        })
+        q_a_bank.append({
+            'question': "What were the findings from the DNA analysis performed on the swab taken from the blood stain on the wall?",
+            'choice_1': "The DNA profile generated was consistent with the profile of an unknown individual, who was later found to be the victim’s son",
+            'choice_2': "The DNA profile generated was consistent with the profile of the victim",
+            'choice_3': "The DNA profile generated was consistent with the profiles of the victim’s friend",
+            'answer': 'choice_2'
+        })
+        q_a_bank.append({
+            'question': "What were the findings from the Drug Test performed on the blood sample from the vase and wall?",
+            'choice_1': "Both blood samples contained alcohol and Diphenhydramine, which is a poiso",
+            'choice_2': "Both blood samples only contained alcohol",
+            'choice_3': "Both blood samples did not contain any drugs",
+            'answer': 'choice_1'
+        })
+        q_a_bank.append({
+            'question': "Why was white fingerprint powder used to develop the fingerprints on the alcohol bottle?",
+            'choice_1': "Traditional black powder was not available ",
+            'choice_2': "White powder is less likely to damage the alcohol bottle’s surface",
+            'choice_3': "White powder provides better contrast on dark surfaces",
+            'answer': 'choice_3'
+        })
+        q_a_bank.append({
+            'question': "What were the findings of the fingerprints enhanced from the vase and the alcohol bottle?",
+            'choice_1': "Both fingerprints were consistent with each other and belonged to the victim",
+            'choice_2': "Both fingerprints were inconsistent with each other, with the print from the bottle being consistent with the victim and the print from the vase being consistent with the victim’s friend",
+            'choice_3': "Both fingerprints were inconsistent with each other, with the print from the bottle being consistent with the victim’s son and the print from the vase being consistent with the victim’s friend",
+            'answer': 'choice_3'
+        })
+        q_a_bank.append({
+            'question': "Why was the alcohol bottle sent for Headspace Gas-Chromatography",
+            'choice_1': "To identify the type of alcohol in the bottle ",
+            'choice_2': "To check for the presence of any contaminants or other substances ",
+            'choice_3': "To determine the alcohol content in the bottle ",
+            'answer': 'choice_2'
+        })
+        q_a_bank.append({
+            'question': "What were the findings from the Heasdpsace Gas-Chromatography performed on the alcohol sample from the bottle?",
+            'choice_1': "The alcohol sample only contained alcohol",
+            'choice_2': "The alcohol sample contained alcohol and Diphenhydramine, which is a poison",
+            'choice_3': "The results were inconclusive",
+            'answer': 'choice_2'
+        })
+        q_a_bank.append({
+            'question': "Was any insight received about the victim?",
+            'choice_1': "The victim suffered a blunt force trauma to the head, which caused an injury, while poison was found in the body, being the main cause of death",
+            'choice_2': "The victim suffered a blunt force trauma to the head, which was the main cause of death",
+            'choice_3': "The victim had a history of consuming alcohol",
+            'answer': 'choice_1'
+        })
+        q_a_bank.append({
+            'question': "Why is it significant that the alcohol bottle was not full and was opened when found at the crime scene?",
+            'choice_1': "It suggests the bottle was tampered with before the victim’s death",
+            'choice_2': "It suggests that the victim’s friend was also drinking from the bottle",
+            'choice_3': "It suggests that the victim had consumed alcohol from that bottle before his death",
+            'answer': 'choice_3'
+        })
+        q_a_bank.append({
+            'question': "Based on the findings, who can be seen as the primary suspect, and ultimately be charged?",
+            'choice_1': "The victim’s friend",
+            'choice_2': "The victim’s son",
+            'choice_3': "An unknown individual",
+            'answer': 'choice_2'
+        })
+        q_a_bank.append({
+            'question': "What key evidence supports your theory of the prime suspect? ",
+            'choice_1': "The fingerprints on the vase were consistent with the victim’s friend",
+            'choice_2': "The fingerprints on the alcohol bottle were consistent with the victim’s son, and Diphenhydramine, a poison, was found in the alcohol ",
+            'choice_3': "There is not enough evidence that points towards a specific individual",
+            'answer': 'choice_2'
+        })
+        q_a_bank.append({
+            'question': "What is the main finding about the pathology report that also supports your theory?",
+            'choice_1': "The victim died from an alcohol overdose",
+            'choice_2': "The victim died from blunt force trauma on the head due to the vase, with the poison being a secondary factor",
+            'choice_3': "The victim died from poisoning, with the head injury being a secondary factor",
+            'answer': 'choice_3'
+        })
+        
+
+
+
 
     def reset_answers():
         global score 
@@ -116,7 +232,7 @@ label setupScene1:
     python:
         # --------- ADDING ITEMS TO INVENTORY --------- 
         # change these parameters as necessary
-        addToInventory(["screwdriver", "laptop_fingerprint"])
+        addToInventory(["bottle_fingerprint", "vase_fingerprint", "dna_vase", "dna_wall"])
 
         for item in environment_items: # iterate through environment items list
             idle_image = Image("Environment Items/{}-idle.png".format(item)) # idle version of image
