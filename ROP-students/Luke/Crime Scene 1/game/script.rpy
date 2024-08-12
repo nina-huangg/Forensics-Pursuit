@@ -140,7 +140,7 @@ label doorway:
     hide screen splash_screen
     scene doorway
     "The resident of this house was reported dead in the living room. He was found lying on the floor, with appearant head injuries."
-    "The police are still investigating the cause of death. While the body has been removed, you are tasked with collecting any remaining evidence."
+    "From police reports, the victim has taken a blow to the head enough to cause bleeding. While the body has been removed, you are tasked with collecting any remaining evidence."
     "Collected evidence can be brought back to the lab for further analysis."
     call screen doorway_screen
 

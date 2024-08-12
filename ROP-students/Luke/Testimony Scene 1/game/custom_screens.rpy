@@ -33,12 +33,12 @@ screen question_screen(q_a):
             style "custom_button"
             action [Function(check_answer, correct_answer=q_a['answer'], choice='choice_1'), Return()]
     hbox:
-        xalign 0.5 ypos 0.4
+        xalign 0.5 ypos 0.45
         textbutton(q_a['choice_2']):
             style "custom_button"
             action [Function(check_answer, correct_answer=q_a['answer'], choice='choice_2'), Return()]
     hbox:
-        xalign 0.5 ypos 0.5
+        xalign 0.5 ypos 0.6
         textbutton(q_a['choice_3']):
             style "custom_button"
             action [Function(check_answer, correct_answer=q_a['answer'], choice='choice_3'), Return()]
