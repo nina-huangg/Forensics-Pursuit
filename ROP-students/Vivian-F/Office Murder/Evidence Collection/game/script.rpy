@@ -96,7 +96,7 @@ transform half_size:
     zoom 0.5
 
 # Labels of scenes, calls screens in custom_screens
-# Start scenes: bahen and gloves
+# Start scenes: bahen
 label start:
     $slot_size = (int(215 / 2), int(196 / 2)) # sets slot size for inventory
     $slot_padding = 120 / 2
@@ -137,25 +137,26 @@ label start:
     scene bahen
     "Yesterday midnight, the Bahen Centre security guard's body was found in an office room in the building."
     "Your job now is to analyze the scene and collect evidences."
-    jump gloves_start
-
-label gloves_start:
-    scene office_bg
-    "First, put on your gloves!"
-    show hands
-    call screen gloves
-
-label gloves2:
-    hide hands
-    "Now let's enter the scene!"
-    show screen full_inventory
+    # jump gloves_start
     jump office_start
 
+# Gloves code currently commented out until found grey/non-colored hands
+# label gloves_start:
+#     scene office_bg
+#     "First, put on your gloves!"
+#     show hands
+#     call screen gloves
+
+# label gloves2:
+#     hide hands
+#     "Now let's enter the scene!"
+#     jump office_start
 
 # Main screen, comes back after each evidence collection
 # Every time back, change cursor to default and turn off all layovers, only icon
 label office_start:
     scene office_bg
+    show screen full_inventory
     hide screen back_button_screen onlayer over_screens
     $ set_cursor('')
     if not all(evidence_marker_set[evidence] for evidence in evidence_marker_set):
