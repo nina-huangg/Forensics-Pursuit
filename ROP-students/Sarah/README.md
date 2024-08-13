@@ -105,7 +105,8 @@ Link to flowchart: https://lucid.app/lucidchart/460a0ce6-e35b-43e3-a535-18c79406
 - Player is told their score and then go over what questions they answered incorrectly
 
 ## What needs to be developed
-- Need to add the explanations for why the player got the answer wrong (still waiting to receive the explanations)
+- Bug Fixes:
+  - Currently do not know of any
 
 # Scenario: Trespassing Gone Wrong
 ## Overview of Scenario:
