@@ -6,15 +6,15 @@ Exception case in screen toolbox for toggling 'marker' -- comment included there
 """
 
 
-# Start/Finish
-# Putting gloves
-screen gloves():
-    imagebutton:
-        xalign 0.5
-        yalign 0.5
-        idle "gloves_box_idle"
-        hover "gloves_box_hover"
-        action Jump("gloves2")
+# # Start/Finish
+# # Putting gloves:currently commented out until found grey/non-colored hands
+# screen gloves():
+#     imagebutton:
+#         xalign 0.5
+#         yalign 0.5
+#         idle "gloves_box_idle"
+#         hover "gloves_box_hover"
+#         action Jump("gloves2")
 
 # Main Screen
 screen scene_office():
@@ -63,7 +63,7 @@ screen scene_office():
                 idle "office_bg"
                 hover "office_bg_hover"
 
-                hotspot(10,520,450,430) action [SetLocalVariable('missing', True)] mouse "exclamation"
+                hotspot(220,520,240,430) action [SetLocalVariable('missing', True)] mouse "exclamation"
                 hotspot(590,280,490,320) action [SetLocalVariable('missing', True)] mouse "exclamation"
                 hotspot(580,830,240,190) action [SetLocalVariable('missing', True)] mouse "exclamation"
                 hotspot(1450,650,380,300) action [SetLocalVariable('missing', True)] mouse "exclamation"
@@ -80,7 +80,7 @@ screen scene_office():
                 idle "office_bg"
                 hover "office_bg_hover"
 
-                hotspot(10,520,450,430) action [Jump("show_deskfoot")] mouse "magnify"
+                hotspot(220,520,240,430) action [Jump("show_deskfoot")] mouse "magnify"
                 hotspot(590,280,490,320) action [Jump("show_blood")] mouse "magnify"
                 hotspot(580,830,240,190) action [Jump("show_bullet")] mouse "magnify"
                 hotspot(1450,650,380,300) action [Jump("show_cheque")] mouse "magnify"

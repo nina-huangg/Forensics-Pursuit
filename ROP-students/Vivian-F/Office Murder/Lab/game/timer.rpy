@@ -1,13 +1,14 @@
 #### TIMER CODE ####
 # You don't need to modify this file. Comments are provided for readability.
+# Vivian F: deleted variable set -- not used and is a default phython name
 
 # starting label
 label timer:
     show timer_bg
     default time_numbers = [0, 0, 0, 0, 0, 0] # stores the input values
     default number_chosen = 0 # the number of variables inputted so far
-    default set_pressed = False # controls if the user pressed the "SET" button -- changed name
     default current_choice = -1 # the user's current choice
+    jump clear_variables
     call screen timer_screen
 
 # updates the numbers in the array on each input
