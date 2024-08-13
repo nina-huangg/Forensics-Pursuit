@@ -1,0 +1,68 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 325, in script
+    call screen dna_screen
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "renpy/common/00action_other.rpy", line 586, in __call__
+    rv = self.callable(*self.args, **self.kwargs)
+  File "game/script.rpy", line 86, in compare_evidence
+    renpy.show_screen("dna_score_screen", 100)
+Exception: Screen dna_score_screen is not known.
+
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 325, in script
+    call screen dna_screen
+  File "/Applications/renpy-8.2.3-sdk/renpy/ast.py", line 1971, in execute
+    self.call("execute")
+  File "/Applications/renpy-8.2.3-sdk/renpy/ast.py", line 1953, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+  File "/Applications/renpy-8.2.3-sdk/renpy/statements.py", line 349, in call
+    return method(parsed, *args, **kwargs)
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "/Applications/renpy-8.2.3-sdk/renpy/exports.py", line 3420, in call_screen
+    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
+  File "/Applications/renpy-8.2.3-sdk/renpy/ui.py", line 301, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/core.py", line 2166, in interact
+    repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, pause_modal=pause_modal, **kwargs) # type: ignore
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/core.py", line 3208, in interact_core
+    rv = root_widget.event(ev, x, y, 0)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/screen.py", line 793, in event
+    rv = self.child.event(ev, x, y, st)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/behavior.py", line 1174, in event
+    return handle_click(self.clicked)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/behavior.py", line 1095, in handle_click
+    rv = run(action)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/behavior.py", line 388, in run
+    new_rv = run(i, *args, **kwargs)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/behavior.py", line 395, in run
+    return action(*args, **kwargs)
+  File "renpy/common/00action_other.rpy", line 586, in __call__
+    rv = self.callable(*self.args, **self.kwargs)
+  File "game/script.rpy", line 86, in compare_evidence
+    renpy.show_screen("dna_score_screen", 100)
+  File "/Applications/renpy-8.2.3-sdk/renpy/display/screen.py", line 1322, in show_screen
+    raise Exception("Screen %s is not known.\n" % (name[0],))
+Exception: Screen dna_score_screen is not known.
+
+
+macOS-14.5-arm64-arm-64bit arm64
+Ren'Py 8.2.3.24061702
+Lab Scene 1 1.0
+Sun Aug 11 22:47:29 2024

@@ -6,7 +6,8 @@ label door:
 
 label handprint:
     if analyzed["handprint"]:
-        scene handprint backing
+        $ tools["magnetic powder"] = False
+        scene handprint on gel lifter
         "I've already analyzed this print."
         jump corridor
     $ analyzing["handprint"] = True
@@ -14,7 +15,16 @@ label handprint:
     call screen toolbox_print
 
 label handprint_dusted:
+    $ encountered["handprint"] = True
     scene handprint dusted
+    "{color=#30b002}New photo added to evidence.{/color}"
+    call screen toolbox_print
+
+label handprint_gel:
+    scene handprint gel
+    "Let's remove the gel lifter carefully now..."
+    scene handprint on gel lifter
+    "Perfect! Now to package it!"
     call screen toolbox_print
 
 label handprint_scalebar:
@@ -32,6 +42,7 @@ label handprint_backing:
 
 label fingerprint:
     if analyzed["fingerprint"]:
+        $ tools["magnetic powder"] = False
         scene fingerprint backing
         "I've already analyzed this print."
         jump corridor
@@ -40,7 +51,9 @@ label fingerprint:
     call screen toolbox_print
 
 label fingerprint_dusted:
+    $ encountered["fingerprint"] = True
     scene fingerprint dusted
+    "{color=#30b002}New photo added to evidence.{/color}"
     call screen toolbox_print
 
 label fingerprint_scalebar:
@@ -49,7 +62,9 @@ label fingerprint_scalebar:
 
 label gin:
     $ default_mouse = "default"
+    $ encountered["gin"] = True
     scene gin        
+    "{color=#30b002}New photo added to evidence.{/color}" 
     "We should take this to the lab for further processing."
     "It could have some useful prints."
     $ analyzing["gin"] = True
@@ -68,9 +83,9 @@ label packaging:
     scene door dark
     $ tools["bag"] = True
     if analyzing["fingerprint"]:
-        show backing fingerprint at Transform(xpos=0.3, ypos=0.2, zoom=2)
+        show backing fingerprint at Transform(xpos=0.3, ypos=0.2, zoom=1.6)
     elif analyzing["handprint"]:
-        show backing handprint at Transform(xpos=0.3, ypos=0.2, zoom=2)
+        show backing handprint at Transform(xpos=0.34, ypos=0.2, zoom=1.5)
     call screen toolbox_packaging
 
 label packaging_1:
@@ -85,7 +100,7 @@ label packaging_1:
         call screen gin_to_bag
     $ tools["bag"] = False
     show evidence bag large at Transform(xpos=0.4, ypos=0.15)
-    "Sample successfully placed in bag."
+    "{color=#30b002}Sample successfully placed in bag.{/color}"
     call screen toolbox_packaging
 
 label packaging_2:
@@ -94,17 +109,16 @@ label packaging_2:
 
 label packaging_3:
     show casefile_evidence_idle at Transform(xpos=0.3, ypos=0.24)
-    "Bag successfully secured."
     if analyzing["fingerprint"]:
-        "The fingerprint has been added to your evidence."
+        "{color=#30b002}The fingerprint has been added to your evidence.{/color}"
         $ analyzing["fingerprint"] = False
         $ analyzed["fingerprint"] = True
     elif analyzing["handprint"]:
-        "The handprint has been added to your evidence"
+        "{color=#30b002}The handprint has been added to your evidence.{/color}"
         $ analyzing["handprint"] = False
         $ analyzed["handprint"] = True
     elif analyzing["gin"]:
-        "The gin bottle has been added to your evidence"
+        "{color=#30b002}The gin bottle has been added to your evidence.{/color}"
         $ analyzing["gin"] = False
         $ analyzed["gin"] = True
     hide casefile_evidence_idle

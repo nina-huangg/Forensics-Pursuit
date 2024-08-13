@@ -13,7 +13,7 @@ screen ui():
         imagebutton:
             auto "case_file_%s.png" at Transform(zoom=2.5)
             hovered Notify("evidence")
-            action ToggleScreen("casefile")
+            action Function(close_menu)
 
 # Contents of casefile ---------------------------------------------------------------------------------------
 screen casefile():
@@ -38,7 +38,8 @@ screen casefile():
             action [ToggleScreen("casefile"), ToggleScreen("casefile_photos")]
     
 screen casefile_physical():
-    zorder 1
+    zorder 0
+    modal True
     add "casefile_inventory.png"
     text "Evidence Collected" xpos 0.42 ypos 0.15
     hbox:
@@ -84,7 +85,6 @@ screen casefile_physical():
 
 screen casefile_photos():
     zorder 1
-    modal True
     add "casefile_inventory.png"
     text "Evidence Collected" xpos 0.42 ypos 0.15
     hbox:
@@ -92,6 +92,42 @@ screen casefile_photos():
         imagebutton:
             auto "back_button_%s.png" at Transform(zoom=0.2)
             action [ToggleScreen("casefile_photos"), ToggleScreen("casefile")]
+    
+    showif encountered["footprint"]:
+        hbox:
+            xpos 0.18 ypos 0.22
+            imagebutton:
+                idle "footprint" at Transform(zoom=0.2)
+
+    showif encountered["footprint enhanced"]:
+        hbox:
+            xpos 0.4 ypos 0.22
+            imagebutton:
+                idle "footprint enhanced" at Transform(zoom=0.2)
+
+    showif encountered["handprint"]:
+        hbox:
+            xpos 0.62 ypos 0.22
+            imagebutton:
+                idle "handprint dusted" at Transform(zoom=0.2)
+
+    showif encountered["fingerprint"]:
+        hbox:
+            xpos 0.18 ypos 0.5
+            imagebutton:
+                idle "fingerprint dusted" at Transform(zoom=0.2)
+
+    showif encountered["splatter"]:
+        hbox:
+            xpos 0.4 ypos 0.5
+            imagebutton:
+                idle "splatter" at Transform(zoom=0.2)
+
+    showif encountered["gin"]:
+        hbox:
+            xpos 0.62 ypos 0.5
+            imagebutton:
+                idle "gin" at Transform(zoom=0.2)
 
 # Contents of toolbox --------------------------------------------------------------------------------------
 screen toolbox_front_corridor():
@@ -126,7 +162,7 @@ screen toolbox_print():
             sensitive tools["magnetic powder"]
             auto "magnetic_powder_%s.png" at Transform(zoom=0.06)
             hovered Notify("magnetic powder")
-            action [SetDict(tools, "magnetic powder", False), SetDict(tools, "scalebar", True), If(analyzing["handprint"], Jump("handprint_dusted"), Jump("fingerprint_dusted"))]
+            action [SetDict(tools, "magnetic powder", False), If(analyzing["handprint"], [SetDict(tools, "gel lifter", True), Jump("handprint_dusted")], [SetDict(tools, "scalebar", True), Jump("fingerprint_dusted")])]
     
     hbox:
         xpos 0.885 ypos 0.5
@@ -159,6 +195,14 @@ screen toolbox_print():
             auto "casefile_evidence_%s.png" at Transform(zoom=0.3)
             hovered Notify("packaging")
             action [SetDict(tools, "packaging", False), SetDict(tools, "tube", True), Jump("packaging")]
+    
+    hbox:
+        xpos 0 ypos 0.34
+        imagebutton:
+            sensitive tools["gel lifter"]
+            idle "gel lifter.png" at Transform(zoom=0.35)
+            hovered Notify("gel lifter")
+            action [SetDict(tools, "gel lifter", False), SetDict(tools, "packaging", True), Jump("handprint_gel")]
 
 screen toolbox_blood():
     zorder 1
@@ -187,19 +231,19 @@ screen toolbox_presumptive():
         xpos 0.88 ypos 0.02
         imagebutton:
             auto "ethanol %s.png"
-            action SetVariable("default_mouse", "ethanol") mouse "dropper"
+            action [SetVariable("default_mouse", "ethanol"), ToggleScreen("toolbox_presumptive")] mouse "dropper"
     
     hbox:
         xpos 0.895 ypos 0.26
         imagebutton:
             auto "reagent %s.png"
-            action SetVariable("default_mouse", "reagent") mouse "dropper"
+            action [SetVariable("default_mouse", "reagent"), ToggleScreen("toolbox_presumptive")] mouse "dropper"
 
     hbox:
         xpos 0.898 ypos 0.5
         imagebutton:
             auto "hydrogen peroxide %s.png"
-            action SetVariable("default_mouse", "hydrogen") mouse "dropper"
+            action [SetVariable("default_mouse", "hydrogen"), ToggleScreen("toolbox_presumptive")] mouse "dropper"
 
     hbox:
         xpos 0.898 ypos 0.75
@@ -230,12 +274,11 @@ screen toolbox_packaging():
             auto "evident_tape_%s.png" at Transform(zoom=0.06)
             action [SetDict(tools, "tamper evident tape", False), If(analyzing["splatter"] or analyzing["footprint"], Jump("splatter_packaging_2"), Jump("packaging_2"))]
     
-# TODO: fix dragging bounds so there is no overlap with the UI
 screen sample_to_tube():
     draggroup:
         drag:
             drag_name "sample"
-            child "red swab"
+            child "red swab cropped"
             xpos 0.28 ypos 0.3
             draggable True
             droppable True
@@ -352,7 +395,7 @@ screen front_corridor():
             hover "no gin hover"
 
         # Door
-        hotspot (890, 115, 368, 714) action [ToggleScreen("ui"), SetDict(tools, "uv light", True), Jump("door")] mouse "hover"
+        hotspot (890, 115, 368, 714) action [ToggleScreen("ui"), SetDict(tools, "uv light", True), SetDict(encountered, "door", True), Jump("door")] mouse "hover"
 
         # Footprint
         hotspot (1063, 865, 166, 163) action [ToggleScreen("ui"), SetDict(tools, "swab", True), Jump("footprint")] mouse "hover"
@@ -364,9 +407,19 @@ screen front_corridor():
         # Splatter
         hotspot (465, 960, 209, 109) action [ToggleScreen("ui"), SetDict(tools, "swab", True), Jump("splatter")] mouse "hover"
 
+        showif encountered["door"]:
+            add "marker 4" at Transform(xpos=0.63, ypos=0.74, zoom=0.3)
+        
+        showif encountered["splatter"]:
+            add "marker 2" at Transform(xpos=0.32, ypos=0.83, zoom=0.33)
+        
+        showif encountered["footprint"]:
+            add "marker 1" at Transform(xpos=0.54, ypos=0.77, zoom= 0.32)
+            
+
 screen bloody_swab():
     imagebutton:
-        idle "red swab" at Transform(xpos=0.45, ypos=0.3)
+        idle "red swab" at Transform(xpos=0.4, ypos=0.3)
         action Jump("presumptive")
 
 screen dark_overlay_with_mouse():

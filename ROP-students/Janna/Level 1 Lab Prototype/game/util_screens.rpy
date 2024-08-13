@@ -6,7 +6,7 @@ screen back_button_screen(old_location):
         imagebutton:
             idle "back_button" at Transform(zoom=0.2)
             hover "back_button_hover"
-            action [SetVariable("imported_print", ""), SetVariable("print_imported", False), Hide('afis_screen'), SetVariable("location", old_location), Jump(old_location)]
+            action [SetVariable("imported_print", ""), SetVariable("print_imported", False), Hide('afis_screen'), Hide("casefile_physical"), SetVariable("location", old_location), Jump(old_location)]
 
 ### CASE FILES
 screen case_files_screen():

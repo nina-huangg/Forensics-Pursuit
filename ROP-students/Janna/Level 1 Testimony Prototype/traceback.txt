@@ -1,0 +1,75 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While loading <renpy.display.im.Image object ('images/judge normal.webp') at 0x0000000005194850>:
+  File "game/script.rpy", line 263, in script
+    j "Let us begin."
+Exception: Could not load image 'images/judge normal.webp': error('Failed to decode WEBP')
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 263, in script
+    j "Let us begin."
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 2557, in execute
+    Say.execute(self)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 615, in execute
+    renpy.exports.say(who, what, *args, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\exports.py", line 1491, in say
+    renpy.store.say(who, what, *args, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\defaultstore.py", line 419, in say
+    who(what, *args, interact=interact, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\character.py", line 1394, in __call__
+    self.do_display(who, what, cb_args=self.cb_args, dtt=dtt, **display_args)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\character.py", line 1045, in do_display
+    display_say(who,
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\character.py", line 741, in display_say
+    rv = renpy.ui.interact(mouse='say', type=type, roll_forward=roll_forward)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\ui.py", line 301, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\core.py", line 2165, in interact
+    repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, pause_modal=pause_modal, **kwargs) # type: ignore
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\core.py", line 2818, in interact_core
+    self.draw_screen(root_widget, fullscreen_video, (not fullscreen_video) or video_frame_drawn)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\core.py", line 1352, in draw_screen
+    surftree = renpy.display.render.render_screen(
+  File "render.pyx", line 486, in renpy.display.render.render_screen
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\layout.py", line 900, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\layout.py", line 900, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\layout.py", line 900, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\transform.py", line 957, in render
+    return RenderTransform(self).render(width, height, st, at)
+  File "accelerator.pyx", line 978, in renpy.display.accelerator.RenderTransform.render
+  File "accelerator.pyx", line 413, in renpy.display.accelerator.RenderTransform.render_child
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\image.py", line 513, in render
+    return wrap_render(self.target, width, height, st, at)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\image.py", line 316, in wrap_render
+    rend = render(child, w, h, st, at)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\im.py", line 626, in render
+    return cache.get(self, render=True)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\im.py", line 309, in get
+    surf = image.load()
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\im.py", line 761, in load
+    raise e
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\im.py", line 722, in load
+    surf = renpy.display.pgrender.load_image(f, filename)
+  File "C:\Users\Janna\Downloads\renpy-8.2.1-sdk\renpy\display\pgrender.py", line 201, in load_image
+    raise Exception("Could not load image {!r}{}: {!r}".format(filename, extra, e))
+Exception: Could not load image 'images/judge normal.webp': error('Failed to decode WEBP')
+
+Windows-10-10.0.22631 AMD64
+Ren'Py 8.2.1.24030407
+Forensics Testimony Scene Tutorial 1.0
+Sun Aug 11 16:06:49 2024

@@ -61,7 +61,7 @@ screen choose_icon():
             idle "afis_icon_idle"
             hover "afis_icon_hover"
 
-            action NullAction()
+            action Jump("computer")
 
     hbox:
         xpos 0.3078125 ypos 0.19814815
@@ -70,9 +70,6 @@ screen choose_icon():
             hover "dna_comparison_icon_hover"
 
             action Jump("display_table_of_findings")
-        
-transform smaller_machine():
-    zoom 0.1
 
 screen choose_lab():
     zorder 50
@@ -100,24 +97,61 @@ screen choose_lab():
 
             action Jump("lab_bench")
 
+transform smaller_info():
+    zoom 0.75
+
 screen choose_machine():
     zorder 50
 
     hbox:
         xpos 0.25 ypos 0.3
         imagebutton:
-            idle "fumehood_idle" at smaller_machine
+            idle "fumehood_idle"
             hover "fumehood_hover"
 
             action Jump("fumehood")
 
+    # info button for fumehood
+    hbox:
+        xpos 0.34 ypos 0.23
+        imagebutton:
+            idle "info_button_idle" at smaller_info
+            hover "info_button_hover"
+            action Show("fumehood_info")
+
     hbox:
         xpos 0.5 ypos 0.3
         imagebutton:
-            idle "cyano_idle" at smaller_machine
+            idle "cyano_idle"
             hover "cyano_hover"
 
             action Jump("cyanosafe_machine")
+
+    # info button for cyanosafe
+    hbox:
+        xpos 0.59 ypos 0.23
+        imagebutton:
+            idle "info_button_idle" at smaller_info
+            hover "info_button_hover"
+            action Show("cyanosafe_info")
+
+screen fumehood_info():
+    zorder 53
+    frame:
+        xpos 0.2 ypos 0.4
+        vbox:
+            text "A ventilated workspace to capture, contain and exhaust harmful fumes."
+            textbutton "Okay":
+                action Hide("fumehood_info")
+
+screen cyanosafe_info():
+    zorder 53
+    frame:
+        xpos 0.25 ypos 0.4
+        vbox:
+            text "Uses cyanoacrylate fuming to process latent fingerprints. \nRequires superglue and distilled water."
+            textbutton "Okay":
+                action Hide("cyanosafe_info")
 
 screen open_cyanosafe_door():
     zorder 50
@@ -159,7 +193,7 @@ screen add_superglue_to_cyanosafe():
             idle "add_superglue_idle"
             hover "add_superglue_hover"
 
-            action Jump("added_item_to_cyanosafe")
+            action [Show("added_superglue"), Jump("added_item_to_cyanosafe")]
 
 screen add_superglue_before_knife():
     zorder 50
@@ -170,7 +204,7 @@ screen add_superglue_before_knife():
             idle "add_superglue_before_knife_idle"
             hover "add_superglue_before_knife_hover"
 
-            action Jump("added_item_to_cyanosafe")
+            action [Show("added_superglue"), Jump("added_item_to_cyanosafe")]
 
 screen add_water_to_cyanosafe():
     zorder 50
@@ -181,7 +215,7 @@ screen add_water_to_cyanosafe():
             idle "add_water_idle"
             hover "add_water_hover"
 
-            action Jump("added_item_to_cyanosafe")
+            action [Show("added_distilled_water"), Jump("added_item_to_cyanosafe")]
 
 screen add_water_before_knife():
     zorder 50
@@ -192,7 +226,7 @@ screen add_water_before_knife():
             idle "add_water_before_knife_idle"
             hover "add_water_before_knife_hover"
 
-            action Jump("added_item_to_cyanosafe")
+            action [Show("added_distilled_water"), Jump("added_item_to_cyanosafe")]
 
 screen closing_cyanosafe_door():
     zorder 50
@@ -227,7 +261,7 @@ screen collect_lifted_knife():
 screen incorrect_time_message():
     zorder 52
     frame:
-        xpos 0.2 ypos 0.15
+        xpos 0.25 ypos 0.4
         vbox:
             text "Hmm . . . that doesn't seem like the correct time. Think again."
             textbutton "Okay":
@@ -236,7 +270,7 @@ screen incorrect_time_message():
 screen successfully_lifted_print_from_knife():
     zorder 52
     frame:
-        xpos 0.2 ypos 0.15
+        xpos 0.23 ypos 0.1
         vbox:
             text "You lifted the print from the knife! It's a bit hard to \nsee though. I wonder if there's something we can do about that?"
             textbutton "I have an idea!":
@@ -247,7 +281,7 @@ screen successfully_lifted_print_from_knife():
 screen stain_hint_message():
     zorder 52
     frame:
-        xpos 0.2 ypos 0.15
+        xpos 0.2 ypos 0.1
         vbox:
             text "I'm sure you could use a stain to make the print fluoresce under ALS."
             textbutton "Okay":
@@ -276,7 +310,7 @@ screen spray_knife():
 screen stained_knife():
     zorder 52
     frame:
-        xpos 0.2 ypos 0.15
+        xpos 0.2 ypos 0.1
         vbox:
             text "You stained the knife! Let's collect the knife and then photograph the print using ALS."
             textbutton "Okay":
@@ -295,7 +329,7 @@ screen collect_stained_knife():
 screen scalebar_hint():
     zorder 52
     frame:
-        xpos 0.15 ypos 0.15
+        xpos 0.2 ypos 0.1
         vbox:
             text "Remember to place a scalebar next to the fingerprint before taking photos."
             textbutton "Okay":
@@ -314,16 +348,16 @@ screen place_scalebar():
 screen wrong_light():
     zorder 52
     frame:
-        xpos 0.15 ypos 0.15
+        xpos 0.3 ypos 0.4
         vbox:
-            text "Hmm . . . seems light you picked the wrong light. You should probably try again."
+            text "Hmm . . . seems light you picked the wrong light. \nYou should probably try again."
             textbutton "Okay":
                 action Return(True)
 
 screen already_using_light():
     zorder 52
     frame:
-        xpos 0.15 ypos 0.15
+        xpos 0.28 ypos 0.4
         vbox:
             text "You're already using a flashlight. Put that one away first."
             textbutton "Okay":
@@ -388,10 +422,64 @@ screen warn_player_about_knife():
     zorder 52
     tag warn_player_about_knife
     frame:
-        xpos 0.15 ypos 0.15
+        xpos 0.25 ypos 0.4
         vbox:
             text "Wait! You don't know if there is any DNA evidence \non the knife since blood was found on the crime scene. \nYou should probably check for that first."
             textbutton "Okay":
                 action Return(True)
 
+screen added_superglue():
+    zorder 52
+    frame:
+        xpos 0.165 ypos 0.03
+        vbox:
+            text "You added superglue."
+            timer 1.0 action Hide("added_superglue", transition=Dissolve(1.0))
 
+screen added_distilled_water():
+    zorder 52
+    frame:
+        xpos 0.165 ypos 0.03
+        vbox:
+            text "You added distilled water."
+            timer 1.0 action Hide("added_distilled_water", transition=Dissolve(1.0))
+
+screen too_much_time():
+    frame:
+        xpos 0.35 ypos 0.43
+        vbox:
+            text "That's too much time. Try again."
+            textbutton "Okay":
+                action [Hide("too_much_time"), Jump("timer")]
+
+screen not_enough_time():
+    frame:
+        xpos 0.35 ypos 0.43
+        vbox:
+            text "That's not enough time. Try again."
+            textbutton "Okay":
+                action [Hide("not_enough_time"), Jump("timer")]
+
+screen correct_time():
+    frame:
+        xpos 0.43 ypos 0.05
+        vbox:
+            text "That's correct!"
+            textbutton "Okay":
+                action [Hide("correct_time"), Jump("correct_time")]
+
+screen already_lifted_print():
+    frame:
+        xpos 0.3 ypos 0.4
+        vbox:
+            text "You already lifted the print off the knife."
+            textbutton "Okay":
+                action Return(True)
+
+screen analyzed_all_evidence():
+    frame:
+        xpos 0.2 ypos 0.4
+        vbox:
+            text "You've analyzed all the evidence! It's now time to head to the courtroom."
+            textbutton "Okay":
+                action Return(True)

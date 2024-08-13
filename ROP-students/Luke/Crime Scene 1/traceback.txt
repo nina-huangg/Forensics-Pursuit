@@ -1,0 +1,26 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 190, in script
+    $ steps["floor"] += 1
+  File "game/script.rpy", line 190, in <module>
+    $ steps["floor"] += 1
+KeyError: 'floor'
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 190, in script
+    $ steps["floor"] += 1
+  File "C:\Users\zluke\Downloads\renpy-8.2.1-sdk\renpy\ast.py", line 823, in execute
+    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
+  File "C:\Users\zluke\Downloads\renpy-8.2.1-sdk\renpy\python.py", line 1178, in py_exec_bytecode
+    exec(bytecode, globals, locals)
+  File "game/script.rpy", line 190, in <module>
+    $ steps["floor"] += 1
+KeyError: 'floor'
+
+Windows-10-10.0.22631 AMD64
+Ren'Py 8.2.1.24030407
+Crime Scene 3 1.0
+Wed Jul 31 12:03:21 2024

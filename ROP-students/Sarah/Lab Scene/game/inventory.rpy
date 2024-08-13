@@ -546,7 +546,7 @@ init python:
                 renpy.jump("something_on_bench")
         elif item.type == "knife":
             holding_knife = True
-            if at_cyanosafe_machine and close_to_cyanosafe and not ran_cyanosafe and not warned_player_about_fingerprint_before_swabbing:
+            if at_cyanosafe_machine and close_to_cyanosafe and not ran_cyanosafe and not sample_collected_from_knife:
                 renpy.jump("warn_player_about_lifting_print")
             if at_cyanosafe_machine and close_to_cyanosafe and not ran_cyanosafe:
                 renpy.show_screen("place_knife_in_cyanosafe")
@@ -558,8 +558,6 @@ init python:
             holding_knife_lifted_print = True
             if at_fumehood:
                 renpy.show_screen("put_knife_in_fumehood")
-            elif at_lab_bench and not towel_on_lab_bench:
-                renpy.show_screen("place_knife_on_lab_bench")
         elif item.type == "sample_from_floor":
             # Update variable
             swab_sample_being_looked_at = "floor"
@@ -789,6 +787,8 @@ init python:
                     renpy.show_screen("add_superglue_to_cyanosafe")
                 else:
                     renpy.show_screen("add_superglue_before_knife")
+            elif at_cyanosafe_machine and close_to_cyanosafe and ran_cyanosafe:
+                renpy.jump("already_lifted")
         elif item.type == "distilled_water":
             # ------------- Needed for DNA code ---------------------
             if current_dna_evidence.viewing_tray and current_dna_evidence.dna_sample_in and current_dna_evidence.holding_pipette and not current_dna_evidence.finished_pcr:
@@ -816,6 +816,8 @@ init python:
                     renpy.show_screen("add_water_to_cyanosafe")
                 else:
                     renpy.show_screen("add_water_before_knife")
+            elif at_cyanosafe_machine and close_to_cyanosafe and ran_cyanosafe:
+                renpy.jump("already_lifted")
             else:
                 holding_distilled_water = False
                 renpy.jump("dont_need_tool")
@@ -825,7 +827,7 @@ init python:
                 renpy.show_screen("spray_knife")
         elif item.type == "scalebar":
             holding_scalebar = True
-            if not scaled_knife and not at_lab_bench:
+            if not scaled_knife and photographing_knife:
                 renpy.show_screen("place_scalebar")
         elif item.type == "hemastix":
             if at_lab_bench:

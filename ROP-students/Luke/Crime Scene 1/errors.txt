@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/custom_screens.rpy", line 142: 'renpy' is not a keyword argument or valid child of the screen statement.
+    renpy.set_variable(default_mouse, None)
+         ^
+
+Ren'Py Version: Ren'Py 8.2.1.24030407
+Wed Jul 31 10:53:02 2024

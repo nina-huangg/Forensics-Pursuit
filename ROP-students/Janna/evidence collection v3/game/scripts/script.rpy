@@ -1,9 +1,4 @@
-﻿# TODO: gin bottle processing scene - need to go back to crime scene house and rearrange table to look less crowded and take pictures without the bottles for game logic
-# TODO: intro and outro text
-# TODO: insert evidence and evidence photos in evidence bag
-# TODO: get Vivian's inventory code up
-# TODO: need to add the evidence markers!!!
-
+﻿# TODO: get Vivian's inventory code up
 init python:
     config.mouse = {
         "default": [("cursor.png", 0, 0)],
@@ -19,6 +14,7 @@ init python:
         "uv light": False,
         "magnetic powder": False,
         "scalebar": False,
+        "gel lifter": False,
         "tape": False,
         "backing": False,
         "packaging": False,
@@ -28,22 +24,18 @@ init python:
         "swab": False
     }
 
-    # TODO: remember to set analyzing back to False when complete
     analyzing = {
         "handprint": False,
         "fingerprint": False,
-        "bottle": False,
         "splatter": False,
         "footprint": False,
         "gin": False
 
     }
 
-    # TODO: need to find a way to return to the front corridor from a piece of evidence and need to create a message for when player tries to analyze already analyzed evidence
     analyzed = {
         "handprint": False,
         "fingerprint": False,
-        "bottle": False,
         "splatter": False,
         "splatter presumptive": False,
         "splatter packaged": False,
@@ -52,6 +44,16 @@ init python:
         "footprint presumptive": False,
         "footprint enhanced": False,
         "gin": False
+    }
+
+    encountered = {
+        "door": False,
+        "handprint": False,
+        "fingerprint": False,
+        "gin": False,
+        "splatter": False,
+        "footprint": False,
+        "footprint enhanced": False 
     }
 
     valid_kastle_meyer_orders = [
@@ -81,13 +83,50 @@ init python:
         renpy.hide_screen("tape_to_bag")
 
         return True
+    
+    def close_menu():
+        if renpy.get_screen("casefile_physical"):
+            renpy.hide_screen("casefile_physical")
+        elif renpy.get_screen("casefile_photos"):
+            renpy.hide_screen("casefile_photos")
+        elif renpy.get_screen("casefile"):
+            renpy.hide_screen("casefile")
+        else:
+            renpy.show_screen("casefile")
+
+define s = Character("Supervisor")
 
 label start:
     $ default_mouse = "default"
     scene front corridor
-    "Eventually, there'll be a scene briefing here."
-    "But for now, go and investigate the scene!"
+    "{color=#30b002}July 13, 2024 8:17 AM. 1219 Address Road.{/color}"
+    show ema normal
+    s "Officer, glad to see you."
+    show ema serious
+    s "It’s been a long, long morning. We were called in pretty early- around 10am."
+    s "The victim was found in this very living room."
+    s "Witnesses say there was possibly a small gathering here last night. Neighbours reported shouting, but dismissed it as just general party behaviour-"
+    s "-until this morning when the victim's friend came over to check in on him and found him dead in the living room."
+    show ema normal
+    s "Let me give you a quick rundown of what we know so far."
+    s "The victim, Davis Dayid, was a 20-year-old student at the University of Rotonro, Simisaugus."
+    show ema holding glasses
+    s "According to the friend who found him, Davis was hosting a small get-together with a few close friends."
+    show ema serious
+    s "We've interviewed a few neighbours, and they reported hearing loud voices and shouting around 1am."
+    s "Unfortunately, they didn't think much of it at the time, assuming it was just typical party noise."
+    s "It wasn't until Davis' friend came by this morning to check on him that anyone realized something was terribly wrong."
+    s "The body has been moved to the morgue, but the room itself remains untouched."
+    s "I need you to be thorough."
+    s "Look for any relevant evidence, collect fingerprints, and keep an eye out for possible weapons."
+    s " Fair warning, there’s quite a bit of blood on this scene. I trust you know the drill by now."
+    show ema normal
+    s "Remember, time is of the essence. We need to gather all the evidence we can before it gets contaminated or lost."
+    s "You can check your collected evidence at anytime through the casefile on the top left corner"
+    show ema holding glasses
+    s "Good luck, Officer. We're counting on you to help us solve this case."
 
+    
 label corridor:
     $ default_mouse = "magnifying"
     if analyzed["gin"]:
@@ -95,9 +134,18 @@ label corridor:
     else:
         scene front corridor
     show screen ui
-    if analyzed["fingerprint"] and analyzed["handprint"] and analyzed["splatter"] and analyzed["footprint"]:
-        "Well done. You've found all the evidence."
-        "We'll put some outro code here that segues into the lab portion later!"
+    if analyzed["fingerprint"] and analyzed["handprint"] and analyzed["splatter"] and analyzed["footprint"] and analyzed["gin"]:
+        hide screen ui
+        # For some reason only 1 displays, will fix later
+        # show marker 4 at Transform(xpos=0.63, ypos=0.74, zoom=0.3)
+        # show marker 2 at Transform(xpos=0.32, ypos=0.83, zoom=0.33)
+        # show marker 1 at Transform(xpos=0.54, ypos=0.77, zoom= 0.32)
+        show ema holding glasses
+        s "Well done. It looks like you've processed quite a lot of evidence!"
+        show ema normal
+        s "Tomorrow you can head into the lab to analyze them."
+        show ema holding glasses
+        s "But for now, give yourself a pat on the back and rest well. Tomorrow's going to be a busy day!"
         return
     call screen front_corridor
 

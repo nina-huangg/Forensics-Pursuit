@@ -23,6 +23,7 @@ define at_detection_plate = False
 define at_plate_centrifuge = False
 define at_miseq = False
 define viewing_table_of_findings = False
+define at_afis = False
 
 # Variables for cyanosafe
 define cyanosafe_door_open = False
@@ -93,6 +94,13 @@ define hemastix_next_to_knife = False
 define currently_using_hemastix = False
 define currently_swabbing = False
 define swab_sample_being_looked_at = ""
+
+define filled_table_of_findings = False
+
+# Variables for fingerprint processing
+define ready_to_process_knife_fingerprint = False
+define processed_stove_fingerprint = False
+define processed_knife_fingerprint = False
 
 init python:
     # For presumptive tests and swabbing for evidence
@@ -235,6 +243,7 @@ init python:
 
     table_of_findings = TableofFindings()
 
+
 # The game starts here.
 
 label start:
@@ -311,7 +320,7 @@ label setupScene1:
     python:
         # --------- ADDING ITEMS TO INVENTORY --------- 
         # change these parameters as necessary
-        addToInventory(["knife", "dish_towel", "sample_from_floor", "fingerprint_from_stove"])
+        addToInventory(["sample_from_floor", "knife", "dish_towel", "fingerprint_from_stove"])
         addToToolbox(["als_flashlights", "distilled_water", "superglue", "basic_yellow", "cotton_swab", "hemastix", "scalebar", "gf_positive_control"])
         addToToolboxPop(["uva_flashlight", "415nm_flashlight", "450nm_flashlight", "530nm_flashlight"])
 
@@ -366,6 +375,9 @@ label back:
         $ viewing_table_of_findings = False
         hide screen profiles
         jump enter_data_analysis_lab
+    elif at_afis:
+        $ at_afis = False
+        jump enter_data_analysis_lab
     elif at_fumehood:
         $ at_fumehood = False
         jump in_chemistry_lab
@@ -415,12 +427,19 @@ label back:
         show screen full_inventory
         hide screen back_button
         hide screen choose_dna_machine
+        hide screen centrifuge_info
+        hide screen pcr_info
+        hide screen thermal_cycler_info
+        hide screen plate_centrifuge_info
+        hide screen miseq_machine_info
         jump enter_materials_lab
     elif in_chemistry_lab:
         $ in_chemistry_lab = False
         show screen full_inventory
         hide screen back_button
         hide screen choose_machine
+        hide screen fumehood_info
+        hide screen cyanosafe_info
         jump enter_materials_lab
     elif in_materials_lab:
         show screen full_inventory
@@ -434,6 +453,37 @@ label back:
         hide screen choose_icon
         hide screen back_button
         jump in_lab_hallway
+    else:
+        jump in_lab_hallway
+
+# --------------- TIMER CODE -----------------
+label timer_set:
+    
+    scene cyanosafe_closed
+    
+    $ min_hours = 0
+    $ min_minutes = 9
+    $ min_seconds = 0
+    $ max_hours = 0
+    $ max_minutes = 11
+    $ max_seconds = 0
+
+    # Calculations
+    $ min_time = min_hours * 3600 + min_minutes * 60 + min_seconds
+    $ max_time = max_hours * 3600 + max_minutes * 60 + max_seconds
+    $ true_time = time_numbers[5] + time_numbers[4] * 10 + time_numbers[3] * 60 + time_numbers[2] * 600 + time_numbers[1] * 3600 + time_numbers[0] * 36000
+
+    # Default messsages, customize to your liking
+    if true_time >= min_time and true_time <= max_time:
+        call screen correct_time
+        jump correct_time
+    elif true_time < min_time:
+        call screen not_enough_time
+        jump timer
+    elif true_time > max_time:
+        call screen too_much_time
+        jump timer
+# ----------- END OF TIMER CODE -----------------
 
 label took_photo:
     # Code for the flash effect
@@ -444,6 +494,7 @@ label took_photo:
     if holding_450nm_flashlight and photographing_knife:
         if inspecting_fingerprint:
             $ took_photo_fingerprint_scaled_als = True
+            $ ready_to_process_knife_fingerprint = True
             python:
                 addToInventory(["photo_of_fingerprint_scaled_with_450nm"])
         jump update_knife_scene
@@ -542,6 +593,8 @@ label something_on_bench:
 
 label fumehood:
     hide screen choose_machine
+    hide screen fumehood_info
+    hide screen cyanosafe_info
     scene fumehood_bg
     show screen back_button
     $ at_fumehood = True
@@ -644,6 +697,8 @@ label already_using_light:
 
 label cyanosafe_machine:
     hide screen choose_machine
+    hide screen fumehood_info
+    hide screen cyanosafe_info
     $ at_cyanosafe_machine = True
 
     if cyanosafe_door_open:
@@ -681,6 +736,8 @@ label added_item_to_cyanosafe:
     hide screen place_knife_in_cyanosafe
     hide screen add_superglue_to_cyanosafe
     hide screen add_water_to_cyanosafe
+    hide screen add_water_before_knife
+    hide screen add_superglue_before_knife
     hide screen back_button
 
     if holding_knife:
@@ -710,27 +767,8 @@ label ready_to_run_cyanosafe:
 label ready_to_lift_print:
     scene cyanosafe_closed
     $ cyanosafe_door_open = False
-    jump ask_player_how_long
-
-label ask_player_how_long:
-    menu:
-        "How long should we set the cyanosafe for?"
-
-        "1 minute":
-            jump incorrect_time
-
-        "5 minutes":
-            jump incorrect_time
-
-        "10 minutes":
-            jump correct_time
-
-        "15 minutes":
-            jump incorrect_time
-
-label incorrect_time:
-    call screen incorrect_time_message
-    jump ask_player_how_long
+    "How long should we set the cyanosafe for?"
+    jump timer
 
 label correct_time:
     hide screen full_inventory
@@ -755,12 +793,12 @@ label correct_time:
     $ renpy.pause(1.0)
     hide timer_done
     show screen full_inventory
+    $ ran_cyanosafe = True
     call screen open_door_after_processing
 
 label warn_player_about_lifting_print:
     show screen full_inventory
     call screen warn_player_about_knife
-    $ warned_player_about_fingerprint_before_swabbing = True
     call screen full_inventory
 
 label ready_to_collect_knife:
@@ -775,7 +813,7 @@ label collected_knife:
     show screen full_inventory
     call screen successfully_lifted_print_from_knife
     $ at_cyanosafe_machine = False
-    $ clsoe_to_cyanosafe = False
+    $ close_to_cyanosafe = False
     $ knife_in_cyanosafe = False
     $ added_superglue = False
     $ added_water = False
@@ -790,6 +828,11 @@ label give_stain_hint:
     $ added_water = False
     $ print_lifted_from_knife = True
     jump enter_materials_lab
+
+label already_lifted:
+    show screen full_inventory
+    call screen already_lifted_print
+    call screen full_inventory
 
 # ------------------------------------------------ BEGINNING OF DNA CODE ---------------------------------------------------------------
 label selected_water:
@@ -1055,6 +1098,11 @@ label already_swabbed:
 
 label using_centrifuge:
     hide screen choose_dna_machine
+    hide screen centrifuge_info
+    hide screen pcr_info
+    hide screen thermal_cycler_info
+    hide screen plate_centrifuge_info
+    hide screen miseq_machine_info
     $ at_centrifuge = True
     scene centrifuge_bg
     # If you do not have any samples with an insufficient concentration of DNA the following if statement should work:
@@ -1259,6 +1307,11 @@ label moving_to_pcr:
 
 label using_pcr:
     hide screen choose_dna_machine
+    hide screen centrifuge_info
+    hide screen pcr_info
+    hide screen thermal_cycler_info
+    hide screen plate_centrifuge_info
+    hide screen miseq_machine_info
     $ at_pcr = True
     scene pcr_bg 
     if current_dna_evidence.finished_pcr:
@@ -1318,6 +1371,7 @@ label quantification_calculation:
             if current_dna_evidence.name == "towel":
                 show screen full_inventory
                 call screen cant_continue_with_sample
+                $ finished_analyzing_towel_sample = True
                 python:
                     current_dna_evidence.continuing_with_amplification = False
                 jump back
@@ -1325,8 +1379,12 @@ label quantification_calculation:
                 current_dna_evidence.continuing_with_amplification = True
 
         "No":
+            if current_dna_evidence.name != "towel":
+                call screen wrong_decision
+
             python:
                 current_dna_evidence.continuing_with_amplification = False
+            $ finished_analyzing_towel_sample = True
             jump back
     label calculation:
         python:
@@ -1409,6 +1467,11 @@ label already_added_positive_control:
 
 label using_thermal_cycler:
     hide screen choose_dna_machine
+    hide screen centrifuge_info
+    hide screen pcr_info
+    hide screen thermal_cycler_info
+    hide screen plate_centrifuge_info
+    hide screen miseq_machine_info
     $ at_thermal_cycler = True
     scene thermal_cycler_closed 
     if current_dna_evidence.finished_detection_thermal_cycler and current_dna_evidence.plate_on_ice and not current_dna_evidence.plate_in_thermal_cycler and not current_dna_evidence.thermal_cycler_open:
@@ -1544,6 +1607,11 @@ label dont_use_this_anymore:
 
 label using_plate_centrifuge:
     hide screen choose_dna_machine
+    hide screen centrifuge_info
+    hide screen pcr_info
+    hide screen thermal_cycler_info
+    hide screen plate_centrifuge_info
+    hide screen miseq_machine_info
     $ at_plate_centrifuge = True
     scene plate_centrifuge_bg
     if current_dna_evidence.finished_detection_centrifuge and not current_dna_evidence.plate_in_centrifuge and not current_dna_evidence.plate_centrifuge_open:
@@ -1618,6 +1686,11 @@ label plate_is_on_ice:
 label using_miseq:
     $ at_miseq = True
     hide screen choose_dna_machine
+    hide screen centrifuge_info
+    hide screen pcr_info
+    hide screen thermal_cycler_info
+    hide screen plate_centrifuge_info
+    hide screen miseq_machine_info
     scene miseq_bg
     if current_dna_evidence.finished_detection:
         jump dont_need_to_use_machine
@@ -1711,6 +1784,7 @@ label add_to_table:
                 table_of_findings.holding_floor_electropherogram = False
                 table_of_findings.second_evidence = "floor"
                 removeInventoryItem(inventory_sprites[inventory_items.index("electropherogram_of_floor_sample")])
+        $ filled_table_of_findings = True
 
         show screen full_inventory
         # Explain the results of the table of findings
@@ -1718,12 +1792,12 @@ label add_to_table:
         show highlight_table_column:
             xpos 0.36822917 # Can change according to how big your table of findings is
             ypos 0.03240741
-        "This is the genetic profile of the victim, collected from their toothbrush in their home."
+        "This is the genetic profile of the victim Kurt Adams, collected from his toothbrush in his home."
         # Explain the suspect's profile
         show highlight_table_column:
             xpos 0.45416667
             ypos 0.03240741
-        "This is the genetic profile of the suspect."
+        "This is the genetic profile of Jenny Adams, the wife of Kurt Adams."
         # Explain the next column in the table
         show highlight_table_column:
             xpos 0.54166667
@@ -1731,23 +1805,26 @@ label add_to_table:
         # Go through every piece of evidence it could be
         if table_of_findings.first_evidence == "floor":
             "This is the genetic profile of the sample collected from the floor."
-            "Based on the likelihood ratio, it is 2.25 x 10^20 times more likely that the evidence originated from the victim, rather than an unknown individual."
+            "Based on the likelihood ratio, it is 2.25 x 10^20 times more likely that the evidence originated from Kurt Adams, the victim, rather than an unknown individual."
         elif table_of_findings.first_evidence == "knife":
             "This is the genetic profile of the sample collected from the knife."
-            "The profile shows that the sample was contaminated. Based on the likelihood ratio, it is 2.46 x 10^20 times more likely that the evidence originated from the victim rather than an unknown individual."
-            "It is also 2.73 x 10^20 times more likely that the evidence originated from the suspect rather than an unknown individual."
+            "The profile shows that the sample was contaminated. Based on the likelihood ratio, it is 2.46 x 10^20 times more likely that the evidence originated from Kurt Adams, the victim rather than an unknown individual."
+            "It is also 2.73 x 10^20 times more likely that the evidence originated from Jenny Adams, Kurt's wife, rather than an unknown individual."
         # Explain the next colum in the table
         show highlight_table_column:
             xpos 0.628125
             ypos 0.03240741
         if table_of_findings.second_evidence == "floor":
             "This is the genetic profile of the sample collected from the floor."
-            "Based on the likelihood ratio, it is 2.25 x 10^20 times more likely that the evidence originated from the victim, rather than an unknown individual."
+            "Based on the likelihood ratio, it is 2.25 x 10^20 times more likely that the evidence originated from Kurt Adams, the victim, rather than an unknown individual."
         elif table_of_findings.second_evidence == "knife":
             "This is the genetic profile of the sample collected from the knife."
-            "The profile shows that the sample was contaminated. Based on the likelihood ratio, it is 2.46 x 10^20 times more likely that the evidence originated from the victim rather than an unknown individual."
-            "It is also 2.73 x 10^20 times more likely that the evidence originated from the suspect rather than an unknown individual."
+            "The profile shows that the sample was contaminated. Based on the likelihood ratio, it is 2.46 x 10^20 times more likely that the evidence originated from Kurt Adams, the victim rather than an unknown individual."
+            "It is also 2.73 x 10^20 times more likely that the evidence originated from Jenny Adams, Kurt's wife rather than an unknown individual."
         hide highlight_table_column
+
+        if processed_stove_fingerprint and processed_knife_fingerprint and filled_table_of_findings and finished_analyzing_towel_sample:
+            jump analyzed_all
     else:
         # Go through each possible electropherogram the player could be holding
         if table_of_findings.holding_knife_electropherogram:
@@ -1781,3 +1858,8 @@ label dont_need_tool:
 # make sure to add this add the bottom of the setup labels to ensure that images are properly sized
 transform half_size:
     zoom 0.5
+
+label analyzed_all:
+    show screen full_inventory
+    call screen analyzed_all_evidence
+    $ renpy.quit()

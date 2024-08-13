@@ -1,0 +1,9 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/script.rpy", line 22: is not terminated with a newline. (Check strings and parenthesis.)
+            q_a_bank.append({
+
+Ren'Py Version: Ren'Py 8.2.1.24030407
+Wed Aug  7 22:54:20 2024

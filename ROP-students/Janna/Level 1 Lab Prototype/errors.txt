@@ -2,8 +2,7 @@
 errors listed below, and try again.
 
 
-File "game/evidence.rpy", line 94: invalid syntax
-    label.
+File "game/oven.rpy", line 154: Indentation mismatch.
 
 Ren'Py Version: Ren'Py 8.2.1.24030407
-Wed Jul 31 22:27:39 2024
+Sun Aug 11 14:07:27 2024

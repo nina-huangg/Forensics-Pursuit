@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/custom_screens.rpy", line 45: Line is indented, but the preceding action statement does not expect a block. Please check this line's indentation. You may have forgotten a colon (:).
+    SetLocalVariable('interface_imported', False)
+    ^
+
+Ren'Py Version: Ren'Py 8.2.3.24061702
+Sun Aug 11 15:06:15 2024

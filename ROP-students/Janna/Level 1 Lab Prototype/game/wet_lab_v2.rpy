@@ -43,29 +43,33 @@ screen toolbox_dfo_v2():
         xpos 0.86 ypos 0
         imagebutton:
             # sensitive methanol.available
-            idle "methanol" at Transform(zoom=0.5)
-            action [SetVariable("tool", "methanol"), Jump("pour_methanol")]
-            
+            idle "methanol" at Transform(zoom=0.45)
+            action [SetVariable("tool", "methanol"), Jump("pour_methanol")] mouse "hand"
+    text " Methanol" xpos 0.88 ypos 0.21 size 26
+
     hbox:
         xpos 0.89 ypos 0.27
         imagebutton:
             # sensitive dfo.available
-            idle "dfo" at Transform(zoom=0.6)
-            action [SetVariable("tool", "dfo"), Jump("pour_dfo")]
-            
+            idle "dfo" at Transform(zoom=0.53)
+            action [SetVariable("tool", "dfo"), Jump("pour_dfo")] mouse "hand"
+    text "DFO" xpos 0.904 ypos 0.46 size 26
+
     hbox:
         xpos 0.86 ypos 0.45
         imagebutton:
             # sensitive acetic_acid.available
-            idle "acetic acid" at Transform(zoom=0.6)
-            action [SetVariable("tool", "acetic acid"), Jump("pour_acetic_acid")]
+            idle "acetic acid" at Transform(zoom=0.55)
+            action [SetVariable("tool", "acetic acid"), Jump("pour_acetic_acid")] mouse "hand"
+    text "Acetic Acid" xpos 0.88 ypos 0.69 size 26
 
     hbox:
         xpos 0.88 ypos 0.72
         imagebutton:
             # sensitive hfe.available
-            idle "hfe" at Transform(zoom=0.5)
-            action [SetVariable("tool", "hfe"), Jump("pour_hfe")]
+            idle "hfe" at Transform(zoom=0.45)
+            action [SetVariable("tool", "hfe"), Jump("pour_hfe")] mouse "hand"
+    text "HFE" xpos 0.91 ypos 0.925 size 26
 
 screen graduated_cyllinder:
     imagebutton auto "graduated cyllinder %s" at cyllinder action Jump("cyllinder_animation")
@@ -149,6 +153,7 @@ transform hfe_rotated:
     yanchor 0.5
 
 label fumehood_label_v2:
+    hide screen back_button_screen onlayer over_screens
     hide screen casefile_physical
     hide screen ui
 
@@ -204,7 +209,8 @@ label pour_methanol:
     $ renpy.show(name=bowl.image, at_list=[Transform(zoom=1.3, xpos=0.15, ypos=0.4)])
     show graduated cyllinder idle at cyllinder
     show methanol at methanol
-    pause(0.5)
+    "Adding 20mL of methanol."
+    window hide
     show methanol at methanol_rotated with ease
     pause(0.5)
     show methanol at methanol with ease
@@ -222,7 +228,8 @@ label pour_dfo:
     hide hfe
     $ renpy.show(name=bowl.image, at_list=[Transform(zoom=1.3, xpos=0.25, ypos=0.4)])
     show dfo at dfo with ease
-    pause(1.0)
+    "Adding 0.125g of DFO."
+    window hide
     show dfo at dfo_rotated with ease
     pause(1.0)
     show dfo at dfo with ease
@@ -242,7 +249,8 @@ label pour_acetic_acid:
     $ renpy.show(name=bowl.image, at_list=[Transform(zoom=1.3, xpos=0.15, ypos=0.4)])
     show graduated cyllinder idle at cyllinder
     show acetic acid at acetic_acid
-    pause(1.0)
+    "Adding 10mL of acetic acid."
+    window hide
     show acetic acid at acetic_acid_rotated with ease
     pause(1.0)
     show acetic acid at acetic_acid with ease
@@ -260,7 +268,8 @@ label pour_hfe:
     $ renpy.show(name=bowl.image, at_list=[Transform(zoom=1.3, xpos=0.15, ypos=0.4)])
     show graduated cyllinder idle at cyllinder
     show hfe at hfe with ease
-    pause(1.0)
+    "Adding 470mL of HFE."
+    window hide
     show hfe at hfe_rotated with ease
     pause(1.0)
     show hfe at hfe with ease

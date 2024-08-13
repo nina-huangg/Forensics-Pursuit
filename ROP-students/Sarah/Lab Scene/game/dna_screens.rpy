@@ -304,6 +304,9 @@ screen swab_has_been_collected():
 # ----------------------------------------------------------------------------------------------------
 
 # -------------------------- Screen for choosing the DNA machine -------------------------------------
+transform smaller_info():
+    zoom 0.75
+
 screen choose_dna_machine:
     zorder 50
     hbox:
@@ -314,6 +317,14 @@ screen choose_dna_machine:
 
             action Jump("using_centrifuge")
 
+    # info button for centrifuge
+    hbox:
+        xpos 0.185 ypos 0.185
+        imagebutton:
+            idle "info_button_idle" at smaller_info
+            hover "info_button_hover"
+            action Show("centrifuge_info")
+
     hbox:
         xpos 0.3 ypos 0.2537037
         imagebutton:
@@ -321,6 +332,14 @@ screen choose_dna_machine:
             hover "pcr_button_hover"
 
             action Jump("using_pcr")
+
+    # info button for PCR
+    hbox:
+        xpos 0.335 ypos 0.185
+        imagebutton:
+            idle "info_button_idle" at smaller_info
+            hover "info_button_hover"
+            action Show("pcr_info")
 
     hbox:
         xpos 0.45 ypos 0.2537037
@@ -330,6 +349,14 @@ screen choose_dna_machine:
 
             action Jump("using_thermal_cycler")
 
+    # info button for Thermal Cycler
+    hbox:
+        xpos 0.485 ypos 0.185
+        imagebutton:
+            idle "info_button_idle" at smaller_info
+            hover "info_button_hover"
+            action Show("thermal_cycler_info")
+
     hbox:
         xpos 0.6 ypos 0.2537037
         imagebutton:
@@ -338,6 +365,14 @@ screen choose_dna_machine:
 
             action Jump("using_plate_centrifuge")
 
+    # info button for plate centrifuge
+    hbox:
+        xpos 0.63 ypos 0.185
+        imagebutton:
+            idle "info_button_idle" at smaller_info
+            hover "info_button_hover"
+            action Show("plate_centrifuge_info")
+
     hbox:
         xpos 0.75 ypos 0.2537037
         imagebutton:
@@ -345,6 +380,60 @@ screen choose_dna_machine:
             hover "miseq_button_hover"
 
             action Jump("using_miseq")
+
+    # info button for miseq
+    hbox:
+        xpos 0.78 ypos 0.185
+        imagebutton:
+            idle "info_button_idle" at smaller_info
+            hover "info_button_hover"
+
+            action Show("miseq_machine_info")
+
+screen centrifuge_info():
+    zorder 53
+    frame:
+        xpos 0.2 ypos 0.4
+        vbox:
+            text "Used in the extraction stage of DNA analysis. \nSeparates mixtures into their various components based on density."
+            textbutton "Okay":
+                action Hide("centrifuge_info")
+
+screen pcr_info():
+    zorder 53
+    frame:
+        xpos 0.3 ypos 0.4
+        vbox:
+            text "Used in the quantification stage of DNA analysis. \nProvides the concentration data for the DNA."
+            textbutton "Okay":
+                action Hide ("pcr_info")
+
+screen thermal_cycler_info():
+    zorder 53
+    frame:
+        xpos 0.16 ypos 0.4
+        vbox:
+            text "Used in the amplification and detection stages of DNA analysis. \nAmplifies DNA sequences into more copies by using a polymerase chain reaction."
+            textbutton "Okay":
+                action Hide("thermal_cycler_info")
+
+screen plate_centrifuge_info():
+    zorder 53
+    frame:
+        xpos 0.21 ypos 0.4
+        vbox:
+            text "Used in the detection stage of DNA analysis. \nSeparates mixtures into their various components based on density."
+            textbutton "Okay":
+                action Hide("plate_centrifuge_info")
+
+screen miseq_machine_info():
+    zorder 53
+    frame:
+        xpos 0.19 ypos 0.4
+        vbox:
+            text "Used in the detection stage of DNA analysis. \nPerforms capillary electrophoresis  and data analysis of said sequencing."
+            textbutton "Okay":
+                action Hide("miseq_machine_info")
 # ---------------------------------------------------------------------------------------------------------
 
 # ----------------------- Screens for using the DNA machines and/or using a plate ------------------------
@@ -972,6 +1061,15 @@ screen move_to_pcr():
             text "It's now time to put the plate into the PCR."
             textbutton "Okay":
                 action Return(True)
+
+screen wrong_decision():
+    zorder 52
+    frame:
+        xpos 0.25 ypos 0.4
+        vbox:
+            text "Take a look at the concentration value provided and try again."
+            textbutton "Okay":
+                action Jump("quantification_calculation")
 
 screen wrong_calculation:
     zorder 52

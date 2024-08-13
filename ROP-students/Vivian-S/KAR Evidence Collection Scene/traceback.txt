@@ -1,0 +1,56 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 229, in script
+    call screen scene1
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "game/inventory.rpy", line 138, in inventoryEvents
+    removeEnvironmentItem(item3)
+  File "game/inventory.rpy", line 787, in removeEnvironmentItem
+    environment_items.pop(environment_items.index(item.type))
+ValueError: 'lantern' is not in list
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 229, in script
+    call screen scene1
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 1968, in execute
+    self.call("execute")
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 1950, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\statements.py", line 349, in call
+    return method(parsed, *args, **kwargs)
+  File "renpy/common/000statements.rpy", line 671, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\exports.py", line 3413, in call_screen
+    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ui.py", line 301, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\core.py", line 2165, in interact
+    repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, pause_modal=pause_modal, **kwargs) # type: ignore
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\core.py", line 3201, in interact_core
+    rv = root_widget.event(ev, x, y, 0)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\screen.py", line 793, in event
+    rv = self.child.event(ev, x, y, st)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\layout.py", line 1202, in event
+    rv = i.event(ev, x - xo, y - yo, cst)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\particle.py", line 330, in event
+    return self.event_function(ev, x, y, st)
+  File "game/inventory.rpy", line 138, in inventoryEvents
+    removeEnvironmentItem(item3)
+  File "game/inventory.rpy", line 787, in removeEnvironmentItem
+    environment_items.pop(environment_items.index(item.type))
+ValueError: 'lantern' is not in list
+
+Windows-10-10.0.19045 AMD64
+Ren'Py 8.2.1.24030407
+Forensics 1.0
+Tue Aug  6 14:44:43 2024
