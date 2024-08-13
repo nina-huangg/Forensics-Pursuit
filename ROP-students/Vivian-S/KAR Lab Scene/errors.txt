@@ -2,8 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 889: invalid syntax
-        if item.type == "camphor_cube"
+File "game/custom_screens.rpy", line 82: screen expects a non-empty block.
+    screen tapeglo_image:
+                         ^
 
 Ren'Py Version: Ren'Py 8.2.1.24030407
-Sun Aug 11 22:23:58 2024
+Mon Aug 12 20:01:55 2024

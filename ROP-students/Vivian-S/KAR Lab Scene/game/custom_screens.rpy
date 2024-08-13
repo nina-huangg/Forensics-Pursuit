@@ -28,6 +28,54 @@ screen data_analysis_lab_screen:
             hover "afis_software_hover"
             action Jump('afis')
 
+screen new_afis_screen:
+    imagebutton:
+        xalign 0.3 yalign 0.16
+        idle "import_idle"
+        hover "import_hover"
+        action Show("import_image")
+    imagebutton:
+        xalign 0.7 yalign 0.16
+        idle "search_idle"
+        hover "search_hover"
+        action Jump("processing_fingerprint")
+
+screen import_image:
+    imagebutton:
+        xalign 0.23 yalign 0.73
+        idle "import_lid_idle"
+        hover "import_lid_hover"
+        action Show("lid_image")
+
+screen lid_image:
+    image "jar_fingerprint":
+        xalign 0.25 yalign 0.6
+
+screen tapeglo_afis:
+    python:
+        renpy.hide("next_image")
+    imagebutton:
+        xalign 0.3 yalign 0.16
+        idle "import_idle"
+        hover "import_hover"
+        action Show("import_tapeglo")
+    imagebutton:
+        xalign 0.7 yalign 0.16
+        idle "search_idle"
+        hover "search_hover"
+        action Jump("processing_fingerprint2")
+
+screen import_tapeglo:
+    imagebutton:
+        xalign 0.23 yalign 0.73
+        idle "import_lid_idle"
+        hover "import_lid_hover"
+        action Show("tapeglo_image")
+
+screen tapeglo_image:
+    image "tapeglo_fingerprint":
+        xalign 0.25 yalign 0.6
+
 screen afis_screen:
     default afis_bg = "software_interface"
     default interface_import = False
@@ -56,7 +104,8 @@ screen afis_screen:
                 ToggleLocalVariable('interface_search'),
                 SetLocalVariable('afis_bg', 'software_search'),
                 Function(calculate_afis, current_evidence),
-                Function(set_cursor, '')]
+                Function(set_cursor, ''),
+                Jump("processing_fingerprint")]
     
     showif interface_import:
         imagemap:

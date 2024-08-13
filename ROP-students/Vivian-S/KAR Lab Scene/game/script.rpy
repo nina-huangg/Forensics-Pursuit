@@ -42,22 +42,22 @@ init python:
             self.processed = False
     
     ### declare each piece of evidence
-    laptop_fingerprint = Evidence(name = 'laptop_fingerprint',
+    tapeglo_fingerprint = Evidence(name = 'tapeglo_fingerprint',
                                 afis_details = {
-                                    'image': 'laptop_fingerprint',
+                                    'image': 'tapeglo_fingerprint',
                                     'xpos':0.18, 'ypos':0.3,
                                     'score': '70'})
-    screwdriver = Evidence(name = 'screwdriver',
+    jar_fingerprint = Evidence(name = 'jar_fingerprint',
                         afis_details = {
                             'image': 'jar_fingerprint',
                             'xpos':0.18, 'ypos':0.3,
                             'score': '70'})
     
     ### declare afis relevant evidence
-    afis_evidence = [laptop_fingerprint, screwdriver]
+    afis_evidence = [tapeglo_fingerprint, jar_fingerprint]
 
     ### set current_evidence to track which evidence is currently active
-    current_evidence = screwdriver
+    current_evidence = jar_fingerprint
 
 
 #################################### START #############################################
@@ -157,7 +157,11 @@ label data_analysis_lab:
     call screen data_analysis_lab_screen
 
 label afis:
-    call screen afis_screen
+    scene software_interface
+    "Welcome to the data analysis lab!"
+    "Let's analyze the evidence we just processed."
+    "To begin, let's import the image of the lid."
+    call screen new_afis_screen
 
 label materials_lab:
     show screen back_button_screen('hallway') onlayer over_screens
@@ -172,6 +176,50 @@ label analytical_instruments:
     call screen analytical_instruments_screen
 
 # My CODE ----------------------------
+
+label processing_fingerprint:
+    scene software_interface
+    image loading:
+        animation
+        "data_analysis_lab/load1.png"
+        0.3
+        "data_analysis_lab/load2.png"
+        0.3
+        "data_analysis_lab/load3.png"
+        0.3
+        "data_analysis_lab/load4.png"
+        0.3
+        "data_analysis_lab/load5.png"
+    show loading at custom_position(0.496, 0.23)
+    pause 2.0
+    "Great job! Now let's process the Tapeglo image!"
+    hide screen lid_image
+    hide loading
+    hide screen import_image 
+    call screen tapeglo_afis
+
+label processing_fingerprint2:
+    scene software_interface
+    image loading:
+        animation
+        "data_analysis_lab/load1.png"
+        0.3
+        "data_analysis_lab/load2.png"
+        0.3
+        "data_analysis_lab/load3.png"
+        0.3
+        "data_analysis_lab/load4.png"
+        0.3
+        "data_analysis_lab/load5_other.png"
+    show loading at custom_position(0.496, 0.23)
+    pause 2.0
+    "We have now analyzed both fingerprints!"
+    "Hmm... looks like we've done everything we need to do."
+    "What should we do now?"
+    "..."
+    "Time to go to the courtroom!"
+    return
+
 
 label analyze_evidence:
     show screen back_button_screen('wet_lab') onlayer over_screens

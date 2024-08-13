@@ -1,26 +1,32 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
 While running game code:
-  File "game/script.rpy", line 882, in script
-    python:
-  File "game/script.rpy", line 884, in <module>
-    removeEnvironmentItem(environment_sprites[environment_items.index("silver_tray")])
-ValueError: 'silver_tray' is not in list
+  File "game/script.rpy", line 194, in script
+    show screen next_image
+  File "renpy/common/000statements.rpy", line 647, in execute_show_screen
+    renpy.show_screen(name, *args, **kwargs)
+Exception: Screen next_image is not known.
+
 
 -- Full Traceback ------------------------------------------------------------
 
 Full traceback:
-  File "game/script.rpy", line 882, in script
-    python:
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 823, in execute
-    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
-  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\python.py", line 1178, in py_exec_bytecode
-    exec(bytecode, globals, locals)
-  File "game/script.rpy", line 884, in <module>
-    removeEnvironmentItem(environment_sprites[environment_items.index("silver_tray")])
-ValueError: 'silver_tray' is not in list
+  File "game/script.rpy", line 194, in script
+    show screen next_image
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 1968, in execute
+    self.call("execute")
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\ast.py", line 1950, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\statements.py", line 349, in call
+    return method(parsed, *args, **kwargs)
+  File "renpy/common/000statements.rpy", line 647, in execute_show_screen
+    renpy.show_screen(name, *args, **kwargs)
+  File "C:\Users\User\Documents\renpy\renpy-8.2.1-sdk\renpy\display\screen.py", line 1322, in show_screen
+    raise Exception("Screen %s is not known.\n" % (name[0],))
+Exception: Screen next_image is not known.
+
 
 Windows-10-10.0.19045 AMD64
 Ren'Py 8.2.1.24030407
 Forensics Lab L1 Prototype 1.0
-Sun Aug 11 23:32:50 2024
+Mon Aug 12 19:56:46 2024
