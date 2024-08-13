@@ -76,25 +76,29 @@ init python:
                         afis_details = {
                             'image': 'bullet_fingerprint',
                             'xpos': 0.18, 'ypos': 0.3,
-                            'score': '0'},
+                            'score': '0',
+                            'compare': 'None'},
                         afis_processed = False)
     cheque = Evidence(name = 'cheque',
                         afis_details = {
                             'image': 'cheque_fingerprint',
                             'xpos':0.22, 'ypos':0.28,
-                            'score': '80'},
+                            'score': '80',
+                            'compare': 'Mr. X'},
                         afis_processed = False)
     deskfoot = Evidence(name = 'deskfoot',
                         afis_details = {
                             'image': 'deskfoot_footprint',
                             'xpos':0.22, 'ypos':0.28,
-                            'score': '40'},
+                            'score': '40',
+                            'compare': 'Nike Pegasus size 9'},
                         afis_processed = False)
     blood = Evidence(name = 'blood',
                         afis_details = {
                             'image': 'blood_footprint',
                             'xpos':0.18, 'ypos':0.3,
-                            'score': '0'},
+                            'score': '0',
+                            'compare': 'None'},
                         afis_processed = False)
     
     # declare afis relevant evidence

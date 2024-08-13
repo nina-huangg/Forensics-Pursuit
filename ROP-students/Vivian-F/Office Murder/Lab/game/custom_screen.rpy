@@ -108,7 +108,7 @@ screen afis_screen:
                 hbox:
                     xpos afis_search_coordinates['xpos'] ypos afis_search_coordinates['ypos']+(i*0.04)
                     hbox:
-                        text("{color=#000000}"+afis_search[i].name+"{/color}")
+                        text("{color=#000000}"+afis_search[i].afis_details['compare']+"{/color}")
                 hbox:
                     xpos afis_search_coordinates['score_xpos'] ypos afis_search_coordinates['ypos']+(i*0.04)
                     hbox:
