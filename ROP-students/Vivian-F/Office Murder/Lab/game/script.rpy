@@ -23,6 +23,8 @@ default importing = False
 # transition for photo taking flash (0 in/out so middle screen don't last long)
 define flash = Fade(.25, 0, 0, color="#fff")
 
+default curr_timer = ''
+
 init python:
     style.choice_frame.background = "#ffffff"
 
@@ -245,7 +247,7 @@ label bullet_to_water:
     hide bullet_dip
     show screen backtrack onlayer over_screens
     scene bullet_dip_gb
-    "That is correct! After submerging for 10 seconds, lift the exhibit out of 50:50 solution and place it in plain distilled water." 
+    "Lift the exhibit out of 50:50 solution and place it in plain distilled water." 
     "The water will stop the reaction of the Gun Blue acid on the exhibit effectively so that it does not overdevelop and destroy the evidence.\n(click anywhere to proceed)"
     $ set_cursor('tweezer_bullet')
     call screen bullet_water
@@ -290,9 +292,9 @@ label cheque_to_cabinet:
     $ set_cursor('tray_cheque')
     call screen ninhydrin_cabinets
 
-label timer_set:
+label cabinet_timer:
     scene cabinet_humidified
-    
+    $ curr_timer = 'cabinet'
     # Min and max time allowed as correct
     $ min_hours = 0 
     $ min_minutes = 4
@@ -300,6 +302,26 @@ label timer_set:
     $ max_hours = 0
     $ max_minutes = 7
     $ max_seconds = 0
+    jump timer
+
+label dip_timer:
+    scene bullet_dip_gb
+    $ curr_timer = 'dip'
+    "Wait for the Gun Blue to react and develop print"
+    # Min and max time allowed as correct
+    $ min_hours = 0 
+    $ min_minutes = 0
+    $ min_seconds = 10
+    $ max_hours = 0
+    $ max_minutes = 0
+    $ max_seconds = 10
+    jump timer
+
+label timer_set:
+    if curr_timer == 'cabinet':
+        scene cabinet_humidified
+    else:
+        scene bullet_dip_gb
 
     # Calculations
     $ min_time = min_hours * 3600 + min_minutes * 60 + min_seconds
@@ -327,7 +349,10 @@ label timer_set:
                 "Waiting for [string_min_1][string_min_2] minutes and [string_sec_2] seconds... (click anywhere to continue)"
             else:
                 "Waiting for [string_min_1][string_min_2] minutes... (click anywhere to continue)"
-        jump cheque_to_photo
+        if curr_timer == 'cabinet':
+            jump cheque_to_photo
+        else:
+            jump bullet_to_water
     elif true_time < min_time:
         "That's not enough time, try again."
         jump timer

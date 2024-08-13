@@ -4,7 +4,6 @@
 
 # starting label
 label timer:
-    scene cabinet_humidified # added 
     show timer_bg
     default time_numbers = [0, 0, 0, 0, 0, 0] # stores the input values
     default number_chosen = 0 # the number of variables inputted so far

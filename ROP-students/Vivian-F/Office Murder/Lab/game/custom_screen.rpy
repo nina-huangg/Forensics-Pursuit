@@ -248,43 +248,7 @@ screen bullet_dip():
         imagemap:
             idle "bottle_gb"
             hover "bottle_gb_hover"
-            hotspot(570,400,450,540) action [Function(set_cursor, ''), SetLocalVariable('dipped_gb', True)]
-    showif dipped_gb:
-        image 'bullet_dip_gb'
-        frame:
-            style_group 'choice'
-            xalign 0.5 ypos 0.3
-            hbox:
-                text "Wait for the Gun Blue to react and develop print" color "#000000"
-        hbox:
-            xpos 0.15 ypos 0.4
-            textbutton('~ 3 seconds'):
-                style 'custom_button'
-                action SetLocalVariable('threes', True)
-        hbox:
-            xpos 0.15 ypos 0.5
-            textbutton('~ 10 seconds'):
-                style 'custom_button'
-                action [Jump('bullet_to_water')]
-        hbox:
-            xpos 0.15 ypos 0.6
-            textbutton('~ 1 minute'):
-                style 'custom_button'
-                action SetLocalVariable('onemin', True)          
-    showif threes:
-        image 'bullet_dip_gb'
-        hbox:
-            xpos 0.15 ypos 0.5
-            textbutton('That is too short, the print has not fully appeared yet!\n(click to try again)'):
-                style 'custom_button'
-                action [SetLocalVariable('threes', False)]
-    showif onemin:
-        image 'bullet_dip_gb'
-        hbox:
-            xpos 0.15 ypos 0.5
-            textbutton('That is too long, you would have over-developed the print and make it non-visible!\n(click to try again)'):
-                style 'custom_button'
-                action SetLocalVariable('onemin', False)    
+            hotspot(570,400,450,540) action [Function(set_cursor, ''), Jump('dip_timer')]
 
 screen bullet_water():
     default lift_gb = False
@@ -423,7 +387,7 @@ screen ninhydrin_cabinets:
             xpos 0.2 ypos 0.75
             textbutton('Set temperature to 80 degrees celcius with 65% relative humidity'):
                 style 'custom_button'
-                action [Hide('ninhydrin_cabinets'), Jump('timer')]
+                action [Hide('ninhydrin_cabinets'), Jump('cabinet_timer')]
 
 screen ninhydrin_set_photo:
     image 'ninhydrin_take_photo'
