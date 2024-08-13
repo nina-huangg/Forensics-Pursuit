@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/script.rpy", line 11: expected statement.
+    global score = 0
+                 ^
+
+Ren'Py Version: Ren'Py 8.2.1.24030407
+Thu Aug  8 11:48:28 2024

@@ -1,0 +1,45 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "renpy/common/00start.rpy", line 193, in script
+    python:
+  File "renpy/common/00start.rpy", line 193, in script
+    python:
+  File "renpy/common/00start.rpy", line 194, in <module>
+    renpy.execute_default_statement(True)
+  File "game/script.rpy", line 11, in execute_default
+    default score = 0
+Exception: store.score is being given a default a second time.
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\bootstrap.py", line 359, in bootstrap
+    renpy.main.main()
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\main.py", line 635, in main
+    run(restart)
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\main.py", line 145, in run
+    renpy.execution.run_context(True)
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\execution.py", line 955, in run_context
+    context.run()
+  File "renpy/common/00start.rpy", line 193, in script
+    python:
+  File "lib/python3.9/future/utils/__init__.py", line 444, in raise_
+  File "renpy/common/00start.rpy", line 193, in script
+    python:
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\ast.py", line 823, in execute
+    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\python.py", line 1178, in py_exec_bytecode
+    exec(bytecode, globals, locals)
+  File "renpy/common/00start.rpy", line 194, in <module>
+    renpy.execute_default_statement(True)
+  File "C:\Users\Janet\Desktop\renpy-8.2.1-sdk\renpy\exports.py", line 4090, in execute_default_statement
+    i.execute_default(start)
+  File "game/script.rpy", line 11, in execute_default
+    default score = 0
+Exception: store.score is being given a default a second time.
+
+Windows-10-10.0.22631 AMD64
+Ren'Py 8.2.1.24030407
+Forensics Testimony Scene Tutorial 1.0
+Thu Aug  8 11:48:47 2024
