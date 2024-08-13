@@ -145,7 +145,7 @@ init python:
             'question': "What were the findings from the DNA analysis performed on the swab taken from the dish towel?",
             'choice_1': "No DNA profile was generated as there was an insufficient amount of DNA.",
             'choice_2': "The DNA profile generated was consisitent with the profiles of both the victim and the suspect.",
-            'choice_3': "The DNA profile generated was consistent with an unknown individual.",
+            'choice_3': "The DNA profile generated was consistent with an unknown individual named Lucy.",
             'choice_4': "The DNA profile geerated was consistent with the profile of Jenny Adams, the wife.",
             'answer': 'choice_1'
         })
@@ -176,25 +176,25 @@ init python:
 
     def load_explanations():
         global question_explanations
-        question_explanations.append("Question 1:\n Insert explanation")
-        question_explanations.append("Question 2:\n Insert explanation")
-        question_explanations.append("Question 3:\n Insert explanation")
-        question_explanations.append("Question 4:\n Insert explanation")
-        question_explanations.append("Question 5:\n Insert explanation")
-        question_explanations.append("Question 6:\n Insert explanation")
-        question_explanations.append("Question 7:\n Insert explanation")
-        question_explanations.append("Question 8:\n Insert explanation")
-        question_explanations.append("Question 9:\n Insert explanation")
-        question_explanations.append("Question 10:\n Insert explanation")
-        question_explanations.append("Question 11:\n Insert explanation")
-        question_explanations.append("Question 12:\n Insert explanation")
-        question_explanations.append("Question 13:\n Insert explanation")
-        question_explanations.append("Question 14:\n Insert explanation")
-        question_explanations.append("Question 15:\n Insert explanation")
-        question_explanations.append("Question 16:\n Insert explanation")
-        question_explanations.append("Question 17:\n Insert explanation")
-        question_explanations.append("Question 18:\n Insert explanation")
-        question_explanations.append("Question 19:\n Insert explanation")
+        question_explanations.append("Question 1:\n A controlled environment is suggested for further examination to ensure evidence contamination chances are very low.")
+        question_explanations.append("Question 2:\n Evidence like knives are sharp and hence a safety hazard. So they should be contained in a separate container that is able to preserve it in a safe manner and lower chances of cross contamination with other evidence on scene")
+        question_explanations.append("Question 3:\n It's best to avoid unnecessary processing, so using an ALS first can prevent that.")
+        question_explanations.append("Question 4:\n You should always use powder that contrasts in colour.")
+        question_explanations.append("Question 5:\n Luminol can affect the integrity of the DNA, while ALS does not.")
+        question_explanations.append("Question 6:\n Blood does not fluoresce— rather it absorbs the light coming from the ALS and hence appears darker. It can luminesce with the help of substances like Luminol and BlueStar.")
+        question_explanations.append("Question 7:\n Presumptive tests are usually used to confirm the presence of blood. Forensic services are usually very backlogged and will not test a biological sample without a presumptive test. This is not only to save time and resources, but also to add another piece of evidence to the log for court purposes, and fulfills the screening of evidence on scene.")
+        question_explanations.append("Question 8:\n You should always capture the luminescence produced by the luminol.")
+        question_explanations.append("Question 9:\n The original and non-tampered state of the crime scene is always important to capture in the case of cross-questioning from defence counsel in court. It is important to ensure nothing is being hidden from the court and transparency is being maintained at all times.")
+        question_explanations.append("Question 10:\n DNA samples should always be collected first before any other analysis.")
+        question_explanations.append("Question 11:\n Cyanoacrylate fuming (CA) is more effective for non-porus surfaces such as the metal knife blade since powder may not adhere well to the knife.")
+        question_explanations.append("Question 12:\n When ALS is used to enhance fingerprints, an orange filter is used to block the waves of light that are unnecessary and are reflected back from the evidence piece, and hence only the rays that are targeted on the piece are captured.")
+        question_explanations.append("Question 13:\n Check the DNA analysis performed on the sample from the knife blade.")
+        question_explanations.append("Question 14:\n A mixed DNA profile is when there is more than one source that has genetically contributed to the profile.")
+        question_explanations.append("Question 15:\n The dish towel absorbed the blood, therefore a fingerprint could not be developed from it.")
+        question_explanations.append("Question 16:\n Check the DNA analysis performed, the sample from the dish towel could not generate a complete profile.")
+        question_explanations.append("Question 17:\n Check the DNA analysis performed on the sample from the floor.")
+        question_explanations.append("Question 18:\n Check the fingerprint analysis that was performed.")
+        question_explanations.append("Question 19:\n As an expert witness, one can only speak to the evidence and its results, and can not say or determine with certainty who is guilty in the case. An expert witness should only testify within their realm of expertise, which does not include deciding who the culprit is.")
 
         
 
@@ -223,7 +223,7 @@ label start:
     $inventory_sprites = [] # holds all evidence sprite objects
     $inventory_items = [] # holds evidence items
     $inventory_item_names = ["Dish Towel", "Fingerprint From Stove", "Knife with Basic Yellow", "Photo of Fingerprint Scaled With 450nm", 
-    "Photo of Hemastix Next to Knife", "Photo of Hemastix Next to Towel", "Table of Findings"] # holds names for inspect pop-up text 
+    "Photo of Hemastix Next to Knife", "Photo of Hemastix Next to Towel", "Table of Findings", "AFIS Results"] # holds names for inspect pop-up text 
     $inventory_db_enabled = False # determines whether up arrow on evidence hotbar is enabled or not
     $inventory_ub_enabled = False # determines whether down arrow on evidence hotbar is enabled or not
     $inventory_slot_size = (int(215 / 2), int(196 / 2)) # sets slot size for evidence bar
@@ -278,7 +278,7 @@ label setupScene1:
         # change these parameters as necessary
         addToInventory(["dish_towel", "fingerprint_from_stove", "knife_with_basic_yellow", 
         "photo_of_fingerprint_scaled_with_450nm", "photo_of_hemastix_next_to_knife", 
-        "photo_of_hemastix_next_to_towel", "table_of_findings"])
+        "photo_of_hemastix_next_to_towel", "table_of_findings", "afis_results"])
 
         for item in environment_items: # iterate through environment items list
             idle_image = Image("Environment Items/{}-idle.png".format(item)) # idle version of image
