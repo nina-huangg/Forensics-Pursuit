@@ -1,6 +1,8 @@
 
 label door:
     $ default_mouse = "default"
+    hide screen casefile_physical
+    hide screen casefile_photos
     scene door
     call screen toolbox_print
 
@@ -62,6 +64,8 @@ label fingerprint_scalebar:
 
 label gin:
     $ default_mouse = "default"
+    hide screen casefile_physical
+    hide screen casefile_photos
     $ encountered["gin"] = True
     scene gin        
     "{color=#30b002}New photo added to evidence.{/color}" 
