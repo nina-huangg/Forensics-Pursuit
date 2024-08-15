@@ -385,6 +385,8 @@ label quick_end:
     j "You will be put under direct civil contempt of court for disrupting proceedings."
     j "Court is adjourned."
     show kristoph confident as character
+    scene lobby
+    "5 minutes later..."
     d "Hah! How laughable."
     show ema serious as character
     s "What the heck was that?!"
