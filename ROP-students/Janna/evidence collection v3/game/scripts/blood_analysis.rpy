@@ -6,6 +6,8 @@ init python:
 
 label footprint:
     $ default_mouse = "default"
+    hide screen casefile_physical
+    hide screen casefile_photos
 
     if analyzed["footprint"]:
         $ analyzing["footprint"] = False
@@ -26,6 +28,8 @@ label footprint:
 label splatter:
     $ default_mouse = "default"
     scene splatter
+    hide screen casefile_physical
+    hide screen casefile_photos
 
     if analyzed["splatter"] and analyzed["splatter presumptive"] and analyzed["splatter packaged"]:
         $ analyzing["splatter"] = False
