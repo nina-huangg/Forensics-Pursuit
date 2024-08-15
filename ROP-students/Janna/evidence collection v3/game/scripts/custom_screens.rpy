@@ -39,7 +39,6 @@ screen casefile():
     
 screen casefile_physical():
     zorder 0
-    modal True
     add "casefile_inventory.png"
     text "Evidence Collected" xpos 0.42 ypos 0.15
     hbox:
