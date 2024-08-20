@@ -1,5 +1,10 @@
 # Overview
 A person is found dead in his living room. From police reports, the victim has taken a blow to the head, strong enough to cause bleeding. The player is tasked with collecting evidence at the crime scene, processing it in the labs and finally presenting their case and conclusions as testimony in the courtroom. 
+### Flow charts
+https://drive.google.com/file/d/1BMnW111uZiUWMuw_IWntZOoNyBglS18L/view?usp=sharing 
+https://app.diagrams.net/#G1GTegTCqITtN6Ppul04Gd2r5cTUEg-JZv#%7B%22pageId%22%3A%225R1Ep1ZRfNg14T2-pnC7%22%7D
+https://app.diagrams.net/#G1Yqex8UCL1sX58kxBmkI7Bt3PB0pXX2yi#%7B%22pageId%22%3A%22x35-wouxuZ1qwb7TEoSw%22%7D 
+https://www.figma.com/board/1WFBQCPg455ryA7anEl4n2/FigJam-basics 
 # Game Play
 ## Crime Scene 1
 ### Evidence and forensic techniques
