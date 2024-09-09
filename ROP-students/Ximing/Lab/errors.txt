@@ -1,0 +1,54 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/renpy/script.rpy", line 99: end of line expected.
+    jump show_stereo("wood_stereo1")
+                    ^
+
+File "game/renpy/script.rpy", line 102: end of line expected.
+    jump show_stereo("wood_stereo2")
+                    ^
+
+File "game/renpy/script.rpy", line 105: end of line expected.
+    jump show_stereo("bone2_stereo1")
+                    ^
+
+File "game/renpy/script.rpy", line 108: end of line expected.
+    jump show_stereo("bone2_stereo2")
+                    ^
+
+File "game/renpy/script.rpy", line 111: end of line expected.
+    jump show_stereo("stone_stereo1")
+                    ^
+
+File "game/renpy/script.rpy", line 114: end of line expected.
+    jump show_stereo("stone_stereo2")
+                    ^
+
+File "game/renpy/script.rpy", line 117: end of line expected.
+    jump show_stereo("stone_stereo3")
+                    ^
+
+File "game/renpy/script.rpy", line 120: end of line expected.
+    jump show_stereo("bone3_stereo1")
+                    ^
+
+File "game/renpy/script.rpy", line 123: end of line expected.
+    jump show_stereo("bone3_stereo2")
+                    ^
+
+File "game/renpy/script.rpy", line 126: end of line expected.
+    jump show_stereo("metal_stereo1")
+                    ^
+
+File "game/renpy/script.rpy", line 129: end of line expected.
+    jump show_stereo("metal_stereo2")
+                    ^
+
+File "game/renpy/script.rpy", line 132: end of line expected.
+    jump show_stereo("metal_stereo3")
+                    ^
+
+Ren'Py Version: Ren'Py 8.2.1.24030407
+Thu Aug  1 23:30:05 2024

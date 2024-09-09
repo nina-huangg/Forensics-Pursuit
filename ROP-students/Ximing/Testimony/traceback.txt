@@ -1,0 +1,72 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While processing text tag {name} in 'Final question. Are you, {name}, 100 precent certain in the accuracy of your results from all your analyses?'.:
+  File "game/rpy/script.rpy", line 172, in script
+    python:
+  File "game/rpy/script.rpy", line 174, in <module>
+    renpy.call_screen("question_screen", q_a=q_a)
+Exception: Unknown text tag 'name'
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/rpy/script.rpy", line 172, in script
+    python:
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/ast.py", line 823, in execute
+    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/python.py", line 1178, in py_exec_bytecode
+    exec(bytecode, globals, locals)
+  File "game/rpy/script.rpy", line 174, in <module>
+    renpy.call_screen("question_screen", q_a=q_a)
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/exports.py", line 3413, in call_screen
+    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/ui.py", line 301, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/display/core.py", line 2165, in interact
+    repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, pause_modal=pause_modal, **kwargs) # type: ignore
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/display/core.py", line 2818, in interact_core
+    self.draw_screen(root_widget, fullscreen_video, (not fullscreen_video) or video_frame_drawn)
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/display/core.py", line 1352, in draw_screen
+    surftree = renpy.display.render.render_screen(
+  File "render.pyx", line 486, in renpy.display.render.render_screen
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/display/layout.py", line 900, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/display/layout.py", line 900, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/display/layout.py", line 900, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/display/screen.py", line 754, in render
+    child = renpy.display.render.render(self.child, w, h, st, at)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/display/layout.py", line 900, in render
+    surf = render(child, width, height, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/display/layout.py", line 1361, in render
+    surf = render(child,
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/display/layout.py", line 1076, in render
+    surf = render(d, rw, height - y, cst, cat)
+  File "render.pyx", line 170, in renpy.display.render.render
+  File "render.pyx", line 260, in renpy.display.render.render
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/text/text.py", line 2276, in render
+    virtual_layout = Layout(self, width, height, renders, drawable_res=False, size_only=True)
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/text/text.py", line 640, in __init__
+    self.paragraphs = self.segment(text.tokens, style, renders, text)
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/text/text.py", line 1394, in segment
+    raise Exception("Unknown text tag %r" % text)
+Exception: Unknown text tag 'name'
+
+macOS-10.16-x86_64-i386-64bit x86_64
+Ren'Py 8.2.1.24030407
+Testimony 1.0
+Wed Aug 21 19:53:08 2024

@@ -1,0 +1,28 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/renpy/script.rpy", line 184, in script
+    if not persistent.visited_labels['microscope5']:
+  File "game/renpy/script.rpy", line 184, in <module>
+    if not persistent.visited_labels['microscope5']:
+TypeError: 'NoneType' object is not subscriptable
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/renpy/script.rpy", line 184, in script
+    if not persistent.visited_labels['microscope5']:
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/ast.py", line 1842, in execute
+    if renpy.python.py_eval(condition):
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/python.py", line 1209, in py_eval
+    return py_eval_bytecode(code, globals, locals)
+  File "/Volumes/renpy-8.2.1-sdk/renpy-8.2.1-sdk/renpy/python.py", line 1202, in py_eval_bytecode
+    return eval(bytecode, globals, locals)
+  File "game/renpy/script.rpy", line 184, in <module>
+    if not persistent.visited_labels['microscope5']:
+TypeError: 'NoneType' object is not subscriptable
+
+macOS-10.16-x86_64-i386-64bit x86_64
+Ren'Py 8.2.1.24030407
+lab 1.0
+Thu Aug  1 23:17:00 2024
