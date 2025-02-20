@@ -20,7 +20,7 @@
 
     def generate_response(prompt, user_name, specialty, case_details, context_history, unintelligible_count):
         try:
-            url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAz7IAI7qB8Sq5djYBXGTz0y0-D-OD7nCI" 
+            url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=[YOUR_KEY_HERE]" 
             headers = {'Content-Type': 'application/json'}
 
             system_context = (
