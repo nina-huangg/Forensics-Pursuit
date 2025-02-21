@@ -182,9 +182,11 @@ label difficulty_selection:
     menu:
         "Prosecution":
             $ LEX_DIFFICULTY = "prosecution"
+            $ unplayed_difficulty = "defense"
             jump lex_intro
         "Defense":
             $ LEX_DIFFICULTY = "defense"
+            $ unplayed_difficulty = "prosecution"
             jump lex_intro
 
 label lex_intro:
@@ -198,13 +200,11 @@ label lex_intro:
     hide judge
     show lawyer
     l "I believe you've chosen to testify as an expert for [persistent.case_choice] in [persistent.specialty]. Very well, let's proceed."
-    $ user_name = renpy.input("Could you please state your full first and last name for the court?")
+    $ user_name = renpy.input("Could you please state your full first and last name for the court?", length=25)
     if not user_name:
         $ user_name = "Witness"
     $ case_details = cases[persistent.case_choice] 
-    $ ai_first_question = generate_response(
-        "Generate the first question for the expert witness to establish qualification in their field. Keep it short.",
-        user_name, persistent.specialty, case_details, context_history, unintelligible_count,)
+    $ ai_first_question = generate_response("Generate the first question for the expert witness to establish qualification in their field. Keep it short.", user_name, persistent.specialty, case_details, context_history, unintelligible_count,)
     l "Thank you, [user_name]. Let's begin."
     jump first_question
 
@@ -232,7 +232,11 @@ label first_question:
                         mentioned_truths.add(truth.lower())
         jump interview_loop
     elif "unintelligible response" in ai_response:
-        jump first_question
+        $ unintelligible_count += 1
+        if unintelligible_count >= 3:
+            jump game_over
+        else:
+            jump first_question
     else:
         "An unexpected error occurred. Please restart the game."
         return
@@ -250,23 +254,23 @@ label interview_loop:
                 for truth in truth_bases[persistent.case_choice][persistent.specialty][evidence_point]:
                     if truth.lower() in user_prompt.lower():
                         mentioned_truths.add(truth.lower()) 
-            if mentioned_truths == all_truths:
-                ai_response = generate_response("Conclude the examination by saying exactly: I have no further questions, Your Honour", user_name, persistent.specialty, case_details, context_history, unintelligible_count)
-                responses = divide_response_v2(ai_response)
-                say_responses(responses)
-                renpy.jump("interview_end")
-            if "I have no further questions, Your Honour" in ai_response.lower(): #lol back up plan
-                renpy.jump("interview_end")
-                
+
         $ ai_response = generate_response(user_prompt, user_name, persistent.specialty, case_details, context_history, unintelligible_count)
         $ responses = divide_response_v2(ai_response)
         $ say_responses(responses)
         $ context_history.append(f"AI: {ai_response}")
+
+        python:
+            if "i have no further questions, your honour" in ai_response.lower(): 
+                renpy.jump("interview_end")
+
         if "QUALIFICATION: UNQUALIFIED" in ai_response:
             jump game_over
         if "unintelligible response" in ai_response:
             $ unintelligible_count += 1
             if unintelligible_count >= 3:
+                jump game_over
+            elif "examination cannot continue" in ai_response.lower():
                 jump game_over
             else:
                 $ ai_response = generate_response("Generate a question for the user. Ensure that they follow the rules of the court and establish key information for the triers of fact.", user_name, persistent.specialty, case_details, context_history, unintelligible_count)
@@ -277,6 +281,7 @@ label interview_loop:
         else:
             $ unintelligible_count = 0
     return
+
 label game_over:
     scene bg gameover
     "The examination has been terminated because you were deemed unqualified to testify as an expert witness."
@@ -303,6 +308,36 @@ label interview_end:
     j "Thank you, Lex. [user_name], you may leave the court room. You will receive your evaluation outside with your supervisor."
     hide judge
     hide lawyer
+    python:
+        try:
+            all_truths = create_all_truths_set(persistent.case_choice, persistent.specialty)
+            full_transcript = "\n".join(context_history)
+            evaluation_prompt = (
+                f"Evaluate the expert witness testimony based on the following transcript:\n\n{full_transcript}\n\n"
+                f"The expert testified as a {persistent.specialty} in {case_details['case_name']}.\n\n"
+                f"All the truth bases they needed to say are:\n\n{all_truths}\n\n"
+                f"Evaluate the testimony considering these grading criteria in mind:\n\n{grading_criteria}\n\n"
+                f"Generate 3-5 concise bullet points that explain the evaluation and give a total score out of 100 based on the grading criteria by saying exactly 'Score: X'. Please ensure points are 20 words or less each."
+            )
+            evaluation_response = generate_response(evaluation_prompt, user_name, persistent.specialty, case_details, context_history, unintelligible_count)
+            score_match = re.search(r"Score: (\d+)", evaluation_response)
+            if score_match:
+                score = int(score_match.group(1))
+                eval_comments = re.sub(r"Score: \d+", "", evaluation_response).strip()
+            else:
+                score = 0
+                eval_comments = "Score not found in evaluation."
+
+            renpy.store.eval_comments = evaluation_response
+            renpy.store.score = score  
+
+            print(f"EVAL COMMENTS:\n{renpy.store.eval_comments}")
+            print(f"SCORE:\n{renpy.store.score}")
+
+        except Exception as e:
+            renpy.store.eval_comments = f"Error: {str(e)}"
+            renpy.store.score = 0
+
     scene bg spec
     show sprite happy
     s "Welcome back, [user_name]! In just a second, Lex and the Judge will return with any feedback they have for you."
@@ -310,12 +345,90 @@ label interview_end:
     s "After you receive your feedback, I encourage you to testify again for the [unplayed_difficulty] to get the full court room experience."
     show sprite neutral
     s "You can also choose a whole new case and specialty and start again! The choice is yours!"
+    #ADD FOOTSTEPS SOUND HERE HEHEHE
     show sprite think
-    s "Oh! Sounds like Lex and the Judge are about to join us. Don't worry, I know you did great!"
+    s "Oh! Sounds like Lex and the Judge are about to join us. Don't worry, I'm sure you did great!"
     jump evaluation_sec
 
 label evaluation_sec:
     scene bg spec
     show lawyer
     l "Hi |supervisor| and [user_name]. Are you ready to receive your evaluation?"
-## Incomplete ##
+    hide lawyer
+    call screen evaluation_screen                                                                                
+
+screen evaluation_screen:
+    modal True  
+    frame:
+        xalign 0.5
+        yalign 0.5
+        xsize 800  
+        ysize 600  
+        background "#222"  
+
+        vbox:
+            xalign 0.5
+            yalign 0.5
+            spacing 20
+
+            text "Evaluation":
+                color "#FFF"
+                size 32
+                xalign 0.5
+ 
+            viewport:
+                xsize 700
+                ysize 400
+                scrollbars "vertical"
+                mousewheel True
+                text renpy.store.eval_comments: 
+                    color "#FFF"
+                    size 16
+                    xalign 0.5
+            
+            text "Total Score: [renpy.store.score]/100": 
+                color "#FFF"
+                size 24
+                xalign 0.5
+            
+        textbutton "Done":
+            background "#4C4C4C"
+            hover_background "#363737"
+            xalign 0.9
+            yalign 0.9
+            action Jump("ending_0")
+
+label ending_0:
+    scene bg spec
+    call screen credits_lol
+
+screen credits_lol:
+    frame:
+        xalign 0.5
+        yalign 0.5
+        xsize 800  
+        ysize 600  
+        background "#222"  
+
+        vbox:
+            xalign 0.5
+            yalign 0.5
+
+            text "THANKS FOR PLAYING":
+                color "#FFF"
+                size 32
+        hbox:
+            xalign 0.5
+            yalign 0.7
+            #spacing 100
+            button:
+                background "#4C4C4C"
+                hover_background "#363737"
+                action Jump("start")
+                text "Try again"
+##### INCOMPLETE: SWITCHING SIDES ####
+#            button:
+#                background "#4C4C4C"
+#                hover_background "#363737"
+#                action Jump("interview_loop")
+#                text "Testify for [unplayed_difficulty]"
