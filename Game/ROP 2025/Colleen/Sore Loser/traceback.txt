@@ -1,0 +1,28 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/scripts/print_analysis.rpy", line 72, in script
+    call screen toolbox
+ScriptError: could not find label 'bottles'.
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "C:\Users\colle\OneDrive\Desktop\renpy-8.3.7-sdk\renpy\bootstrap.py", line 359, in bootstrap
+    renpy.main.main()
+  File "C:\Users\colle\OneDrive\Desktop\renpy-8.3.7-sdk\renpy\main.py", line 652, in main
+    run(restart)
+  File "C:\Users\colle\OneDrive\Desktop\renpy-8.3.7-sdk\renpy\main.py", line 148, in run
+    renpy.execution.run_context(True)
+  File "C:\Users\colle\OneDrive\Desktop\renpy-8.3.7-sdk\renpy\execution.py", line 958, in run_context
+    context.run()
+  File "game/scripts/print_analysis.rpy", line 72, in script
+    call screen toolbox
+  File "C:\Users\colle\OneDrive\Desktop\renpy-8.3.7-sdk\renpy\script.py", line 1103, in lookup
+    raise ScriptError("could not find label '%s'." % str(original))
+ScriptError: could not find label 'bottles'.
+
+Windows-10-10.0.26100 AMD64
+Ren'Py 8.3.7.25031702
+evidence collection v3 1.0
+Thu Jul 10 21:04:14 2025
