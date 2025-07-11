@@ -18,11 +18,11 @@ label carpet:
     if analyzed["carpet packaged"] and analyzed["carpet presumptive"] and analyzed["carpet_cut packaged"]:
         $ analyzing["carpet_stain"] = False
         $ analyzing["carpet_cut"] = False
-        s normal3 "You've finished analyzing the carpet stain."
+        s normal "You've finished analyzing the carpet stain."
 
         if not analyzed["luminol"]:
-            s normal2 "Thinking about it though... the stain looked oddly suspicious, like it leaked on the floor but someone cleaned it."
-            s normal3 "Let's try analyzing the floorboards more closely."
+            s write "Thinking about it though... the stain looked oddly suspicious, like it leaked on the floor but someone cleaned it."
+            s talk "Let's try analyzing the floorboards more closely."
             jump luminol
         else:
             jump corridor
@@ -31,11 +31,11 @@ label carpet:
         $ analyzing["carpet_stain"] = False
         $ analyzing["carpet_cut"] = False
         # s normal2 "You've already enhanced the carpet."
-        s normal2 "There's nothing more you can do now."
+        s write "There's nothing more you can do now."
         
         if not analyzed["luminol"]:
-            s normal2 "Thinking about it though... the stain looked oddly suspicious, like it leaked on the floor but someone cleaned it."
-            s normal3 "Let's try analyzing the floorboards more closely."
+            s write "Thinking about it though... the stain looked oddly suspicious, like it leaked on the floor but someone cleaned it."
+            s talk "Let's try analyzing the floorboards more closely."
             jump luminol
         else:
             jump corridor
@@ -64,7 +64,7 @@ label drip:
 
     if analyzed["drip"] and analyzed["drip presumptive"] and analyzed["drip packaged"]:
         $ analyzing["drip"] = False
-        s normal3 "You've finished analyzing the drip."
+        s normal "You've finished analyzing the drip."
         jump corridor
 
     if encountered["drip"] == False:
@@ -170,14 +170,17 @@ label presumptive:
     if default_mouse == "ethanol":
         $ player_kastle_meyer_order.append("e")
         $ default_mouse = "default"
+        play sound "audio/waterdrop.mp3"
         "A drop of ethanol has been added to the sample."
     elif default_mouse == "reagent":
         $ player_kastle_meyer_order.append("r")
         $ default_mouse = "default"
+        play sound "audio/waterdrop.mp3"
         "A drop of phenolpthalin has been added to the sample."
     elif default_mouse == "hydrogen":
         $ player_kastle_meyer_order.append("h")
         $ default_mouse = "default"
+        play sound "audio/waterdrop.mp3"
         "A drop of hydrogen peroxide has been added to the sample."
 
     if len(player_kastle_meyer_order) > 5:
@@ -230,7 +233,7 @@ label cutting:
 
     show darken_overlay
     show carpet_sample
-    "Perfect! Let's package this"
+    s talk "Perfect! Let's package this."
     # will not allow player to sample blood from the carpet again
     python:
         removal_list = ["swab_pack", "scissors"]
@@ -293,6 +296,7 @@ label drip_packaging_1:
     call screen toolbox
 
 label drip_packaging_2:
+
     hide evidence bag large
     call screen tape_to_bag
     show darken_overlay
@@ -304,6 +308,8 @@ label drip_packaging_2:
                 removeToolboxItem(toolbox_sprites[toolbox_items.index(item)])
 
     show casefile_evidence_idle at Transform(xpos=0.3, ypos=0.24)
+    play sound "audio/tape.mp3"
+    
     if analyzing["carpet_stain"]:
         "The carpet sample has been added to your evidence."
         $ analyzed["carpet packaged"] = True

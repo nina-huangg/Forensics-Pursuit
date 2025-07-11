@@ -39,6 +39,7 @@ init python:
         
         # Fingerprint and handprint ------------------------------
         if item == "uv_light" and tools["uv light"]:
+            renpy.play("audio/flashlight.mp3")
             tools["uv light"] = False
             hide_all_inventory()
             if analyzing["counter"]:
@@ -87,6 +88,7 @@ init python:
             renpy.jump("handprint_gel")
         # drip and carpet ------------------------------
         elif item == "swab_pack" and tools["swab"]:
+            renpy.play("audio/swab.mp3")
             hide_all_inventory()
             if analyzing["carpet_stain"]:
                 renpy.jump("carpet_swab")

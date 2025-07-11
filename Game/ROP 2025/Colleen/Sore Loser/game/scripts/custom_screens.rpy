@@ -574,22 +574,25 @@ screen apt():
         hotspot (1250, 250, 450, 150) action [SetDict(tools, "uv light", True), SetDict(encountered, "counter", True), Jump("counter")] mouse "hover"
 
         # cabinet
-        hotspot (1230, 0, 600, 130) action [SetDict(tools, "uv light", True), SetDict(encountered, "cabinet", True), Jump("cabinet")] mouse "hover"
+        hotspot (1230, 0, 600, 130) action [Play("sound","audio/cabinet.mp3"), SetDict(tools, "uv light", True), SetDict(encountered, "cabinet", True), Jump("cabinet")] mouse "hover"
 
         # lower cabinet
-        hotspot (1400, 373, 235, 357) action [SetDict(tools, "uv light", True), Jump("lower_cabinet")] mouse "hover"
+        hotspot (1400, 373, 235, 357) action [Play("sound","audio/cabinet.mp3"), SetDict(tools, "uv light", True), Jump("lower_cabinet")] mouse "hover"
 
         # trashcan
-        hotspot (0, 640, 100, 380) action [SetDict(tools, "uv light", True), Jump("trashcan")] mouse "hover"
+        hotspot (0, 640, 100, 380) action [Play("sound","audio/trash.mp3"), SetDict(tools, "uv light", True), Jump("trashcan")] mouse "hover"
 
         showif encountered["drip"]:
-            add "marker 4" at Transform(xpos=0.63, ypos=0.74, zoom=0.3)
+            add "marker 4" at Transform(xpos=0.63, ypos=0.74, zoom=0.33)
         
         showif encountered["carpet"]:
             add "marker 2" at Transform(xpos=0.9, ypos=0.83, zoom=0.33)
         
         showif encountered["counter"]:
-            add "marker 1" at Transform(xpos=0.7, ypos=0.23, zoom= 0.32)
+            add "marker 1" at Transform(xpos=0.7, ypos=0.23, zoom= 0.3)
+
+        showif analyzed["needle"]:
+            add "marker 3" at Transform(xpos=0.41, ypos=0.38, zoom=0.3)
     
     showif not analyzed["needle"]:
         add "needle" at Transform(xpos=0.41, ypos=0.4, zoom=0.1) 

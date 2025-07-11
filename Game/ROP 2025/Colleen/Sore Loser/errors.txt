@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/scripts/custom_screens.rpy", line 569: 'show' is not a keyword argument or valid child of the imagemap statement.
-    show if not analyzed["needle"]:
-        ^
+File "game/scripts/script.rpy", line 22: invalid syntax
+            "luminol": [("images/luminol_cursor.png", 0, 0)],
+             ^
 
 Ren'Py Version: Ren'Py 8.3.7.25031702
-Thu Jul 10 20:30:30 2025
+Fri Jul 11 04:15:21 2025

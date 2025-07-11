@@ -24,7 +24,7 @@ screen dig():
         hover "trashcan dig hover"
 
         # paper
-        hotspot (376, 22, 1161, 1150) action [SetDict(tools, "uv light", True), SetDict(analyzing, "pillbox", True), Jump("pillbox")] mouse "hover"
+        hotspot (376, 22, 1161, 1150) action [Play("sound", "audio/crumple.mp3"), SetDict(tools, "uv light", True), SetDict(analyzing, "pillbox", True), Jump("pillbox")] mouse "hover"
 
 label trashcan:
     $ default_mouse = "default"
@@ -42,7 +42,7 @@ label trashcan:
     if analyzed["steroids"] and analyzed["pillbox"]:
         scene trashcan empty
         $ analyzing["trashcan"] = False
-        s normal2 "There's nothing else to analyze here."
+        s normal "There's more nothing else to analyze here."
         jump corridor
     elif encountered["uncovered trash"]:
         $ analyzing["pillbox"] = True
@@ -75,9 +75,9 @@ label steroids:
     # $ analyzing["steroids"] = False
     # $ analyzed["steroids"] = True
 
-    "{color=#2ac975}It's a vial of steroids, about half full. The label reads <DRUG NAME> XX mL'.{/color}"
+    "{color=#88F3FF}It's a vial of steroids, about half full. The label reads <DRUG NAME> XX mL'.{/color}"
 
-    s normal2 "This seems suspicious... we should analyze this vial more closely at the lab."
+    s write "This seems suspicious... we should analyze this vial more closely at the lab."
 
     hide screen back_button_overlay
 
@@ -98,10 +98,11 @@ label pillbox_analysis:
     hide screen toolbox_blood
     show darken_overlay
     show pillbox at pillbox
+    show capsules at Transform(xpos=0.6, ypos=0.38, zoom=0.7, rotate=0.1)
 
-    "{color=#2ac975}A pill box filled with assorted tablets. It has a faint odor of garlic and a light yellow powder dusts the insides of the containers.{/color}"
+    "{color=#88F3FF}A pill box filled with assorted tablets. It has a faint odor of garlic and a light yellow powder dusts the insides of the containers.{/color}"
 
-    s normal2 "This seems suspicious... we should analyze this more closely at the lab."
+    s write "This seems suspicious... we should analyze this more closely at the lab."
 
     hide screen back_button_overlay
 

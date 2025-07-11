@@ -18,7 +18,7 @@ label tylenol:
     show tylenol at Transform(xpos=0.42, ypos=0.2, zoom=0.8)
     show capsules at Transform(xpos=0.49, ypos=0.4, zoom=0.7, rotate=0.1)
 
-    s normal2 "We should take this back to the lab for further analysis."
+    s write "We should take this back to the lab for further analysis."
 
     python:
         removal_list = ["uv_light", "magnetic_powder", "scalebar", "tape", "backing_card", "gel_lifter", "evidence_bag"]
@@ -40,7 +40,7 @@ label vitamins:
     show vitamins
     
 
-    "Various vitamins and supplements."
+    "{color=#88F3FF}Various vitamins and supplements.{/color}"
 
     show screen back_to_cabinet
 

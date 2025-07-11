@@ -18,7 +18,9 @@ init python:
         "reagent": [("images/dropper_filled.png", 0, 49)],
         "hydrogen": [("images/dropper_filled.png", 0, 49)],
         "hand": [("images/default_hand.png", 0, 0)],
-        "hand_grab": [("images/grab_hand.png", 0, 0)]
+        "hand_grab": [("images/grab_hand.png", 0, 0)],
+        "luminol": [("images/luminol_cursor.png", 0, 0)],
+        "luminol_tilt": [("images/luminol_cursor_tilt.png", 0, 0)],
     }
 
     packaging = False  # Used to determine if the player is packaging evidence
@@ -91,7 +93,6 @@ init python:
 
     # Used to keep track of what evidence has been encountered
     # This is used to display the evidence markers and enable respective photos
-    # TODO
     encountered = {
         "cabinet": False,
 
@@ -186,35 +187,37 @@ label start:
     $ default_mouse = "default"
     scene apt
 
-    # "June 13, 2025 12:20 PM. 15 Walmer Road."
-    # show nina normal1
-    # s "Officer, it's good to see you."
-    # show nina normal2
-    # s "Sorry to call you in during your break, but we got an urgent call from this apartment at {color=#00ff00}11:45 AM{/color}."
-    # s "The victim, Eaton Poisson, was found dead in his living room by his roomate, Chet Erv"
-    # s "He says he had come back from a morning run and found Eaton lying on the floor, unresponsice and with blood dripping out of a puncture in his thigh."
-    # show nina normal1
-    # s "Let me give you a quick rundown of what we know so far."
-    # s "The victim is 19 years old, and he and his roommate are both varisty track-and-field athletes on the University of Rotonro team."
-    # s "Eaton was apparently one of the best runners on the team, in great health and with no underlying medical conditions."
-    # s "Him and his roommate are both on a strict diet, taking vitamin supplements and not permitted to drink alcohol."
-    # show nina write1
-    # s "However, over a week ago, Eaton started to complain of {color=#00ff00}random bruising and pain.{/color}"
-    # s "His doctor thought it was related to a vitamin deficiency, and prescribed him some vitamin K supplements."
-    # s "However, it seems like that didn't help with his condition."
-    # show nina thinknote1
-    # s "Furthermore, when the police arrived at the scene, they noted that there was an {color=#00ff00}unusual amount of blood coming from the puncture wound.{/color}"
-    # s "There were no signs of a struggle or any other serious wounds, so we believe this might be the work of some toxin."
-    # s "And that's all we know so far."
-    # s "The body has been moved to the morgue, but the room itself remains untouched."
-    # s "I need you to be thorough."
-    # s "Look for any relevant evidence and collect fingerprints."
-    # show nina normal2
-    # s "Remember, time is of the essence. We need to gather all the evidence we can before it gets contaminated or lost."
-    # # s "You can check your collected evidence at anytime through the {color=#00ff00}casefile{/color} on the top left corner"
-    # show nina normal3
-    # s "Good luck, Officer. We're counting on you to help us solve this case."
-    $ print("test")
+    "June 13, 2025 12:20 PM. 15 Walmer Road."
+    show nina talk
+    s "Officer, it's good to see you."
+    show nina normal 
+    s "Sorry to call you in during your break, but we got an urgent call from this apartment at {color=#00ff00}11:45 AM{/color}."
+    show nina normal
+    s "The victim, Eaton Poisson, was found dead in his living room by his roomate, Chet Erv"
+    s "He says he had come back from a morning run and found Eaton lying on the floor, unresponsice and with blood dripping out of a puncture in his thigh."
+    show nina talk
+    s "Let me give you a quick rundown of what we know so far."
+    show nina write
+    s "The victim is 19 years old, and he and his roommate are both varisty track-and-field athletes on the University of Rotonro team."
+    s "Eaton was apparently one of the best runners on the team, in great health and with no underlying medical conditions."
+    s "Him and his roommate are both on a strict diet, taking vitamin supplements and not permitted to drink alcohol."
+    show nina think
+    s "However, over a week ago, Eaton started to complain of {color=#00ff00}random bruising and pain.{/color}"
+    s "His doctor thought it was related to a vitamin deficiency, and prescribed him some vitamin K supplements."
+    s "However, it seems like that didn't help with his condition."
+    show nina talk
+    s "Furthermore, when the police arrived at the scene, they noted that there was an {color=#00ff00}unusual amount of blood coming from the puncture wound.{/color}"
+    show nina normal
+    s "There were no signs of a struggle or any other serious wounds, so we believe this might be the work of some toxin."
+    s "And that's all we know so far."
+    show nina talk
+    s "The body has been moved to the morgue, but the room itself remains untouched."
+    s "I need you to be thorough."
+    s "Look for any relevant evidence and collect fingerprints."
+    show nina normal
+    s "Remember, time is of the essence. We need to gather all the evidence we can before it gets contaminated or lost."
+    # s "You can check your collected evidence at anytime through the {color=#00ff00}casefile{/color} on the top left corner"
+    s "Good luck, Officer. We're counting on you to help us solve this case."
     jump corridor  
 
 label corridor:
@@ -287,8 +290,7 @@ label corridor:
 
     $all_pieces = 0
 
-    # This changes the background image depending on whether or not the player has collected the gin bottle
-    # TODO
+    # This changes the background image depending on whether or not the player has...
     if analyzed["carpet_cut packaged"]:
         scene apt cut
     else:
@@ -299,11 +301,10 @@ label corridor:
     # if all(value == True for value in analyzed.values()):
     if analyzed["fingerprint"] and analyzed["handprint"] and analyzed["carpet"] and analyzed["drip"] and analyzed["steroids"] and analyzed["pillbox"] and analyzed["needle"] and analyzed["tylenol"] and analyzed["rat_poison"]:
         $ hide_all_inventory()
-        show nina normal3
+        show nina talk
         s "Well done. It looks like you've processed quite a lot of evidence!"
-        show nina normal1
+        show nina normal
         s "Tomorrow you can head into the lab to analyze them."
-        show nina normal3
         s "But for now, give yourself a pat on the back and rest well. Tomorrow's going to be a busy day!"
         return
     call screen apt

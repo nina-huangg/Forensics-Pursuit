@@ -23,7 +23,7 @@ label handprint:
         $ analyzing["counter"] = False
         $ analyzing["handprint"] = False
         scene handprint on gel lifter
-        s normal2 "You've already analyzed this print."
+        s normal "You've already analyzed this print."
         jump corridor
     $ analyzing["handprint"] = True
 
@@ -38,9 +38,9 @@ label handprint_dusted:
 
 label handprint_gel:
     scene handprint
-    s normal2 "Let's remove the gel lifter carefully now..."
+    s write "Let's remove the gel lifter carefully now..."
     scene handprint on gel lifter
-    s normal3 "Perfect! Now to package it!"
+    s talk "Perfect! Now to package it!"
     call screen toolbox
 
 label handprint_scalebar:
@@ -81,7 +81,7 @@ label fingerprint:
     if analyzed["fingerprint"]:
         $ tools["magnetic powder"] = False
         scene fingerprint backing
-        s normal2 "You've already analyzed this print."
+        s normal "You've already analyzed this print."
         jump corridor
     $ analyzing["fingerprint"] = True
     scene fingerprint
@@ -138,6 +138,7 @@ label packaging_1:
     hide backing handprint
     hide steroids
     hide pillbox
+    hide capsules
     hide carpet_sample
 
     show darken_overlay
@@ -175,6 +176,8 @@ label packaging_2:
     call screen tape_to_bag
 
 label packaging_3:
+    play sound "audio/tape.mp3"
+    
     show casefile_evidence_idle at Transform(xpos=0.3, ypos=0.24)
     if analyzing["fingerprint"]:
         "The fingerprint has been added to your evidence."

@@ -1,19 +1,18 @@
-2025-07-11 02:34:47 UTC
+2025-07-11 09:28:54 UTC
 Windows-10-10.0.26100
 Ren'Py 8.3.7.25031702
 
-Early init took 0.06s
-Loading error handling took 0.02s
-Loading script took 0.15s
+Early init took 0.07s
+Loading error handling took 0.03s
+Loading script took 0.23s
 Loading save slot metadata took 0.03s
 Loading persistent took 0.00s
-Running init code took 0.04s
-Loading analysis data took 0.02s
+Running init code took 0.06s
+Loading analysis data took 0.01s
 Analyze and compile ATL took 0.00s
 Reloading save slot metadata took 0.02s
 Index archives took 0.00s
-Backing up script files to 'C:\\Users\\colle\\AppData\\Roaming/RenPy/backups\\New UI Sore Loser':
-Dump and make backups took 0.04s
+Dump and make backups took 0.05s
 Cleaning cache took 0.00s
 Making clean stores took 0.00s
 Initial gc took 0.04s
@@ -24,14 +23,14 @@ Creating interface object took 0.00s
 Cleaning stores took 0.00s
 Init translation took 0.00s
 Build styles took 0.00s
-Load screen analysis took 0.00s
-Analyze screens took 0.02s
-Save screen analysis took 0.03s
-Prepare screens took 0.12s
+Load screen analysis took 0.04s
+Analyze screens took 0.00s
+Save screen analysis took 0.00s
+Prepare screens took 0.11s
 Save pyanalysis. took 0.00s
-Save bytecode. took 0.03s
+Save bytecode. took 0.04s
 Running _start took 0.00s
-Interface start took 0.38s
+Interface start took 0.53s
 
 Initializing gl2 renderer:
 primary display bounds: (0, 0, 2880, 1800)
@@ -43,4 +42,3 @@ Version: b'4.6.0 - Build 30.0.101.1003'
 Display Info: None
 Screen sizes: virtual=(1920, 1080) physical=(2744, 1544) drawable=(2744, 1544)
 Maximum texture size: 4096x4096
-test

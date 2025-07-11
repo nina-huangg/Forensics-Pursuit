@@ -17,7 +17,7 @@ label lower_cabinet:
 
     if analyzed["rat_poison"]:
         scene lower cabinet no poison
-        s normal2 "There's nothing else to analyze here."
+        s normal "There's nothing else to analyze here."
         $ analyzing["lower_cabinet"] = False
         jump corridor
     else:
@@ -29,9 +29,9 @@ label rat_poison:
     show darken_overlay
     show rat poison at Transform(xpos=0.35, ypos=0.1)
 
-    "{color=#2ac975}It's a bag of rat poison that's half full. The crumbly pellets are a dark green, giving off a garlic-y odour.{/color}"
+    "{color=#88F3FF}It's a bag of rat poison that's half full. The crumbly pellets are a dark green, giving off a garlic-y odour.{/color}"
 
-    s normal2 "This seems suspicious... we should analyze this more closely at the lab."
+    s write "This seems suspicious... we should analyze this more closely at the lab."
 
     $ tools["bag"] = True
     $ addToToolbox(["evidence_bag", "tamper_evident_tape"])
