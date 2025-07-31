@@ -1,0 +1,10 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/script.rpy", line 595: The hotspot statement is not a valid child of the imagebutton statement.
+    hotspot (50, 180, 40, 40) action Function(toggle_element, "H")
+           ^
+
+Ren'Py Version: Ren'Py 8.3.7.25031702
+Fri Jul 25 01:42:47 2025

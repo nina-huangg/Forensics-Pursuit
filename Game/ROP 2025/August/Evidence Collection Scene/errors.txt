@@ -1,0 +1,9 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/custom_screens.rpy", line 141: is not terminated with a newline. (Check strings and parenthesis.)
+            hotspot (529, 157, 120, 112) action If(
+
+Ren'Py Version: Ren'Py 8.3.7.25031702
+Sat Jul 19 20:01:24 2025

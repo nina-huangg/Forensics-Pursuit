@@ -1,46 +1,23 @@
-2024-08-12 03:52:46 UTC
-Windows-10-10.0.19045
-Ren'Py 8.2.1.24030407
+Sun Jun  8 20:16:10 2025
+Windows-10-10.0.26100
+Ren'Py 8.1.0.23051307
+ 
 
-Early init took 0.47s
-Loading error handling took 0.21s
-Loading script took 1.29s
-Loading save slot metadata took 1.02s
-Loading persistent took 0.00s
-Set script version to: (8, 1, 0)
- - Init at game/draw.rpy:1 took 0.30805 s.
-Running init code took 0.92s
-Loading analysis data took 0.08s
-Analyze and compile ATL took 0.01s
-Reloading save slot metadata took 0.41s
-Index archives took 0.00s
-Dump and make backups took 0.17s
-Cleaning cache took 0.00s
-Making clean stores took 0.00s
-Initial gc took 0.09s
-DPI scale factor: 1.500000
-nvdrs: Loaded, about to disable thread optimizations.
-nvdrs: b"Couldn't load nvlib." (can be ignored)
-Creating interface object took 0.01s
-Cleaning stores took 0.00s
-Init translation took 0.12s
-Build styles took 0.02s
-Load screen analysis took 0.18s
-Analyze screens took 0.00s
-Save screen analysis took 0.00s
-Prepare screens took 0.38s
-Save pyanalysis. took 0.00s
-Save bytecode. took 0.00s
-Running _start took 0.00s
-Interface start took 1.01s
+Bootstrap to the start of init.init. took 0.02s
+Early init. took 0.00s
+Loader init. took 0.01s
+Loading error handling. took 0.09s
 
-Initializing gl2 renderer:
-primary display bounds: (0, 0, 1920, 1080)
-swap interval: 1 frames
-Windowed mode.
-Vendor: "b'Intel'"
-Renderer: b'Intel(R) HD Graphics 620'
-Version: b'4.6.0 - Build 31.0.101.2111'
-Display Info: None
-Screen sizes: virtual=(1920, 1080) physical=(1731, 974) drawable=(1731, 974)
-Maximum texture size: 4096x4096
+Full traceback:
+  File "D:\August\uni\csc299\Forensics-Pursuit\Game\ROP 2024\Vivian-S\KAR Evidence Collection Scene\renpy\bootstrap.py", line 275, in bootstrap
+    renpy.main.main()
+  File "D:\August\uni\csc299\Forensics-Pursuit\Game\ROP 2024\Vivian-S\KAR Evidence Collection Scene\renpy\main.py", line 492, in main
+    renpy.game.script.load_script() # sets renpy.game.script.
+  File "D:\August\uni\csc299\Forensics-Pursuit\Game\ROP 2024\Vivian-S\KAR Evidence Collection Scene\renpy\script.py", line 310, in load_script
+    self.load_appropriate_file(".rpyc", [ "_ren.py", ".rpy" ], dir, fn, initcode)
+  File "D:\August\uni\csc299\Forensics-Pursuit\Game\ROP 2024\Vivian-S\KAR Evidence Collection Scene\renpy\script.py", line 880, in load_appropriate_file
+    raise Exception("Could not load file %s." % lastfn) # type: ignore
+Exception: Could not load file D:\August\uni\csc299\Forensics-Pursuit\Game\ROP 2024\Vivian-S\KAR Evidence Collection Scene\game/_draw.rpyc.
+
+While loading the script.
+Exception: Could not load file D:\August\uni\csc299\Forensics-Pursuit\Game\ROP 2024\Vivian-S\KAR Evidence Collection Scene\game/_draw.rpyc.
