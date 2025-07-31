@@ -1,0 +1,42 @@
+# compiled
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# renpy cache
+**/cache/
+*.rpyc
+*.rpyb
+
+# Ren'Py save files
+**/saves/
+*.save
+**/persistent
+
+# Log and error files
+*.log
+*.txt
+traceback.txt
+files.txt
+
+# Ignore translation files
+**/tl/
+
+# Ignore compiled shaders
+*.rps
+    
+# Ignore navigation JSON
+navigation.json
+
+# Ignore macOS system files
+**/.DS_Store
+
+# Ignore vscode-related stuff
+**/.vscode/

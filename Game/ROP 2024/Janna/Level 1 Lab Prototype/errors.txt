@@ -1,8 +1,0 @@
-﻿I'm sorry, but errors were detected in your script. Please correct the
-errors listed below, and try again.
-
-
-File "game/oven.rpy", line 154: Indentation mismatch.
-
-Ren'Py Version: Ren'Py 8.2.1.24030407
-Sun Aug 11 14:07:27 2024

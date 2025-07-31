@@ -1,9 +1,0 @@
-renpy.dissolve renpy.geometry
-renpy.geometry renpy.solid
-renpy.alpha renpy.geometry renpy.texture
-renpy.alpha renpy.texture
-renpy.ftl
-renpy.geometry renpy.texture
-renpy.solid
-renpy.texture
-renpy.dissolve renpy.dissolve
