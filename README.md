@@ -1,21 +1,13 @@
-# Forensics Pursuit 🔎
+# Concrete Evidence
+Forensics Pursuit ROP: Concrete Evidence
 
-<p align="center">
-   <img src="https://github.com/user-attachments/assets/06af8626-6d68-47a4-a8d0-961c6c68ab33" width="550" height="350">
-  <p align="center"> Splashscreen developed by the lovely Vivian Song! 👩🏻‍🎨 </p>
-</p>
+Check out the [itch page](https://hemmatio.itch.io/forensic-pursuits-2025)
 
-Forensics Pursuit is a collection of forensics games, developed to educate forensics students on crime scene analysis.
-This collection comprises engaging and comprehensive levels that delve into the intricacies of forensic evidence collection and processing. In particular, students will explore the critical steps in forensic investigations, starting with **evidence collection**, **laboratory processing**, and ultimately, **courtroom testimonies**. Our goal is for students to develop a deep understanding of how forensic science plays a pivotal role in solving crimes and delivering justice! 
+# Server guide
+The webserver will run by default on `localhost:3000`, which is also what the game is configured to write to.
+The api route is `/api/submit-progress`. Further details can be found in `index.js`.
+Currently, the lab scene has progress tracking implemented.
+The websever saves all saved progress to `progress-log.json`.
 
-The games are developed using Ren'Py, a visual novel engine that runs on Python. 
-
-## About the game
-Information and setup instructions about the game can be found on our [wiki](https://github.com/nina-huangg/Forensics-Pursuit/wiki) 🫧📄 <br/><br/>
-Each folder also has a README that provides an overview of its contents!
-
-## Updates
-This repository is maintained actively, so if you encounter any bugs/challenges, please raise an issue!
-
-Like our work?
-Give the repository a star ⭐️ 
+## Starting the server
+Ensure that your `cd` is `webserver`. Then, run `npm start`. This will start the server and open the API endpoint.

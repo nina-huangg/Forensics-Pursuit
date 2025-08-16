@@ -1,0 +1,52 @@
+[
+  {
+    "username": "desktop_user",
+    "pcr_completed": true,
+    "dna_matches_found": 0,
+    "mistakes_made": 0,
+    "time_spent": 12.263000011444092,
+    "timestamp": 1753424489.633,
+    "server_timestamp": 1753424566.459,
+    "logged_at": "2025-07-25T06:22:46.459Z"
+  },
+  {
+    "username": "desktop_user",
+    "pcr_completed": true,
+    "dna_matches_found": 0,
+    "mistakes_made": 0,
+    "time_spent": 8.551999807357788,
+    "timestamp": 1753424977.6739998,
+    "server_timestamp": 1753424977.706,
+    "logged_at": "2025-07-25T06:29:37.706Z"
+  },
+  {
+    "username": "desktop_user",
+    "pcr_completed": true,
+    "dna_matches_found": 1,
+    "mistakes_made": 0,
+    "time_spent": 34.65300011634827,
+    "timestamp": 1753425003.775,
+    "server_timestamp": 1753425003.785,
+    "logged_at": "2025-07-25T06:30:03.785Z"
+  },
+  {
+    "username": "desktop_user",
+    "pcr_completed": true,
+    "dna_matches_found": 0,
+    "mistakes_made": 0,
+    "time_spent": 16.735000133514404,
+    "timestamp": 1753425085.7910001,
+    "server_timestamp": 1753425085.807,
+    "logged_at": "2025-07-25T06:31:25.807Z"
+  },
+  {
+    "username": "desktop_user",
+    "pcr_completed": true,
+    "dna_matches_found": 1,
+    "mistakes_made": 0,
+    "time_spent": 90.26699995994568,
+    "timestamp": 1753425159.323,
+    "server_timestamp": 1753425159.334,
+    "logged_at": "2025-07-25T06:32:39.334Z"
+  }
+]

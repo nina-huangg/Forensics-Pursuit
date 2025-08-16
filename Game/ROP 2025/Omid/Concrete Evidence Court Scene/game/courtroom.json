@@ -1,0 +1,31 @@
+[
+    {
+        "specialty": "Forensic Biology",
+        "evidence": [
+            {
+                "name": "DNA Analysis",
+                "image": "dna",
+                "description": "DNA analysis on blood found at the scene and on the recovered knives confirmed that the DNA profiles from both the male and female were consistent with the blood at the scene. This indicates that both individuals were present and sustained injuries in the location where the blood was found. The analysis also ruled out the presence of any third-party DNA, supporting the conclusion that the male and female were the only injured parties. However, due to the mixture of their blood and DNA, it cannot be determined who was at fault for the attack.",
+                "truth_base": [
+                    "DNA analysis method",
+                    "male and female DNA profiles from warrants matched the blood found at the scene",
+                    "knives contained DNA from both individuals",
+                    "no foreign DNA detected, only the male and female were injured",
+                    "mixture of DNA prevents determination of who was at fault"
+                ]
+            },
+            {
+                "name": "Blood Pattern Analysis",
+                "image": "faro",
+                "description": "Bloodstain pattern analysis was conducted using a FARO 3D laser scanner to capture precise spatial data from the scene. The data was processed in FARO Zone software to align high-resolution photographs with the 3D scan, allowing measurement of stain angles, trajectories, and areas of convergence. Analysis of the reconstructed scene showed patterns consistent with a knife attack, with cast-off and impact spatter indicating close-range sharp force trauma. These findings supported the conclusion that the injury and blood deposition occurred in the same area.",
+                "truth_base": [
+                    "FARO 3D laser scanner used to capture scene geometry",
+                    "FARO Zone software used to align photographs with 3D scan",
+                    "measured angles, trajectories, and areas of convergence",
+                    "spatter pattern consistent with knife attack",
+                    "patterns indicated injury and deposition occurred in same area"
+                ]
+            }
+        ]
+    }
+]
