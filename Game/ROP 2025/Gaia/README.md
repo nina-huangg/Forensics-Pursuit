@@ -1,1 +1,5 @@
-This is where you should push your code! Make sure to make a subdirectory within your folder to separate each of your levels (evidence collection, lab analysis, courtroom)
+## A Show To Die For
+
+Evidence collection level by Gaia and Jackie. 
+
+Player is called in to investigate theatre where an actor died. 
