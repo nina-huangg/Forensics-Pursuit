@@ -1,0 +1,221 @@
+{
+  "version": "1.0",
+  "description": "Photography scoring configuration for morgue forensic evidence documentation",
+
+  "locations": {
+    "knuckle1": {
+      "name": "Knuckle Injury",
+      "type": "closeup",
+      "description": "Close-up of knuckle injury on hand",
+      "optimal_settings": {
+        "lens": "105mm",
+        "aperture_index": 1,
+        "aperture_value": "F8",
+        "iso_index": 1,
+        "iso_value": 200,
+        "zoom_range": [3.2, 3.8],
+        "zoom_optimal": 3.5,
+        "composition": {
+          "theme_x_range": [0.45, 0.55],
+          "theme_y_range": [0.45, 0.55],
+          "theme_x_optimal": 0.5,
+          "theme_y_optimal": 0.5
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 30,
+        "exposure": 30,
+        "sharpness": 30,
+        "completeness": 10
+      },
+      "tips": "Use the macro lens (105mm) for close-up injury documentation. F8 provides good depth of field for surface detail."
+    },
+
+    "knuckle2": {
+      "name": "Knuckle Injury (Detail)",
+      "type": "closeup",
+      "description": "Detailed view of second knuckle injury",
+      "optimal_settings": {
+        "lens": "105mm",
+        "aperture_index": 1,
+        "aperture_value": "F8",
+        "iso_index": 0,
+        "iso_value": 100,
+        "zoom_range": [3.5, 4.0],
+        "zoom_optimal": 3.8,
+        "composition": {
+          "theme_x_range": [0.48, 0.52],
+          "theme_y_range": [0.48, 0.52],
+          "theme_x_optimal": 0.5,
+          "theme_y_optimal": 0.5
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 25,
+        "exposure": 30,
+        "sharpness": 35,
+        "completeness": 10
+      },
+      "critical": true,
+      "tips": "Maximum detail needed. Use low ISO (100) for clearest image. Center the wound precisely."
+    },
+
+    "hematoma": {
+      "name": "Hematoma",
+      "type": "closeup",
+      "description": "Bruising/hematoma on body",
+      "optimal_settings": {
+        "lens": "105mm",
+        "aperture_index": 2,
+        "aperture_value": "F11",
+        "iso_index": 1,
+        "iso_value": 200,
+        "zoom_range": [3.0, 3.6],
+        "zoom_optimal": 3.3,
+        "composition": {
+          "theme_x_range": [0.45, 0.55],
+          "theme_y_range": [0.45, 0.55],
+          "theme_x_optimal": 0.5,
+          "theme_y_optimal": 0.5
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 30,
+        "exposure": 30,
+        "sharpness": 30,
+        "completeness": 10
+      },
+      "tips": "Use F11 for good depth of field to capture the full extent of bruising. Include surrounding skin for context."
+    },
+
+    "laceration": {
+      "name": "Laceration",
+      "type": "closeup",
+      "description": "Laceration wound requiring documentation",
+      "optimal_settings": {
+        "lens": "105mm",
+        "aperture_index": 1,
+        "aperture_value": "F8",
+        "iso_index": 1,
+        "iso_value": 200,
+        "zoom_range": [3.2, 3.8],
+        "zoom_optimal": 3.5,
+        "composition": {
+          "theme_x_range": [0.45, 0.55],
+          "theme_y_range": [0.45, 0.55],
+          "theme_x_optimal": 0.5,
+          "theme_y_optimal": 0.5
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 25,
+        "exposure": 30,
+        "sharpness": 35,
+        "completeness": 10
+      },
+      "critical": true,
+      "tips": "CRITICAL: Laceration edges must be sharp and clear. Use F8 for optimal sharpness at close range."
+    },
+
+    "tattoo": {
+      "name": "Tattoo",
+      "type": "identification",
+      "description": "Personal identification tattoo on body",
+      "optimal_settings": {
+        "lens": "50mm",
+        "aperture_index": 1,
+        "aperture_value": "F8",
+        "iso_index": 2,
+        "iso_value": 300,
+        "zoom_range": [1.5, 2.0],
+        "zoom_optimal": 1.8,
+        "composition": {
+          "theme_x_range": [0.45, 0.55],
+          "theme_y_range": [0.45, 0.55],
+          "theme_x_optimal": 0.5,
+          "theme_y_optimal": 0.5
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 30,
+        "exposure": 25,
+        "sharpness": 35,
+        "completeness": 10
+      },
+      "tips": "Document the full tattoo clearly for identification purposes. Ensure all details are legible."
+    }
+  },
+
+  "scoring_system": {
+    "max_score": 100,
+    "grade_thresholds": {
+      "A+": 95,
+      "A": 90,
+      "A-": 85,
+      "B+": 80,
+      "B": 75,
+      "B-": 70,
+      "C+": 65,
+      "C": 60,
+      "C-": 55,
+      "D": 50,
+      "F": 0
+    },
+
+    "composition_scoring": {
+      "description": "Measures subject positioning and framing",
+      "perfect_center_points": 15,
+      "acceptable_range_points": 10,
+      "zoom_optimal_points": 15,
+      "zoom_acceptable_points": 10
+    },
+
+    "exposure_scoring": {
+      "description": "Measures ISO and aperture appropriateness",
+      "iso_exact_points": 15,
+      "iso_acceptable_points": 10,
+      "aperture_exact_points": 15,
+      "aperture_acceptable_points": 10
+    },
+
+    "sharpness_scoring": {
+      "description": "Measures lens choice and focus quality",
+      "lens_correct_points": 15,
+      "lens_acceptable_points": 5,
+      "focus_optimal_points": 15,
+      "focus_acceptable_points": 10
+    },
+
+    "completeness_scoring": {
+      "description": "Measures required elements presence",
+      "all_requirements_met": 10,
+      "missing_optional": 7,
+      "missing_required": 0,
+      "bonus_critical_perfect": 5
+    }
+  },
+
+  "tolerance_ranges": {
+    "composition": {
+      "theme_x_tolerance": 0.1,
+      "theme_y_tolerance": 0.1,
+      "zoom_tolerance_percent": 15
+    },
+    "exposure": {
+      "iso_exact_match": 0,
+      "iso_one_stop": 1,
+      "iso_two_stops": 2,
+      "aperture_exact_match": 0,
+      "aperture_one_stop": 1
+    },
+    "sharpness": {
+      "zoom_perfect_range_percent": 10,
+      "zoom_acceptable_range_percent": 25
+    }
+  }
+}
