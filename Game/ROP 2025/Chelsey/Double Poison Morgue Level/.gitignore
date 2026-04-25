@@ -1,0 +1,13 @@
+
+game/cache/
+game/*.rpyc
+game/*.rpymc
+
+game/saves/
+*.save
+persistent
+
+.DS_Store
+*.log
+
+.vscode/
