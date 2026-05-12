@@ -1,0 +1,85 @@
+[
+    {
+        "name": "Backing Card",
+        "image_name": "toolbox-backing_card",
+        "usable": true,
+        "action": "use_backing_card"
+    },
+    {
+        "name": "Cartridges",
+        "image_name": "toolbox-cartridges"
+    },
+    {
+        "name": "Empty Gun",
+        "image_name": "toolbox-empty_gun"
+    },
+    {
+        "name": "Ethanol",
+        "image_name": "toolbox-ethanol"
+    },
+    {
+        "name": "Evidence Bag",
+        "image_name": "toolbox-evidence_bag"
+    },
+    {
+        "name": "Gel Lifter",
+        "image_name": "toolbox-gel_lifter"
+    },
+    {
+        "name": "Gun All",
+        "image_name": "toolbox-gun_all"
+    },
+    {
+        "name": "Gun with Cartridges",
+        "image_name": "toolbox-gun_with_cartridges"
+    },
+    {
+        "name": "Hungarian Red",
+        "image_name": "toolbox-hungarian_red",
+        "description": "A red thing!"
+    },
+    {
+        "name": "Hydrogen Peroxide",
+        "image_name": "toolbox-hydrogen_peroxide"
+    },
+    {
+        "name": "Magnetic Powder",
+        "image_name": "toolbox-magnetic_powder"
+    },
+    {
+        "name": "PVS Kit",
+        "image_name": "toolbox-pvs_kit"
+    },
+    {
+        "name": "Reagent",
+        "image_name": "toolbox-reagent"
+    },
+    {
+        "name": "Scalebar",
+        "image_name": "toolbox-scalebar"
+    },
+    {
+        "name": "Swab Pack",
+        "image_name": "toolbox-swab_pack"
+    },
+    {
+        "name": "Tamper Evident Tape",
+        "image_name": "toolbox-tamper_evident_tape"
+    },
+    {
+        "name": "Tape",
+        "image_name": "toolbox-tape"
+    },
+    {
+        "name": "Tip",
+        "image_name": "toolbox-tip"
+    },
+    {
+        "name": "Tube",
+        "image_name": "toolbox-tube"
+    },
+    {
+        "name": "UV Light",
+        "image_name": "toolbox-uv_light"
+    }
+]

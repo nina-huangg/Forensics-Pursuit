@@ -1,0 +1,34 @@
+[
+    {
+        "name": "Fingerprint",
+        "image_name": "inventory-fingerprint"
+    },
+    {
+        "name": "Footprint",
+        "image_name": "inventory-footprint"
+    },
+    {
+        "name": "Gin",
+        "image_name": "inventory-gin"
+    },
+    {
+        "name": "Handprint",
+        "image_name": "inventory-handprint"
+    },
+    {
+        "name": "Jar in Bag",
+        "image_name": "inventory-jar_in_bag"
+    },
+    {
+        "name": "PVS in Bag",
+        "image_name": "inventory-pvs_in_bag"
+    },
+    {
+        "name": "Splatter",
+        "image_name": "inventory-splatter"
+    },
+    {
+        "name": "Tape in Bag",
+        "image_name": "inventory-tape_in_bag"
+    }
+]
