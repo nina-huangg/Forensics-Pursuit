@@ -1,0 +1,74 @@
+[
+    {
+        "name": "Fingerprint 1",
+        "image_name": "inventory-fingerprint",
+	"description": "Fingerprint from the top of the pill bottle",
+	"usable": true,
+	"action": "bag_item1"
+    },
+{
+        "name": "Bag Fingerprint 1",
+        "image_name": "inventory-sealedbag",
+	"description": "Fingerprint from the top of the pill bottle"
+    },
+{
+        "name": "Fingerprint 2",
+        "image_name": "inventory-fingerprint",
+	"usable": true,
+	"description": "Fingerprint from the plastic bag",
+	"action": "bag_item2"
+    },
+{
+        "name": "Bag Fingerprint 2",
+        "image_name": "inventory-sealedbag",
+	"description": "Fingerprint from the plastic bag"
+    },
+
+    {
+        "name": "Brownie",
+        "image_name": "inventory-brownie",
+	"description": "A brownie",
+	"usable": true,
+	"action": "bag_item4"
+    },
+{
+        "name": "Bag Brownie",
+        "image_name": "inventory-sealedbag",
+	"description": "A brownie"
+    },
+    {
+        "name": "Plastic bag",
+        "image_name": "inventory-weedbag",
+	"description": "A plastic bag containing some green substance",
+	"usable": true,
+	"action": "bag_item5"
+    },
+{
+        "name": "Bag Plastic bag",
+        "image_name": "inventory-sealedbag",
+	"description": "A plastic bag containing some green substance"
+    },
+    {
+        "name": "Pill bottle",
+        "image_name": "inventory-pill",
+	"description": "An unlabeled and empty orange pill bottle",
+	"usable": true,
+	"action": "bag_item6"
+    },
+{
+        "name": "Bag Pill bottle",
+        "image_name": "inventory-sealedbag",
+	"description": "An unlabeled and empty orange pill bottle"
+    },
+{
+	"name": "Parents Testimony",
+	"image_name": "inventory-test",
+	"description": "A testimony from Alastor Brahe's parents."
+    },
+{
+	"name": "Friend Testimony",
+	"image_name": "inventory-test",
+	"description": "A testimony from one of Alastor Brahe's friends."
+    }
+
+]
