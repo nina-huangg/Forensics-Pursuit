@@ -1,25 +1,43 @@
 [
     {
-        "name": "Fingerprint 1",
-        "image_name": "inventory-fingerprint",
+        "name": "Fingerprint 1 S",
+        "image_name": "inventory-finger1-scale",
+	"description": "Fingerprint from the top of the pill bottle",
+	"usable": true,
+	"action": "bag_item1"
+    },
+{
+        "name": "Fingerprint 1 NS",
+        "image_name": "inventory-finger1-noscale",
 	"description": "Fingerprint from the top of the pill bottle",
 	"usable": true,
 	"action": "bag_item1"
     },
 {
         "name": "Bag Fingerprint 1",
+	"usable": true,
+	"action": "bag_finger_1",
         "image_name": "inventory-sealedbag",
 	"description": "Fingerprint from the top of the pill bottle"
     },
 {
-        "name": "Fingerprint 2",
-        "image_name": "inventory-fingerprint",
+        "name": "Fingerprint 2 S",
+        "image_name": "inventory-finger2-scale",
+	"usable": true,
+	"description": "Fingerprint from the plastic bag",
+	"action": "bag_item2"
+    },
+{
+        "name": "Fingerprint 2 NS",
+        "image_name": "inventory-finger2-noscale",
 	"usable": true,
 	"description": "Fingerprint from the plastic bag",
 	"action": "bag_item2"
     },
 {
         "name": "Bag Fingerprint 2",
+	"usable": true,
+	"action": "bag_finger_2",
         "image_name": "inventory-sealedbag",
 	"description": "Fingerprint from the plastic bag"
     },
@@ -51,14 +69,14 @@
     {
         "name": "Pill bottle",
         "image_name": "inventory-pill",
-	"description": "An unlabeled and empty orange pill bottle",
+	"description": "A pill bottle with 2 pills left",
 	"usable": true,
 	"action": "bag_item6"
     },
 {
         "name": "Bag Pill bottle",
         "image_name": "inventory-sealedbag",
-	"description": "An unlabeled and empty orange pill bottle"
+	"description": "A pill bottle with 2 pills left"
     },
 {
 	"name": "Parents Testimony",
@@ -69,6 +87,61 @@
 	"name": "Friend Testimony",
 	"image_name": "inventory-test",
 	"description": "A testimony from one of Alastor Brahe's friends."
+    },
+{
+	"name": "Post blood sample",
+	"image_name": "blood_sample",
+	"description": "Post-mortem blood sample",
+	"usable": true,
+	"action": "use_postbs"
+
+    },
+{
+	"name": "Pre blood sample",
+	"image_name": "blood_sample",
+	"description": "Pre-mortem blood sample",
+	"usable": true,
+	"action": "use_prebs"
+
+    },
+{
+	"name": "Prepared post blood sample",
+	"image_name": "prepared_blood_sample",
+	"description": "Prep post-mortem blood sample",
+	"usable": true,
+	"action": "use_ppostbs"
+
+    },
+{
+	"name": "Prepared pre blood sample",
+	"image_name": "prepared_blood_sample",
+	"description": "Prep pre-mortem blood sample",
+	"usable": true,
+	"action": "use_pprebs"
+
     }
+,
+{
+	"name": "Hospital Report",
+	"image_name": "hospital_report",
+	"description": "Alastor's hospital report"
+
+    },
+{
+	"name": "Toxicology Report",
+	"image_name": "tox_report",
+	"description": "Alastor's toxicology report"
+
+
+    },
+{
+	"name": "House Party Photos",
+	"image_name": "photos",
+	"description": "Photos from the house party."
+
+
+    }
+
+
 
 ]

@@ -13,6 +13,8 @@ init -5 python:
         renpy.jump("useTape")
     def use_tamper_tape():
         renpy.jump("useTamperTape")
+    def use_glove():
+        renpy.jump("useGlove")
 
     def bag_item1():
         renpy.jump("bagItem1")
@@ -24,3 +26,29 @@ init -5 python:
         renpy.jump("bagItem5")
     def bag_item6():
         renpy.jump("bagItem6")
+
+    #fingerprint analysis in the lab
+    def bag_finger_1():
+        renpy.jump("bagFinger1")
+    def bag_finger_2():
+        renpy.jump("bagFinger2")
+
+    # LAB SPE
+    def use_Methanol():
+        renpy.jump("useMethanol")
+    def use_step3():
+        renpy.jump("useStep3")
+    def use_postbs():
+        renpy.jump("usePost")
+    def use_prebs():
+        renpy.jump("usePre")
+    def use_01formic():
+        renpy.jump("use01Formic")
+    def use_5amm():
+        renpy.jump("use5Amm")
+    def use_ppostbs():
+        renpy.jump("usePpostBS")
+    def use_pprebs():
+        renpy.jump("usePpreBS")
+    def use_water():
+        renpy.jump("useWater")
