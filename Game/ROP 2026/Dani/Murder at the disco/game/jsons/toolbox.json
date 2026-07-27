@@ -1,0 +1,137 @@
+[
+    {
+        "name": "Backing Card",
+        "image_name": "toolbox-backing_card",
+        "usable": true,
+        "action": "use_backing_card"
+    },
+    {
+        "name": "Cartridges",
+        "image_name": "toolbox-cartridges"
+    },
+    {
+        "name": "Empty Gun",
+        "image_name": "toolbox-empty_gun"
+    },
+    {
+        "name": "Ethanol",
+        "image_name": "toolbox-ethanol",
+        "usable": true,
+        "action": "use_ethanol"
+    },
+    {
+        "name": "Evidence Bag",
+        "image_name": "toolbox-evidence_bag",
+        "usable": true,
+        "action": "use_bag"
+    },
+    {
+        "name": "Gel Lifter",
+        "image_name": "toolbox-gel_lifter",
+        "usable": true,
+        "action": "use_lifter"
+    },
+    {
+        "name": "Gun All",
+        "image_name": "toolbox-gun_all"
+    },
+    {
+        "name": "Gun with Cartridges",
+        "image_name": "toolbox-gun_with_cartridges"
+    },
+    {
+        "name": "Hungarian Red",
+        "image_name": "toolbox-hungarian_red",
+        "description": "A red thing!",
+        "usable": true,
+        "action": "use_hungarian"
+    },
+    {
+        "name": "Hydrogen Peroxide",
+        "image_name": "toolbox-hydrogen_peroxide",
+        "usable": true,
+        "action": "use_hp"
+    },
+    {
+        "name": "Magnetic Powder",
+        "image_name": "toolbox-magnetic_powder",
+        "usable": true,
+        "action": "use_powder"
+    },
+    {
+        "name": "PVS Kit",
+        "image_name": "toolbox-pvs_kit"
+    },
+    {
+        "name": "Reagent",
+        "image_name": "toolbox-reagent",
+        "usable": true,
+        "action": "use_reagent"
+    },
+    {
+        "name": "Scalebar",
+        "image_name": "toolbox-scalebar",
+        "usable": true,
+        "action": "use_scalebar"
+    },
+    {
+        "name": "Swab Pack",
+        "image_name": "toolbox-swab_pack",
+        "description": "Used to collect wet fluid or blood samples from a crime scene.",
+        "usable": true,
+        "action": "use_swab_pack"
+    },
+    {
+        "name": "Tamper Evident Tape",
+        "image_name": "toolbox-tamper_evident_tape",
+        "usable": true,
+        "action": "use_tamper"
+    },
+    {
+        "name": "Tape",
+        "image_name": "toolbox-tape",
+        "usable": true,
+        "action": "use_tape"
+    },
+    {
+        "name": "Tip",
+        "image_name": "toolbox-tip"
+    },
+    {
+        "name": "Tube",
+        "image_name": "toolbox-tube",
+        "usable": true,
+        "action": "use_tube"
+    },
+    {
+        "name": "UV Light",
+        "image_name": "toolbox-uv_light",
+        "description": "A UV light.",
+        "usable": true,
+        "action": "use_uv_light"
+    },
+
+    {
+        "name": "Lysis Buffer",
+        "image_name": "toolbox-lysis",
+        "description": "Lysis buffer.",
+        "usable": true,
+        "action": "use_lysis"
+    },
+
+    {
+        "name": "Phenol Chloroform",
+        "image_name": "toolbox-phenol",
+        "description": "Phenol-chloroform.",
+        "usable": true,
+        "action": "use_phenol"
+    },
+
+    {
+        "name": "Proteinase K",
+        "image_name": "toolbox-protein",
+        "description": "Proteinase K.",
+        "usable": true,
+        "action": "use_protein"
+    }
+]
