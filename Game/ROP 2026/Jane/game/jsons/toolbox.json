@@ -1,0 +1,86 @@
+[
+    {
+        "name": "Evidence Markers",
+        "image_name": "toolbox-evidence_markers", 
+        "usable": true, 
+        "action": "use_evidence_markers"
+    },
+    {
+        "name": "Marquis Reagent",
+        "image_name": "toolbox-marquis_reagent", 
+        "usable": true, 
+        "action": "use_marquis_reagent"
+    },
+    {
+        "name": "Scott Reagent",
+        "image_name": "toolbox-scott_reagent", 
+        "usable": true, 
+        "action": "use_scott_reagent"
+    },
+    {
+        "name": "Spatula",
+        "image_name": "toolbox-spatula", 
+        "usable": true, 
+        "action": "use_spatula"
+    },
+    {
+        "name": "Tube",
+        "image_name": "toolbox-tube", 
+        "usable": true, 
+        "action": "use_tube"
+    },
+    {
+        "name": "Evidence Bag",
+        "image_name": "toolbox-evidence_bag", 
+        "usable": true, 
+        "action": "use_evidence_bag"
+    },
+    {
+        "name": "Tamper Evident Tape",
+        "image_name": "toolbox-tamper_evident_tape", 
+        "usable": true, 
+        "action": "use_tamper_evident_tape"
+    },
+    {
+        "name": "Distilled Water",
+        "image_name": "toolbox-distilled_water", 
+        "usable": true, 
+        "action": "use_distilled_water"
+    },
+    {
+        "name": "Superglue",
+        "image_name": "toolbox-superglue", 
+        "usable": true, 
+        "action": "use_superglue"
+    },
+    {
+        "name": "100% Methanol",
+        "image_name": "methanol",
+        "usable": true,
+        "action": "use_methanol"
+    },
+    {
+        "name": "1% Formic acid",
+        "image_name": "1_formic",
+        "usable": true,
+        "action": "use_step3"
+    },
+    {
+        "name": "0.1% Formic acid",
+        "image_name": "01_formic",
+        "usable": true,
+        "action": "use_01formic"
+    },
+    {
+        "name": "Methanol and 5% Ammonium Hydroxide",
+        "image_name": "5_amm",
+        "usable": true,
+        "action": "use_5amm"
+    },
+    {
+        "name": "Lab Notebook",
+        "image_name": "toolbox-notebook",
+        "usable": true,
+        "action": "view_lab_notebook"
+    }
+]
