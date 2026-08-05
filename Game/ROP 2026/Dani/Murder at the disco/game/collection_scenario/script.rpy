@@ -6,8 +6,6 @@
     evids = load_items("jsons/evidence.json")
     evidences = set()
 
-    #for evid in evids.values():
-    #    evidence.add_to_inventory(evid)
     flag1 = False
     flag2 = False
     flag3 = False
@@ -24,7 +22,12 @@
         ["e", "e", "r", "r", "h", "h"]
     ]
 
-    player_kastle_meyer_order = []
+    # FIX: scoped per area instead of one shared list, so an abandoned test
+    # on one sample can't bleed into the other.
+    player_kastle_meyer_order = {
+        "big splatter": [],
+        "small splatter": []
+    }
 
     encountered = {
         "big splatter": False,
@@ -47,9 +50,29 @@
         "fingerprint": False
     }
 
-    swab = False
+    # FIX: these now actually gate the steps that follow them.
+    swabbed = {
+        "big splatter": False,
+        "small splatter": False
+    }
+
+    uv_found = {
+        "handprint": False
+    }
+
+    lifted = {
+        "handprint": False,
+        "fingerprint": False
+    }
+
+    carded = {
+        "handprint": False,
+        "fingerprint": False
+    }
+
     scalebar = False
     tape = False
+
     tube = {
         "big splatter": False,
         "small splatter": False
@@ -73,6 +96,14 @@
         "big splatter": False,
         "small splatter": False
     }
+
+    def check_kastle_meyer(current_order):
+        for valid_order in valid_kastle_meyer_orders:
+            if current_order == valid_order:
+                return "complete"
+            if current_order == valid_order[:len(current_order)]:
+                return "progress"
+        return "fail"
 
 define n = Character(name=("Nina"), image="nina")
 
@@ -105,66 +136,102 @@ label swab_use_label:
             if analyzing["big splatter"]:
                 "I don't think wetting the swab is necessary, the blood's still wet."
                 jump swab_use_label
-            else:
+            elif analyzing["small splatter"]:
                 "Alright. Now we need to do our presumptive test."
-                $ toolbox.add_to_inventory(tools["Tube"])
+                $ swabbed["small splatter"] = True
                 jump right_wall
+            else:
+                jump game
         "Dry":
             if analyzing["small splatter"]:
                 "Don't you think we should wet the swab? This blood's already dried out."
                 jump swab_use_label
-            else:
+            elif analyzing["big splatter"]:
                 "Alright. Now we need to do our presumptive test."
-                $ toolbox.add_to_inventory(tools["Tube"])
+                $ swabbed["big splatter"] = True
                 jump big_splatter
+            else:
+                jump game
 
 label e_use_label:
-    "Adding a drop of ethanol."
-    $ player_kastle_meyer_order.append("e")
-    if analyzing["big splatter"]:
+    if analyzing["big splatter"] and swabbed["big splatter"] and not meyered["big splatter"]:
+        "Adding a drop of ethanol."
+        $ player_kastle_meyer_order["big splatter"].append("e")
         jump big_splatter
-    if analyzing["small splatter"]:
+    elif analyzing["small splatter"] and swabbed["small splatter"] and not meyered["small splatter"]:
+        "Adding a drop of ethanol."
+        $ player_kastle_meyer_order["small splatter"].append("e")
         jump right_wall
+    elif analyzing["big splatter"] or analyzing["small splatter"]:
+        "I should swab the sample before testing it."
+        jump game
+    else:
+        jump game
 
 label r_use_label:
-    "Adding a drop of reagent."
-    $ player_kastle_meyer_order.append("r")
-    if analyzing["big splatter"]:
+    if analyzing["big splatter"] and swabbed["big splatter"] and not meyered["big splatter"]:
+        "Adding a drop of reagent."
+        $ player_kastle_meyer_order["big splatter"].append("r")
         jump big_splatter
-    if analyzing["small splatter"]:
+    elif analyzing["small splatter"] and swabbed["small splatter"] and not meyered["small splatter"]:
+        "Adding a drop of reagent."
+        $ player_kastle_meyer_order["small splatter"].append("r")
         jump right_wall
+    elif analyzing["big splatter"] or analyzing["small splatter"]:
+        "I should swab the sample before testing it."
+        jump game
+    else:
+        jump game
 
 label h_use_label:
-    "Adding a drop of hydrogen peroxide."
-    $ player_kastle_meyer_order.append("h")
-    if analyzing["big splatter"]:
+    if analyzing["big splatter"] and swabbed["big splatter"] and not meyered["big splatter"]:
+        "Adding a drop of hydrogen peroxide."
+        $ player_kastle_meyer_order["big splatter"].append("h")
         jump big_splatter
-    if analyzing["small splatter"]:
+    elif analyzing["small splatter"] and swabbed["small splatter"] and not meyered["small splatter"]:
+        "Adding a drop of hydrogen peroxide."
+        $ player_kastle_meyer_order["small splatter"].append("h")
         jump right_wall
+    elif analyzing["big splatter"] or analyzing["small splatter"]:
+        "I should swab the sample before testing it."
+        jump game
+    else:
+        jump game
 
 label kastle_meyer_fail:
     "You destroyed the evidence by putting the wrong chemical. Take another swab."
-    $ player_kastle_meyer_order = []
     if analyzing["big splatter"]:
+        $ player_kastle_meyer_order["big splatter"] = []
+        $ swabbed["big splatter"] = False
         jump big_splatter
-    if analyzing["small splatter"]:
+    elif analyzing["small splatter"]:
+        $ player_kastle_meyer_order["small splatter"] = []
+        $ swabbed["small splatter"] = False
         jump right_wall
+    else:
+        jump game
 
 label kastle_meyer_success:
     "Great. Now you can send it to the lab."
-    $ player_kastle_meyer_order = []
     if analyzing["big splatter"]:
+        $ player_kastle_meyer_order["big splatter"] = []
         $ meyered["big splatter"] = True
+        $ identified["big splatter"] = True
         jump big_splatter
-    if analyzing["small splatter"]:
+    elif analyzing["small splatter"]:
+        $ player_kastle_meyer_order["small splatter"] = []
         $ meyered["small splatter"] = True
+        $ identified["small splatter"] = True
         jump right_wall
+    else:
+        jump game
 
 label uv_use_label:
     if analyzing["handprint"]:
         call screen dark_overlay_with_mouse
     else:
-        call screen dark_overlay_with_mouse2
+        "There's nothing here to search with the UV light right now."
+        jump game
 
 label bar_use_label:
     if identified["fingerprint"]:
@@ -175,8 +242,11 @@ label bar_use_label:
     jump right_wall
 
 label hungarian_use_label:
-    "I'll just spray a few drops..."
-    $ identified["fingerprint"] = True 
+    if analyzing["fingerprint"]:
+        "I'll just spray a few drops..."
+        $ identified["fingerprint"] = True
+    else:
+        "There's nothing here that needs that yet."
     jump right_wall
 
 label tape_use_label:
@@ -184,43 +254,61 @@ label tape_use_label:
         "Alright, let's lift it off with the tape. Carefully now..."
         scene right wall tape
         pause 1.0
-        scene right wal lifted
+        scene right wall lifted
         $ tape = True
+        $ lifted["fingerprint"] = True
     else:
         "Shouldn't you use the scalebar first?"
     jump right_wall
 
 label powder_use_label:
-    if analyzing["handprint"]:
+    if analyzing["handprint"] and uv_found["handprint"]:
         $ identified["handprint"] = True
         scene left wall mag
         "New photo taken for evidence."
         "I should lift it with the gel now I think."
+    elif analyzing["handprint"]:
+        "I should search this wall with the UV light first."
     jump left_wall
 
 label lifter_use_label:
     if identified["handprint"]:
         "Perfect."
+        $ lifted["handprint"] = True
     else:
         "I don't think I should use that right now."
     jump left_wall
 
 label card_use_label:
     if analyzing["handprint"]:
-        "That's a big print, but I got it all on the card, thankfully."
+        if lifted["handprint"]:
+            "That's a big print, but I got it all on the card, thankfully."
+            $ carded["handprint"] = True
+        else:
+            "I should lift the print with the gel first."
         jump left_wall
     else:
-        "Got the print."
+        if lifted["fingerprint"]:
+            "Got the print."
+            $ carded["fingerprint"] = True
+        else:
+            "I should lift the print with the tape first."
         jump right_wall
 
 label tube_use_label:
-    "Putting the swab in a tube..."
-    if analyzing["big splatter"]:
+    if analyzing["big splatter"] and meyered["big splatter"]:
+        "Putting the swab in a tube..."
         $ tube["big splatter"] = True
         jump big_splatter
-    if analyzing["small splatter"]:
+    elif analyzing["small splatter"] and meyered["small splatter"]:
+        "Putting the swab in a tube..."
         $ tube["small splatter"] = True
         jump right_wall
+    elif analyzing["big splatter"] or analyzing["small splatter"]:
+        "I should finish the presumptive test on the swab first."
+        jump game
+    else:
+        jump game
 
 label bag_use_label:
     if analyzing["big splatter"]:
@@ -233,20 +321,12 @@ label bag_use_label:
                     jump bag_use_label
                 "No":
                     "Guess we should use the tamper tape then."
-                    if analyzing["big splatter"]:
-                        $ cased["big splatter"] = True
-                        jump big_splatter
-                    if analyzing["small splatter"]:
-                        $ cased["small splatter"] = True
-                        $ analyzing["small splatter"] = False
-                        jump right_wall
-                    if analyzing["fingerprint"]:
-                        $ analyzing["fingerprint"] = False
-                        jump right_wall
+                    $ cased["big splatter"] = True
+                    jump big_splatter
         else:
             "Aren't you forgetting to put that swab in a tube?"
             jump big_splatter
-    if analyzing["small splatter"]:
+    elif analyzing["small splatter"]:
         if tube["small splatter"] == True:
             "Nice. You've put it in the bag."
             menu:
@@ -256,20 +336,13 @@ label bag_use_label:
                     jump bag_use_label
                 "No":
                     "Guess we should use the tamper tape then."
-                    if analyzing["big splatter"]:
-                        $ cased["big splatter"] = True
-                        jump big_splatter
-                    if analyzing["small splatter"]:
-                        $ cased["small splatter"] = True
-                        $ analyzing["small splatter"] = False
-                        jump right_wall
-                    if analyzing["fingerprint"]:
-                        $ analyzing["fingerprint"] = False
-                        jump right_wall
+                    $ cased["small splatter"] = True
+                    jump right_wall
         else:
             "Aren't you forgetting to put that swab in a tube?"
             jump right_wall
-    else:
+    elif analyzing["handprint"]:
+        if carded["handprint"]:
             "Nice. You've put it in the bag."
             menu:
                 "Send off to the lab?"
@@ -278,82 +351,104 @@ label bag_use_label:
                     jump bag_use_label
                 "No":
                     "Guess we should use the tamper tape then."
-                    if analyzing["handprint"]:
-                        jump left_wall
-                    if analyzing["big splatter"]:
-                        $ cased["big splatter"] = True
-                        jump big_splatter
-                    if analyzing["small splatter"]:
-                        $ cased["small splatter"] = True
-                        $ analyzing["small splatter"] = False
-                        jump right_wall
-                    if analyzing["fingerprint"]:
-                        $ analyzing["fingerprint"] = False
-                        jump right_wall
+                    $ cased["handprint"] = True
+                    jump left_wall
+        else:
+            "We should get this print onto a backing card before we bag it."
+            jump left_wall
+    elif analyzing["fingerprint"]:
+        if carded["fingerprint"]:
+            "Nice. You've put it in the bag."
+            menu:
+                "Send off to the lab?"
+                "Yes":
+                    "Someone forgot the tamper tape."
+                    jump bag_use_label
+                "No":
+                    "Guess we should use the tamper tape then."
+                    $ cased["fingerprint"] = True
+                    jump right_wall
+        else:
+            "We should get this print onto a backing card before we bag it."
+            jump right_wall
+    else:
+        jump game
 
 label tamper_use_label:
-    "Perfect! Now we can send it to the lab."
     if analyzing["handprint"]:
-        $ toolbox.delete_from_inventory(tools["UV Light"])
-        $ toolbox.delete_from_inventory(tools["Magnetic Powder"])
-        $ toolbox.delete_from_inventory(tools["Gel Lifter"])
-        $ toolbox.delete_from_inventory(tools["Backing Card"])
-        $ toolbox.delete_from_inventory(tools["Evidence Bag"])
-        $ toolbox.delete_from_inventory(tools["Tamper Evident Tape"])
-        $ analyzing["handprint"] = False
-        $ analyzed["handprint"] = True
-        $ evidence.add_to_inventory(evids["Handprint"])
-    if analyzing["big splatter"]:
-        $ toolbox.delete_from_inventory(tools["Swab Pack"])
-        $ toolbox.delete_from_inventory(tools["Tube"])
-        $ toolbox.delete_from_inventory(tools["Ethanol"])
-        $ toolbox.delete_from_inventory(tools["Reagent"])
-        $ toolbox.delete_from_inventory(tools["Hydrogen Peroxide"])
-        $ toolbox.delete_from_inventory(tools["Evidence Bag"])
-        $ toolbox.delete_from_inventory(tools["Tamper Evident Tape"])
-        $ analyzing["big splatter"] = False
-        $ analyzed["big splatter"] = True
-        $ evidence.add_to_inventory(evids["Splatter"])
-    if analyzing["small splatter"] and analyzing["fingerprint"] == False:
-        $ toolbox.delete_from_inventory(tools["Swab Pack"])
-        $ toolbox.delete_from_inventory(tools["Tube"])
-        $ toolbox.delete_from_inventory(tools["Ethanol"])
-        $ toolbox.delete_from_inventory(tools["Reagent"])
-        $ toolbox.delete_from_inventory(tools["Hydrogen Peroxide"])
-        $ analyzed["small splatter"] = True
-        $ evidence.add_to_inventory(evids["Splatter 2"])
-        $ evidences.add("sp")
-        jump right_wall
-    if analyzing["small splatter"] == False and analyzing["fingerprint"]:
-        $ toolbox.delete_from_inventory(tools["Hungarian Red"])
-        $ toolbox.delete_from_inventory(tools["Tape"])
-        $ toolbox.delete_from_inventory(tools["Scalebar"])
-        $ toolbox.delete_from_inventory(tools["Backing Card"])
-        $ toolbox.delete_from_inventory(tools["Evidence Bag"])
-        $ toolbox.delete_from_inventory(tools["Tamper Evident Tape"])
-        $ analyzed["fingerprint"] = True
-        $ evidence.add_to_inventory(evids["Fingerprint 1"])
-        $ evidences.add("f")
-        jump right_wall
-    if analyzing["small splatter"] and analyzing["fingerprint"]:
-        $ toolbox.delete_from_inventory(tools["Hungarian Red"])
-        $ toolbox.delete_from_inventory(tools["Tape"])
-        $ toolbox.delete_from_inventory(tools["Scalebar"])
-        $ toolbox.delete_from_inventory(tools["Backing Card"])
-        $ toolbox.delete_from_inventory(tools["Evidence Bag"])
-        $ toolbox.delete_from_inventory(tools["Tamper Evident Tape"])
-        if "f" in evidences:
-            $ evidence.add_to_inventory(evids["Splatter 2"])
+        if cased["handprint"]:
+            "Perfect! Now we can send it to the lab."
+            $ toolbox.delete_from_inventory(tools["UV Light"])
+            $ toolbox.delete_from_inventory(tools["Magnetic Powder"])
+            $ toolbox.delete_from_inventory(tools["Gel Lifter"])
+            $ toolbox.delete_from_inventory(tools["Backing Card"])
+            $ toolbox.delete_from_inventory(tools["Evidence Bag"])
+            $ toolbox.delete_from_inventory(tools["Tamper Evident Tape"])
+            $ analyzing["handprint"] = False
+            $ analyzed["handprint"] = True
+            $ evidence.add_to_inventory(evids["Handprint"])
         else:
-            $ evidence.add_to_inventory(evids["Fingerprint"])
-        $ analyzing["fingerprint"] = False
-        $ analyzed["small splatter"] = True
-        $ analyzed["fingerprint"] = True
-    jump game
+            "We need to bag this before we can seal it."
+        jump game
+
+    elif analyzing["big splatter"]:
+        if cased["big splatter"]:
+            "Perfect! Now we can send it to the lab."
+            $ toolbox.delete_from_inventory(tools["Swab Pack"])
+            $ toolbox.delete_from_inventory(tools["Tube"])
+            $ toolbox.delete_from_inventory(tools["Ethanol"])
+            $ toolbox.delete_from_inventory(tools["Reagent"])
+            $ toolbox.delete_from_inventory(tools["Hydrogen Peroxide"])
+            $ toolbox.delete_from_inventory(tools["Evidence Bag"])
+            $ toolbox.delete_from_inventory(tools["Tamper Evident Tape"])
+            $ analyzing["big splatter"] = False
+            $ analyzed["big splatter"] = True
+            $ evidence.add_to_inventory(evids["Splatter"])
+        else:
+            "We need to bag this before we can seal it."
+        jump game
+
+    elif analyzing["small splatter"]:
+        if cased["small splatter"]:
+            "Perfect! Now we can send it to the lab."
+            $ toolbox.delete_from_inventory(tools["Swab Pack"])
+            $ toolbox.delete_from_inventory(tools["Tube"])
+            $ toolbox.delete_from_inventory(tools["Ethanol"])
+            $ toolbox.delete_from_inventory(tools["Reagent"])
+            $ toolbox.delete_from_inventory(tools["Hydrogen Peroxide"])
+            $ analyzed["small splatter"] = True
+            $ evidence.add_to_inventory(evids["Splatter 2"])
+            $ evidences.add("sp")
+        else:
+            "We need to bag this before we can seal it."
+        jump right_wall
+
+    elif analyzing["fingerprint"]:
+        if cased["fingerprint"]:
+            "Perfect! Now we can send it to the lab."
+            $ toolbox.delete_from_inventory(tools["Hungarian Red"])
+            $ toolbox.delete_from_inventory(tools["Tape"])
+            $ toolbox.delete_from_inventory(tools["Scalebar"])
+            $ toolbox.delete_from_inventory(tools["Backing Card"])
+            $ toolbox.delete_from_inventory(tools["Evidence Bag"])
+            $ toolbox.delete_from_inventory(tools["Tamper Evident Tape"])
+            $ analyzed["fingerprint"] = True
+            $ analyzing["fingerprint"] = False
+            $ evidence.add_to_inventory(evids["Fingerprint 1"])
+            $ evidences.add("f")
+        else:
+            "We need to bag this before we can seal it."
+        jump game
+
+    else:
+        jump game
 
 label handprint:
+    # FIX: this used to fall through into `label sample` because it had no
+    # jump/return at the end.
+    $ uv_found["handprint"] = True
     "That's a pretty gnarly handprint."
-    call screen inventory
+    jump left_wall
 
 label sample:
     show nina normal1
