@@ -1,0 +1,17 @@
+[
+    { "name": "Backing Card", "image_name": "toolbox-backing_card", "usable": true, "action": "auto" },
+    { "name": "Ethanol", "image_name": "toolbox-ethanol", "usable": true, "action": "auto" },
+    { "name": "Evidence Bag", "image_name": "toolbox-evidence_bag", "usable": true, "action": "auto" },
+    { "name": "Hydrogen Peroxide", "image_name": "toolbox-hydrogen_peroxide", "usable": true, "action": "auto" },
+    { "name": "Magnetic Powder", "image_name": "toolbox-magnetic_powder", "usable": true, "action": "auto" },
+    { "name": "PVS Kit", "image_name": "toolbox-pvs_kit", "usable": true, "action": "auto" },
+    { "name": "Reagent", "image_name": "toolbox-reagent", "usable": true, "action": "auto" },
+    { "name": "Scalebar", "image_name": "toolbox-scalebar", "usable": true, "action": "auto" },
+    { "name": "Swab Pack", "image_name": "toolbox-swab_pack", "usable": true, "action": "auto" },
+    { "name": "Tamper Evident Tape", "image_name": "toolbox-tamper_evident_tape", "usable": true, "action": "auto" },
+    { "name": "Tape", "image_name": "toolbox-tape", "usable": true, "action": "auto" },
+    { "name": "Tip", "image_name": "toolbox-tip", "usable": true, "action": "auto" },
+    { "name": "Tube", "image_name": "toolbox-tube", "usable": true, "action": "auto" },
+    { "name": "UV Light", "image_name": "toolbox-uv_light", "usable": true, "action": "auto" },
+    { "name": "Gloves", "image_name": "toolbox-gloves", "usable": true, "action": "auto" }
+]

@@ -1,0 +1,11 @@
+renpy.geometry renpy.texture
+renpy.solid
+renpy.alpha renpy.texture
+renpy.alpha renpy.geometry renpy.texture
+renpy.ftl
+renpy.geometry renpy.matrixcolor renpy.texture
+renpy.texture
+renpy.dissolve renpy.geometry
+renpy.geometry renpy.solid
+renpy.matrixcolor renpy.texture
+renpy.dissolve renpy.dissolve
