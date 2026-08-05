@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Ethanol",
+    "image_name": "toolbox-ethanol",
+    "description": "Ethanol used during DNA extraction.",
+    "usable": true,
+    "action": "use_lab_ethanol"
+  },
+  {
+    "name": "Tube",
+    "image_name": "toolbox-tube",
+    "description": "A 2 mL tube used during DNA extraction.",
+    "usable": true,
+    "action": "use_lab_tube"
+  },
+  {
+    "name": "Biohazard Waste",
+    "image_name": "toolbox-garbage",
+    "description": "Discard liquid or used tubes as biohazard waste.",
+    "usable": true,
+    "action": "use_lab_trash"
+  },
+  {
+    "name": "Column",
+    "image_name": "toolbox-column",
+    "description": "A spin column used for DNA extraction.",
+    "usable": true,
+    "action": "use_column"
+  },
+  {
+    "name": "Collection Tube",
+    "image_name": "toolbox-collection-tube",
+    "description": "A collection tube used during DNA extraction.",
+    "usable": true,
+    "action": "use_collection_tube"
+  }
+]

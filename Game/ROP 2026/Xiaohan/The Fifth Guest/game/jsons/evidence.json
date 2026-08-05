@@ -1,0 +1,129 @@
+[
+  {
+    "name": "Fingerprint",
+    "image_name": "inventory-fingerprint"
+  },
+  {
+    "name": "Footprint",
+    "image_name": "inventory-footprint"
+  },
+  {
+    "name": "Gin",
+    "image_name": "inventory-gin"
+  },
+  {
+    "name": "Handprint",
+    "image_name": "inventory-handprint"
+  },
+  {
+    "name": "Jar in Bag",
+    "image_name": "inventory-jar_in_bag"
+  },
+  {
+    "name": "PVS in Bag",
+    "image_name": "inventory-pvs_in_bag"
+  },
+  {
+    "name": "Splatter",
+    "image_name": "inventory-splatter"
+  },
+  {
+    "name": "Tape in Bag",
+    "image_name": "inventory-tape_in_bag"
+  },
+  {
+    "name": "Photo of Shoeprint",
+    "image_name": "inventory-shoeprint-photo",
+    "description": "A photograph of the shoeprint found on the study door floor."
+  },
+  {
+    "name": "Photo of Blood Splatter",
+    "image_name": "inventory-blood-splash",
+    "description": "A photograph of the blood splatter found in the study."
+  },
+  {
+    "name": "Photo of Lamp (Far)",
+    "image_name": "inventory-lamp-far-photo",
+    "description": "A photograph of the lamp from a distance, showing the study background."
+  },
+  {
+    "name": "Photo of Lamp",
+    "image_name": "inventory-lamp-photo",
+    "description": "A close-up photograph of the study lamp."
+  },
+  {
+    "name": "Swab with Blood (Lamp)",
+    "image_name": "toolbox-swab_pack",
+    "description": "A cotton swab containing a sample of the blood from the lamp."
+  },
+  {
+    "name": "Tube with Swab (Lamp)",
+    "image_name": "toolbox-tube",
+    "description": "A test tube containing the collected lamp blood sample swab."
+  },
+  {
+    "name": "Swab with Blood (Floor)",
+    "image_name": "toolbox-swab_pack",
+    "description": "A cotton swab containing a floor blood pool sample."
+  },
+  {
+    "name": "Tube with Swab (Floor)",
+    "image_name": "toolbox-tube",
+    "description": "A test tube containing the collected floor blood pool sample swab."
+  },
+  {
+    "name": "Photo of Shoeprint with Scalebar",
+    "image_name": "inventory-shoeprint-photo-scalebar",
+    "description": "A photograph of the shoeprint with a scalebar placed next to it for sizing reference."
+  },
+  {
+    "name": "Gel-Lifted Shoeprint",
+    "image_name": "inventory-gel-lifted-shoeprint",
+    "description": "A dust shoeprint lifted from the floor using a gel lifter."
+  },
+  {
+    "name": "Fingerprint Photo",
+    "image_name": "inventory-fingerprint-photo",
+    "description": "A close-up photograph of the fingerprint on the study lamp."
+  },
+  {
+    "name": "Fingerprint Alone Photo",
+    "image_name": "inventory-fingerprint-alone-photo",
+    "description": "A photograph of the fingerprint on the lamp, taken before any processing."
+  },
+  {
+    "name": "Fingerprint Circled Photo",
+    "image_name": "inventory-fingerprint-circled-photo",
+    "description": "A photograph of the circled fingerprint on the lamp, taken before applying powder."
+  },
+  {
+    "name": "Photo of Blood Pool",
+    "image_name": "inventory-bloodpool-photo",
+    "description": "A photograph of the blood pool found in the study."
+  },
+  {
+    "name": "Swab with Blood (Pool)",
+    "image_name": "toolbox-swab_pack",
+    "description": "A cotton swab containing a sample of the blood from the pool on the floor."
+  },
+  {
+    "name": "Tube with Swab (Pool)",
+    "image_name": "toolbox-tube",
+    "description": "A test tube containing the collected blood pool sample swab."
+  },
+  {
+    "name": "Processed Tube with Swab (Lamp)",
+    "image_name": "inventory-processed-swab-lamp",
+    "description": "Lamp blood swab cut into the tube with Buffer ATL and ProK added."
+  },
+  {
+    "name": "Processed Tube with Swab (Floor)",
+    "image_name": "inventory-processed-swab-floor",
+    "description": "Floor blood pool swab cut into the tube with Buffer ATL and ProK added."
+  },
+  {
+    "name": "Negative Control Tube",
+    "image_name": "toolbox-tube",
+    "description": "Negative control (ATL + ProK, no swab). Use on the benchtop centrifuge to balance the rotor opposite your sample."
+  }
+]
