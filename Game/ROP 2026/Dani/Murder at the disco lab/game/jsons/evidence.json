@@ -29,14 +29,61 @@
     },
     {
         "name": "Splatter",
-        "image_name": "inventory-splatter"
+        "description": "A swab from the large blood splatter on the floor.",
+        "image_name": "inventory-splatter",
+        "usable": true,
+        "action": "use_floor"
+        
     },
     {
         "name": "Splatter 2",
-        "image_name": "inventory-splatter"
+        "description": "A swab from the small blood stain on the bathroom wall.",
+        "image_name": "inventory-splatter",
+        "usable": true,
+        "action": "use_wall"
     },
     {
         "name": "Tape in Bag",
         "image_name": "inventory-tape_in_bag"
+    },
+    {
+        "name": "Swab Cutting in Tube",
+        "image_name": "inventory-step1"
+    },
+    {
+        "name": "Swab Cutting Solution",
+        "image_name": "inventory-step2"
+    },
+    {
+        "name": "Swab Cutting After Heating",
+        "image_name": "inventory-step3"
+    },
+    {
+        "name": "Solution after Phenol-Chloroform",
+        "image_name": "inventory-step4"
+    },
+    {
+        "name": "Solution after Vortexing",
+        "image_name": "inventory-step5"
+    },
+    {
+        "name": "Solution after First Centrifuging",
+        "image_name": "inventory-step6"
+    },
+    {
+        "name": "Solution after Pipetting",
+        "image_name": "inventory-step7"
+    },
+    {
+        "name": "Solution after Ethanol",
+        "image_name": "inventory-step8"
+    },
+    {
+        "name": "Solution after Freezing",
+        "image_name": "inventory-step9"
+    },
+    {
+        "name": "Solution after TE Buffer",
+        "image_name": "inventory-step10"
     }
 ]

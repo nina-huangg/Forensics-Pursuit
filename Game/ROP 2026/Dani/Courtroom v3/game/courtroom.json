@@ -1,0 +1,57 @@
+[
+    {
+        "specialty": "latent print analysis",
+        "evidence": [
+            {
+                "name": "Handprint Analysis",
+                "image": "handprint",
+                "description": "A latent handprint was recovered from the upper portion of the stall wall. Ridge detail comparison identified the print as belonging to Taylor Shift. The elevated placement of the print is consistent with a hand braced or raised against the wall at roughly shoulder height or above, rather than a hand resting at a lower, neutral position.",
+                "truth_base": [
+                    "handprint belongs to Taylor Shift",
+                    "print was found on the upper/top portion of the stall wall",
+                    "the elevated position of the handprint indicates Taylor's hands were likely raised or braced upward at the time it was left",
+                    "does not by itself confirm what action Taylor was performing, only the position of her hand"
+                ]
+            },
+            {
+                "name": "Fingerprint Analysis",
+                "image": "fingerprint",
+                "description": "A latent fingerprint rendered in blood was recovered at the scene. Serological testing confirmed the blood used to leave the print originated from Joe Talwyn, the victim. Ridge comparison matched this print against latent prints previously lifted from the broken glass bottle identified as the murder weapon, and both were found to belong to Travis Welce.",
+    "truth_base": [
+        "the fingerprint was left in blood, and that blood was confirmed to be Joe Talwyn's",
+        "the ridge pattern of the fingerprint itself was matched to Travis Welce",
+        "the print was compared against, and matched, prints lifted from the broken glass bottle — it was not itself found on the bottle",
+        "the print being in Joe's blood indicates Travis touched something after Joe was already bleeding, not necessarily that Travis caused the injury"
+    ]
+            }
+        ]
+    },
+    {
+        "specialty": "biology",
+        "evidence": [
+            {
+                "name": "Blood Spatter Analysis - Wall",
+                "image": "splatter_2",
+                "description": "A small blood spatter pattern was documented on the wall of the scene. DNA analysis of the sample confirmed the blood originated from Joe Talywn, the victim.",
+                "truth_base": [
+                    "DNA analysis method used to identify the source",
+                    "the blood is confirmed to belong to Joe Talywn",
+                    "this stain was located on the wall",
+                    "this is a comparatively small spatter pattern"
+                ]
+            },
+            {
+                "name": "Blood Spatter Analysis - Floor",
+                "image": "splatter",
+                "description": "A large blood spatter pattern was documented on the floor of the scene, collected as a separate sample from the wall spatter. DNA analysis confirmed this blood also originated from Joe Talywn, matching the profile obtained from the wall sample despite being an independently collected stain.",
+                "truth_base": [
+                    "DNA analysis method used to identify the source",
+                    "the blood is confirmed to belong to Joe Talywn",
+                    "this stain was located on the floor",
+                    "this is a comparatively large spatter pattern",
+                    "although collected as a separate swab from the wall spatter, the DNA profile matches it, meaning both stains came from the same person"
+                ]
+            }
+        ]
+    }
+]
