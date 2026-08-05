@@ -181,15 +181,22 @@ label nina_choose_extraction_tube:
     $ renpy.hide_screen("lab_notify")
     scene expression "backgrounds/station1.png"
     show nina talk at right
-    s "We've prepared both samples and the negative control."
-    s "The negative control has no swab — it checks for contamination. Keep it for the later steps."
-    s "Which sample tube should we continue with?"
-    menu:
-        "Processed Tube with Swab (Lamp)":
-            $ choose_extraction_tube("Processed Tube with Swab (Lamp)")
-        "Processed Tube with Swab (Floor)":
-            $ choose_extraction_tube("Processed Tube with Swab (Floor)")
-    s "I'll set the other sample aside. Next: pulse-vortex your sample, then the negative control."
+    if len(prep_processed_names) < 2:
+        $ _only_processed = PREP_TUBE_PROCESS_MAP.get(prep_processed_names[0], (None, None))[0]
+        s "You're missing one of the blood swabs, so we only have one sample and the negative control ready."
+        s "We'll only be able to run analysis on the one you have."
+        $ choose_extraction_tube(_only_processed)
+        s "Next: pulse-vortex your sample, then the negative control."
+    else:
+        s "We've prepared both samples and the negative control."
+        s "The negative control has no swab — it checks for contamination. Keep it for the later steps."
+        s "Which sample tube should we continue with?"
+        menu:
+            "Processed Tube with Swab (Lamp)":
+                $ choose_extraction_tube("Processed Tube with Swab (Lamp)")
+            "Processed Tube with Swab (Floor)":
+                $ choose_extraction_tube("Processed Tube with Swab (Floor)")
+        s "I'll set the other sample aside. Next: pulse-vortex your sample, then the negative control."
     hide nina
     $ try_extraction_tool("prep")
     jump return_bio_station

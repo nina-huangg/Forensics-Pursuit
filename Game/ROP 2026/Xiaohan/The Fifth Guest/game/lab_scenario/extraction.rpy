@@ -113,10 +113,10 @@ init -3 python:
         return store.centrifuge_balance_slot == centrifuge_opposite(store.centrifuge_sample_slot)
 
     def centrifuge_reset_rotor(return_sample=False):
+        # Tubes stay visible in Evidence the whole time they're equipped, so
+        # there's nothing to add back — just clear the rotor slot state.
         if return_sample and store.centrifuge_sample_item is not None:
-            store.is_packing_evidence = True
-            store.evidence.add_to_inventory(store.centrifuge_sample_item)
-            store.is_packing_evidence = False
+            custom_notify("Unheld: {}".format(store.centrifuge_sample_item.name), True)
         store.centrifuge_sample_slot = 0
         store.centrifuge_balance_slot = 0
         store.centrifuge_sample_item = None
@@ -215,10 +215,10 @@ init -3 python:
         return store.spinner_balance_slot == spinner_opposite(store.spinner_sample_slot)
 
     def spinner_reset_rotor(return_sample=False):
+        # Tubes stay visible in Evidence the whole time they're equipped, so
+        # there's nothing to add back — just clear the rotor slot state.
         if return_sample and store.spinner_sample_item is not None:
-            store.is_packing_evidence = True
-            store.evidence.add_to_inventory(store.spinner_sample_item)
-            store.is_packing_evidence = False
+            custom_notify("Unheld: {}".format(store.spinner_sample_item.name), True)
         store.spinner_sample_slot = 0
         store.spinner_balance_slot = 0
         store.spinner_sample_item = None
@@ -553,13 +553,12 @@ init -3 python:
         if store.prep_negative_active:
             store.prep_negative_active = False
 
-        store.evidence.delete_from_inventory(item)
         store.prep_equipped_item = item
         store.prep_equipped_source_name = source_name
         prep_reset_bench_flags()
         store.held_evidence = None
         renpy.hide_screen("inventory")
-        custom_notify("Equipped {} on the prep bench.".format(source_name), True)
+        custom_notify("Holding: {}.".format(source_name), True)
         renpy.restart_interaction()
         return True
 
@@ -582,7 +581,6 @@ init -3 python:
             custom_notify("Buffer AL already added to that tube.", True)
             return False
 
-        store.evidence.delete_from_inventory(item)
         store.prep_equipped_item = item
         store.prep_equipped_source_name = name
         store.prep_negative_active = False
@@ -591,9 +589,9 @@ init -3 python:
         if store.prep_al_selected:
             store.default_mouse = "micropipette"
             store.current_cursor = "micropipette"
-            custom_notify("Tube ready — click it to add 300 µL Buffer AL.", True)
+            custom_notify("Holding: {}. Click it to add 300 µL Buffer AL.".format(name), True)
         else:
-            custom_notify("Equipped {}. Select Buffer AL on the table, then click the tube.".format(name), True)
+            custom_notify("Holding: {}. Select Buffer AL on the table, then click the tube.".format(name), True)
         renpy.restart_interaction()
         return True
 
@@ -616,9 +614,6 @@ init -3 python:
             return
 
         store.extraction_step_tubes_done.append(tube_name)
-        store.is_packing_evidence = True
-        store.evidence.add_to_inventory(item)
-        store.is_packing_evidence = False
         store.prep_equipped_item = None
         store.prep_equipped_source_name = ""
         prep_reset_bottle_selection()
@@ -630,7 +625,7 @@ init -3 python:
 
         remaining = len(extraction_required_processed_tubes()) - extraction_step_tube_count()
         custom_notify(
-            "Buffer AL added — tube returned to inventory. Equip the next tube ({} left).".format(remaining),
+            "Unheld: {}. Buffer AL added — equip the next tube ({} left).".format(tube_name, remaining),
             True,
         )
         renpy.restart_interaction()
@@ -654,13 +649,12 @@ init -3 python:
             custom_notify("Buffer ATE already applied to that tube.", True)
             return False
 
-        store.evidence.delete_from_inventory(item)
         store.prep_equipped_item = item
         store.prep_equipped_source_name = name
         store.prep_negative_active = False
         store.held_evidence = None
         renpy.hide_screen("inventory")
-        custom_notify("Equipped {}. Click Apply Buffer ATE to elute.".format(name), True)
+        custom_notify("Holding: {}. Click Apply Buffer ATE to elute.".format(name), True)
         renpy.restart_interaction()
         return True
 
@@ -680,9 +674,6 @@ init -3 python:
             return
 
         store.extraction_step_tubes_done.append(tube_name)
-        store.is_packing_evidence = True
-        store.evidence.add_to_inventory(item)
-        store.is_packing_evidence = False
         store.prep_equipped_item = None
         store.prep_equipped_source_name = ""
 
@@ -693,7 +684,7 @@ init -3 python:
 
         remaining = len(extraction_required_processed_tubes()) - extraction_step_tube_count()
         custom_notify(
-            "Buffer ATE applied — tube returned to inventory. Equip the next tube ({} left).".format(remaining),
+            "Unheld: {}. Buffer ATE applied — equip the next tube ({} left).".format(tube_name, remaining),
             True,
         )
         renpy.restart_interaction()
@@ -723,13 +714,12 @@ init -3 python:
             custom_notify("Already done for that tube on this step.", True)
             return False
 
-        store.evidence.delete_from_inventory(item)
         store.prep_equipped_item = item
         store.prep_equipped_source_name = name
         store.prep_negative_active = False
         store.held_evidence = None
         renpy.hide_screen("inventory")
-        custom_notify("Equipped {} on the Prep bench.".format(name), True)
+        custom_notify("Holding: {}.".format(name), True)
         renpy.restart_interaction()
         return True
 
@@ -746,20 +736,17 @@ init -3 python:
         return True
 
     def prep_return_unequipped():
-        """Put the unequipped (not yet processed) tube back into evidence."""
+        """Unhold the equipped (not yet processed) tube — it never left Evidence."""
         item = store.prep_equipped_item
         if item is None:
             return
-        store.is_packing_evidence = True
-        store.evidence.add_to_inventory(item)
-        store.is_packing_evidence = False
         store.prep_equipped_item = None
         store.prep_equipped_source_name = ""
         if prep_is_add_al_step():
             prep_reset_bottle_selection()
         else:
             prep_reset_bench_flags()
-        custom_notify("Returned tube to inventory.", True)
+        custom_notify("Unheld: {}.".format(item.name), True)
         renpy.restart_interaction()
 
     def extraction_required_processed_tubes():
@@ -798,11 +785,8 @@ init -3 python:
 
     def extraction_reset_step_tubes():
         store.extraction_step_tubes_done = []
-        # Return any tube left on a machine when the step advances.
-        if store.extraction_machine_equipped is not None:
-            store.is_packing_evidence = True
-            store.evidence.add_to_inventory(store.extraction_machine_equipped)
-            store.is_packing_evidence = False
+        # Tubes stay visible in Evidence the whole time they're equipped —
+        # just clear the machine-equip reference when the step advances.
         store.extraction_machine_equipped = None
         store.extraction_machine_equipped_name = ""
         centrifuge_reset_rotor(return_sample=True)
@@ -851,7 +835,6 @@ init -3 python:
             custom_notify("Return or finish the tube already on the machine first.", False)
             return False
 
-        store.evidence.delete_from_inventory(item)
         store.extraction_machine_equipped = item
         store.extraction_machine_equipped_name = item.name
         store.held_evidence = None
@@ -860,34 +843,31 @@ init -3 python:
             (renpy.get_screen("centrifuge") or renpy.get_screen("spinner"))
             and item.name != NEG_CONTROL_NAME
         ):
-            custom_notify("Equipped {}. Click a rotor slot to place it.".format(item.name), True)
+            custom_notify("Holding: {}. Click a rotor slot to place it.".format(item.name), True)
         else:
-            custom_notify("Equipped {} on the machine.".format(item.name), True)
+            custom_notify("Holding: {}.".format(item.name), True)
         renpy.restart_interaction()
         return True
 
     def extraction_return_machine_tube():
+        # Tubes stay visible in Evidence the whole time they're equipped, so
+        # unequipping is just clearing the reference (plus an Unheld notice).
         item = store.extraction_machine_equipped
         if item is None and store.centrifuge_sample_item is not None:
             centrifuge_reset_rotor(return_sample=True)
-            custom_notify("Returned tube to inventory.", True)
             renpy.restart_interaction()
             return
         if item is None and store.spinner_sample_item is not None:
             spinner_reset_rotor(return_sample=True)
-            custom_notify("Returned tube to inventory.", True)
             renpy.restart_interaction()
             return
         if item is None:
             return
-        store.is_packing_evidence = True
-        store.evidence.add_to_inventory(item)
-        store.is_packing_evidence = False
         store.extraction_machine_equipped = None
         store.extraction_machine_equipped_name = ""
         centrifuge_reset_rotor(return_sample=False)
         spinner_reset_rotor(return_sample=False)
-        custom_notify("Returned tube to inventory.", True)
+        custom_notify("Unheld: {}.".format(item.name), True)
         renpy.restart_interaction()
 
     def extraction_current():
@@ -979,10 +959,6 @@ init -3 python:
         if cur is None:
             return False
         key, _tool, msg = cur
-        for item in store.incubator_loaded_tubes:
-            store.is_packing_evidence = True
-            store.evidence.add_to_inventory(item)
-            store.is_packing_evidence = False
         store.incubator_loaded_tubes = []
         store.dna_extraction_progress[key] = True
         store.extraction_step_index += 1
@@ -995,11 +971,9 @@ init -3 python:
         return True
 
     def incubator_dual_reset():
-        """Return any tubes sitting in the thermomixer without finishing the step."""
+        """Unhold any tubes sitting in the thermomixer without finishing the step."""
         for item in store.incubator_loaded_tubes:
-            store.is_packing_evidence = True
-            store.evidence.add_to_inventory(item)
-            store.is_packing_evidence = False
+            custom_notify("Unheld: {}.".format(item.name), True)
         store.incubator_loaded_tubes = []
 
     def extraction_ensure_past_prep():
@@ -1124,16 +1098,13 @@ init -3 python:
         if key in ("add_ethanol_150", "add_ethanol_700"):
             store.ethanol_added = True
 
-        # Mark this tube done and return it to inventory.
+        # Mark this tube done — it stays visible in Evidence the whole time.
         store.extraction_step_tubes_done.append(tube_name)
         # Balanced centrifuge runs process sample + negative control together.
         if tool in ("centrifuge", "spinner") and NEG_CONTROL_NAME not in store.extraction_step_tubes_done:
             if NEG_CONTROL_NAME in extraction_required_processed_tubes():
                 store.extraction_step_tubes_done.append(NEG_CONTROL_NAME)
 
-        store.is_packing_evidence = True
-        store.evidence.add_to_inventory(equipped)
-        store.is_packing_evidence = False
         store.extraction_machine_equipped = None
         store.extraction_machine_equipped_name = ""
         centrifuge_reset_rotor(return_sample=False)
@@ -1145,8 +1116,8 @@ init -3 python:
 
         remaining = len(extraction_required_processed_tubes()) - extraction_step_tube_count()
         custom_notify(
-            "Tube finished this step and returned to inventory. Equip the next tube ({} left).".format(
-                remaining
+            "Unheld: {}. Tube finished this step — equip the next tube ({} left).".format(
+                tube_name, remaining
             ),
             True,
         )
@@ -1173,10 +1144,7 @@ init -3 python:
         item.description = (
             "Swab cut into the tube with Buffer ATL and ProK added. Ready for DNA extraction."
         )
-
-        store.is_packing_evidence = True
-        store.evidence.add_to_inventory(item)
-        store.is_packing_evidence = False
+        store.evidence.refresh_visible_inventory()
 
         if source_name not in store.prep_processed_names:
             store.prep_processed_names.append(source_name)
@@ -1191,14 +1159,18 @@ init -3 python:
             return
         elif remaining > 0:
             custom_notify(
-                "Processed tube returned to inventory. Equip another swab tube ({} left).".format(
-                    remaining
+                "Unheld: {}. Equip another swab tube ({} left).".format(
+                    processed_name, remaining
                 ),
                 True,
             )
         elif not store.prep_negative_done:
+            ready_msg = (
+                "Evidence tube ready." if store.prep_samples_needed <= 1
+                else "Both evidence tubes ready."
+            )
             custom_notify(
-                "Both evidence tubes ready. Now prepare the negative control (no swab).",
+                "{} Now prepare the negative control (no swab).".format(ready_msg),
                 True,
             )
         else:

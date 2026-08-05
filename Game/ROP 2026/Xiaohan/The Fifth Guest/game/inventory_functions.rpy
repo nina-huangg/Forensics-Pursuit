@@ -1218,6 +1218,26 @@ init -5 python:
         renpy.restart_interaction()
 
     def toggle_hold_evidence(item):
+        # Clicking a tube that's already equipped somewhere unholds it again —
+        # it never left Evidence, so this just clears the equip slot.
+        if item is not None and item in (
+            getattr(store, "prep_equipped_item", None),
+            getattr(store, "extraction_machine_equipped", None),
+            getattr(store, "centrifuge_sample_item", None),
+            getattr(store, "spinner_sample_item", None),
+        ):
+            if item is store.prep_equipped_item:
+                prep_return_unequipped()
+            elif item is store.extraction_machine_equipped:
+                extraction_return_machine_tube()
+            elif item is store.centrifuge_sample_item:
+                centrifuge_reset_rotor(return_sample=True)
+                renpy.restart_interaction()
+            elif item is store.spinner_sample_item:
+                spinner_reset_rotor(return_sample=True)
+                renpy.restart_interaction()
+            return
+
         # During DNA prep, Use on a collected tube equips it onto the bench.
         if renpy.get_screen("swab_screen") and item is not None:
             if prep_is_add_al_step() or prep_is_add_ate_step() or prep2_bench_tool_active():

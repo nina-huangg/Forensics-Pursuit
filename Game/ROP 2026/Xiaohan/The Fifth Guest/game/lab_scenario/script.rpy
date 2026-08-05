@@ -120,6 +120,10 @@ init -4 python:
         qpcr_reset_plate()
         pcr_plate_reset()
 
+        # If the player only collected one blood sample at the scene, extraction
+        # only needs that one tube (+ negative control) instead of always two.
+        store.prep_samples_needed = max(1, len(store.lab_blood_samples))
+
         store.tasks = {
             "DNA extraction": False,
             "DNA quantification": False,
