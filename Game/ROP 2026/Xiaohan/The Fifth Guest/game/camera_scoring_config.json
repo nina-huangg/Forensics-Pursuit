@@ -1,0 +1,279 @@
+{
+  "version": "1.1",
+  "description": "Forensic-leaning photography scoring for The Fifth Guest. Optima favor CSI practice: F8–F11 for DOF, moderate ISO with lighting, macro for ridge detail.",
+
+  "locations": {
+    "shoeprint": {
+      "name": "Shoeprint (No Scale)",
+      "type": "closeup",
+      "description": "Dust shoeprint on the study door floor without a scalebar",
+      "optimal_settings": {
+        "lens": "50mm",
+        "aperture_index": 1,
+        "aperture_value": "F8",
+        "iso_index": 1,
+        "iso_value": 200,
+        "zoom_range": [1.45, 1.85],
+        "zoom_optimal": 1.65,
+        "composition": {
+          "theme_x_range": [0.44, 0.56],
+          "theme_y_range": [0.56, 0.72],
+          "theme_x_optimal": 0.50,
+          "theme_y_optimal": 0.64
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 30,
+        "exposure": 25,
+        "sharpness": 35,
+        "completeness": 10
+      },
+      "tips": "Use the 50mm at F8 and ISO 200. Keep the full impression in frame, camera square to the floor when possible."
+    },
+
+    "shoeprint_scale": {
+      "name": "Shoeprint (With Scale)",
+      "type": "closeup",
+      "description": "Dust shoeprint documented with a scalebar for sizing reference",
+      "optimal_settings": {
+        "lens": "50mm",
+        "aperture_index": 2,
+        "aperture_value": "F11",
+        "iso_index": 1,
+        "iso_value": 200,
+        "zoom_range": [1.60, 2.00],
+        "zoom_optimal": 1.80,
+        "composition": {
+          "theme_x_range": [0.36, 0.52],
+          "theme_y_range": [0.54, 0.70],
+          "theme_x_optimal": 0.44,
+          "theme_y_optimal": 0.62
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 30,
+        "exposure": 25,
+        "sharpness": 35,
+        "completeness": 10
+      },
+      "critical": true,
+      "tips": "Stop down to F11 for print + scale sharpness. Keep ISO around 200 and include the scalebar in the same plane as the impression."
+    },
+
+    "blood_splatter": {
+      "name": "Blood Splatter",
+      "type": "overview",
+      "description": "Blood splatter pattern on the study floor",
+      "optimal_settings": {
+        "lens": "50mm",
+        "aperture_index": 2,
+        "aperture_value": "F11",
+        "iso_index": 2,
+        "iso_value": 300,
+        "zoom_range": [1.15, 1.50],
+        "zoom_optimal": 1.30,
+        "composition": {
+          "theme_x_range": [0.30, 0.48],
+          "theme_y_range": [0.46, 0.64],
+          "theme_x_optimal": 0.39,
+          "theme_y_optimal": 0.55
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 30,
+        "exposure": 30,
+        "sharpness": 30,
+        "completeness": 10
+      },
+      "tips": "Pattern documentation needs depth of field: use F11, ISO about 300, and a mid-wide frame so the whole pattern stays sharp."
+    },
+
+    "lamp_far": {
+      "name": "Lamp (Far)",
+      "type": "overview",
+      "description": "Study lamp photographed from a distance for scene context",
+      "optimal_settings": {
+        "lens": "50mm",
+        "aperture_index": 2,
+        "aperture_value": "F11",
+        "iso_index": 0,
+        "iso_value": 100,
+        "zoom_range": [1.05, 1.30],
+        "zoom_optimal": 1.15,
+        "composition": {
+          "theme_x_range": [0.42, 0.58],
+          "theme_y_range": [0.22, 0.42],
+          "theme_x_optimal": 0.50,
+          "theme_y_optimal": 0.32
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 35,
+        "exposure": 25,
+        "sharpness": 30,
+        "completeness": 10
+      },
+      "tips": "Establishing shot: 50mm near 1.15x, F11 and ISO 100 for sharp scene context without diffraction from F16."
+    },
+
+    "lamp_close": {
+      "name": "Lamp (Close)",
+      "type": "closeup",
+      "description": "Close-up photograph of the study lamp",
+      "optimal_settings": {
+        "lens": "105mm",
+        "aperture_index": 1,
+        "aperture_value": "F8",
+        "iso_index": 1,
+        "iso_value": 200,
+        "zoom_range": [3.05, 3.45],
+        "zoom_optimal": 3.25,
+        "composition": {
+          "theme_x_range": [0.44, 0.58],
+          "theme_y_range": [0.28, 0.46],
+          "theme_x_optimal": 0.51,
+          "theme_y_optimal": 0.37
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 30,
+        "exposure": 30,
+        "sharpness": 30,
+        "completeness": 10
+      },
+      "tips": "Detail shot: 105mm, F8 for usable DOF, ISO 200. Fill the frame with the lamp without clipping key surfaces."
+    },
+
+    "blood_pool": {
+      "name": "Blood Pool",
+      "type": "overview",
+      "description": "Blood pool on the study floor",
+      "optimal_settings": {
+        "lens": "50mm",
+        "aperture_index": 2,
+        "aperture_value": "F11",
+        "iso_index": 2,
+        "iso_value": 300,
+        "zoom_range": [1.40, 1.80],
+        "zoom_optimal": 1.60,
+        "composition": {
+          "theme_x_range": [0.40, 0.60],
+          "theme_y_range": [0.48, 0.70],
+          "theme_x_optimal": 0.50,
+          "theme_y_optimal": 0.59
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 30,
+        "exposure": 30,
+        "sharpness": 30,
+        "completeness": 10
+      },
+      "tips": "Prefer F11 and moderate ISO (~300) over high ISO 800. Light the scene and keep the pool fully framed and sharp."
+    },
+
+    "fingerprint": {
+      "name": "Fingerprint",
+      "type": "closeup",
+      "description": "Bloody fingerprint on the study lamp",
+      "optimal_settings": {
+        "lens": "105mm",
+        "aperture_index": 2,
+        "aperture_value": "F11",
+        "iso_index": 0,
+        "iso_value": 100,
+        "zoom_range": [3.45, 3.95],
+        "zoom_optimal": 3.70,
+        "composition": {
+          "theme_x_range": [0.56, 0.76],
+          "theme_y_range": [0.36, 0.54],
+          "theme_x_optimal": 0.66,
+          "theme_y_optimal": 0.45
+        }
+      },
+      "requirements": {},
+      "scoring_weights": {
+        "composition": 25,
+        "exposure": 30,
+        "sharpness": 35,
+        "completeness": 10
+      },
+      "critical": true,
+      "tips": "Macro 105mm, F11 for ridge DOF, ISO 100 with flashlight and tripod. Fill the frame with the print; keep the camera steady and square to the surface."
+    }
+  },
+
+  "scoring_system": {
+    "max_score": 100,
+    "grade_thresholds": {
+      "A+": 95,
+      "A": 90,
+      "A-": 85,
+      "B+": 80,
+      "B": 75,
+      "B-": 70,
+      "C+": 65,
+      "C": 60,
+      "C-": 55,
+      "D": 50,
+      "F": 0
+    },
+
+    "composition_scoring": {
+      "description": "Measures subject positioning and framing",
+      "perfect_center_points": 15,
+      "acceptable_range_points": 10,
+      "zoom_optimal_points": 15,
+      "zoom_acceptable_points": 10
+    },
+
+    "exposure_scoring": {
+      "description": "Measures ISO and aperture appropriateness",
+      "iso_exact_points": 15,
+      "iso_acceptable_points": 10,
+      "aperture_exact_points": 15,
+      "aperture_acceptable_points": 10
+    },
+
+    "sharpness_scoring": {
+      "description": "Measures lens choice and focus quality",
+      "lens_correct_points": 15,
+      "lens_acceptable_points": 5,
+      "focus_optimal_points": 15,
+      "focus_acceptable_points": 10
+    },
+
+    "completeness_scoring": {
+      "description": "Measures required elements presence",
+      "all_requirements_met": 10,
+      "missing_optional": 7,
+      "missing_required": 0,
+      "bonus_critical_perfect": 5
+    }
+  },
+
+  "tolerance_ranges": {
+    "composition": {
+      "theme_x_tolerance": 0.12,
+      "theme_y_tolerance": 0.12,
+      "zoom_tolerance_percent": 18
+    },
+    "exposure": {
+      "iso_exact_match": 0,
+      "iso_one_stop": 1,
+      "iso_two_stops": 2,
+      "aperture_exact_match": 0,
+      "aperture_one_stop": 1
+    },
+    "sharpness": {
+      "zoom_perfect_range_percent": 12,
+      "zoom_acceptable_range_percent": 28
+    }
+  }
+}

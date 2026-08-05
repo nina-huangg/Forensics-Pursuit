@@ -1,0 +1,156 @@
+[
+    {
+        "name": "Backing Card",
+        "image_name": "toolbox-backing_card",
+        "usable": true,
+        "action": "use_backing_card"
+    },
+    {
+        "name": "Cartridges",
+        "image_name": "toolbox-cartridges"
+    },
+    {
+        "name": "Camera",
+        "image_name": "toolbox-camera",
+        "usable": true,
+        "action": "use_camera"
+    },
+    {
+        "name": "Evidence Bag",
+        "image_name": "toolbox-evidence_bag",
+        "usable": true,
+        "action": "use_evidence_bag"
+    },
+    {
+        "name": "Gel Lifter",
+        "image_name": "toolbox-gel_lifter",
+        "usable": true,
+        "action": "use_gel_lifter"
+    },
+    {
+        "name": "Hungarian Red",
+        "image_name": "toolbox-hungarian_red",
+        "usable": true,
+        "action": "use_hungarian_red",
+        "description": "A red dye used to develop latent prints on metal surfaces."
+    },
+    {
+        "name": "Distilled Water",
+        "image_name": "toolbox-distilled_water",
+        "usable": true,
+        "action": "use_distilled_water",
+        "description": "Rinses excess Hungarian Red dye to reveal the developed print."
+    },
+    {
+        "name": "Methanol",
+        "image_name": "toolbox-methanol",
+        "usable": true,
+        "action": "use_methanol",
+        "description": "A bottle from the crime-scene kit."
+    },
+    {
+        "name": "Phenolphthalein",
+        "image_name": "toolbox-phenolphthalein",
+        "usable": true,
+        "action": "use_phenolphthalein",
+        "description": "A bottle from the crime-scene kit."
+    },
+    {
+        "name": "Hydrogen Peroxide",
+        "image_name": "toolbox-hydrogen_peroxide",
+        "usable": true,
+        "action": "use_hydrogen_peroxide",
+        "description": "A bottle from the crime-scene kit."
+    },
+    {
+        "name": "Scalebar",
+        "image_name": "toolbox-scalebar",
+        "usable": true,
+        "action": "use_scalebar"
+    },
+    {
+        "name": "Swab Pack",
+        "image_name": "toolbox-swab_pack",
+        "usable": true,
+        "action": "use_swab_pack"
+    },
+    {
+        "name": "Tamper Evident Tape",
+        "image_name": "toolbox-tamper_evident_tape"
+    },
+    {
+        "name": "Tape",
+        "image_name": "toolbox-tape"
+    },
+    {
+        "name": "Tip",
+        "image_name": "toolbox-tip"
+    },
+    {
+        "name": "Tube",
+        "image_name": "toolbox-tube",
+        "usable": true,
+        "action": "use_tube"
+    },
+    {
+        "name": "UV Light",
+        "image_name": "toolbox-uv_light"
+    },
+    {
+        "name": "Black Granular Powder",
+        "image_name": "toolbox-black-granular-powder",
+        "usable": true,
+        "action": "use_black_granular_powder"
+    },
+    {
+        "name": "Gray Granular Powder",
+        "image_name": "toolbox-gray-granular-powder",
+        "usable": true,
+        "action": "use_gray_granular_powder"
+    },
+    {
+        "name": "Gray Magnetic Powder",
+        "image_name": "toolbox-gray-magnetic-powder",
+        "usable": true,
+        "action": "use_gray_magnetic_powder"
+    },
+    {
+        "name": "Roller",
+        "image_name": "toolbox-roller",
+        "usable": true,
+        "action": "use_roller"
+    },
+    {
+        "name": "Fingerprint Tape",
+        "image_name": "toolbox-fingerprint-tape",
+        "usable": true,
+        "action": "use_fingerprint_tape"
+    },
+    {
+        "name": "Macro Lens",
+        "image_name": "toolbox-macro-lens",
+        "usable": true,
+        "action": "use_macro_lens",
+        "description": "Attach to the camera before photographing fingerprints for sharp close-up detail."
+    },
+    {
+        "name": "Pencil Crayon",
+        "image_name": "toolbox-red-crayon",
+        "usable": true,
+        "action": "use_pencil_crayon"
+    },
+    {
+        "name": "Camera Flashlight",
+        "image_name": "toolbox-camera-flashlight",
+        "usable": true,
+        "action": "use_camera_flashlight",
+        "description": "Attach to the camera before photographing fingerprints for even lighting."
+    },
+    {
+        "name": "Tripod",
+        "image_name": "toolbox-tripod",
+        "usable": true,
+        "action": "use_tripod",
+        "description": "Attach to the camera before photographing fingerprints to keep the shot steady."
+    }
+]
