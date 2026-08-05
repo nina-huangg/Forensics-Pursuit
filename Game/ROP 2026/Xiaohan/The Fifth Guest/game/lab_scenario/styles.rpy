@@ -32,6 +32,12 @@ init -4 python:
         def get_style(self):
             return "bar", "vbar"
 
+    def pour_increment(name, max_value, step=1):
+        """Bump a pour-bar variable up by step (right-arrow key), clamped to max_value."""
+        current = getattr(store, name)
+        setattr(store, name, min(current + step, max_value))
+        renpy.restart_interaction()
+
     style.strikethrough_text = Style(style.default)
     style.strikethrough_text.strikethrough = True
     style.strikethrough_text.color = "#888"

@@ -751,10 +751,12 @@ screen ethanol_pour():
                 size 24
                 bold True
                 color "#ffffff"
-            text "Drag the slider below to pour — it only moves forward, so overshoot means Reset and start again. Hit the exact volume, then click Pour.":
+            text "Drag the slider below to pour, or press → to add 1 µL per press — it only moves forward, so overshoot means Reset and start again. Hit the exact volume, then click Pour.":
                 size 17
                 color "#c5d0d8"
                 xmaximum 860
+
+    key "K_RIGHT" action Function(pour_increment, "ethanol_pour_amount", _max, 1)
 
     # Tube outline with a rising liquid level tied to the poured amount.
     frame:
@@ -860,10 +862,12 @@ screen lysate_transfer():
                 size 24
                 bold True
                 color "#ffffff"
-            text "Drag the slider below to transfer — it only moves forward, so overshoot means Reset and start again. Hit the exact volume, then click Transfer.":
+            text "Drag the slider below to transfer, or press → to add 1 µL per press — it only moves forward, so overshoot means Reset and start again. Hit the exact volume, then click Transfer.":
                 size 17
                 color "#c5d0d8"
                 xmaximum 860
+
+    key "K_RIGHT" action Function(pour_increment, "lysate_transfer_amount", _max, 1)
 
     # QIAamp column outline with rising lysate level tied to the transferred amount.
     frame:
@@ -969,10 +973,12 @@ screen aw1_pour():
                 size 24
                 bold True
                 color "#ffffff"
-            text "Drag the slider below to pour — it only moves forward, so overshoot means Reset and start again. Hit the exact volume, then click Add.":
+            text "Drag the slider below to pour, or press → to add 1 µL per press — it only moves forward, so overshoot means Reset and start again. Hit the exact volume, then click Add.":
                 size 17
                 color "#c5d0d8"
                 xmaximum 860
+
+    key "K_RIGHT" action Function(pour_increment, "aw1_pour_amount", _max, 1)
 
     # Collection tube outline with rising Buffer AW1 level tied to the poured amount.
     frame:
@@ -1079,10 +1085,12 @@ screen ate_pour():
                 size 24
                 bold True
                 color "#ffffff"
-            text "Unlike the other reagents, the protocol allows a range here — drag anywhere between [_min_target] and [_max_target] µL, then click Apply.":
+            text "Unlike the other reagents, the protocol allows a range here — drag the slider, or press → to add 1 µL per press, anywhere between [_min_target] and [_max_target] µL, then click Apply.":
                 size 17
                 color "#c5d0d8"
                 xmaximum 860
+
+    key "K_RIGHT" action Function(pour_increment, "ate_pour_amount", _max, 1)
 
     # Tube outline with a rising ATE level tied to the applied amount.
     frame:

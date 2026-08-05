@@ -1,5 +1,5 @@
 label use_computer:
-    """This machine is the Capillary Electrophoresis station."""
+    # This machine is the Capillary Electrophoresis station.
     $ open_machine()
     if not tasks["DNA amplification"]:
         $ custom_notify("Amplification isn't done yet — run the Thermal Cycler first.", False)
@@ -28,7 +28,7 @@ label wait_screen:
 
 
 label machine_wait(message="Waiting...", bg=None):
-    """Short wait beat on a machine background (or black). Returns to the caller."""
+    # Short wait beat on a machine background (or black). Returns to the caller.
     if bg:
         scene expression bg
     else:
@@ -82,10 +82,10 @@ label use_vortex:
 
 
 label vortex_set_time:
-    """Player sets pulse-vortex time by clicking the machine; equipping a tube is checked separately when the pulse runs."""
     # Keep the zoomed vortex view — Jump from the screen would otherwise reveal Station 1.
     scene expression "backgrounds/use_vortex.png"
     show screen open_inv
+    $ custom_notify("Click the machine to set the time. Equip a tube from Evidence separately to run it.", True)
 
     $ _cur = extraction_current()
     $ _key = _cur[0] if _cur else ""
@@ -162,7 +162,7 @@ label use_prep:
 
 
 label ate_pour_start:
-    """Pipette mini-game for eluting with Buffer ATE — the protocol allows a 20-100 µL range."""
+    # Pipette mini-game for eluting with Buffer ATE — the protocol allows a 20-100 µL range.
     $ open_machine()
     if prep_equipped_item is None:
         jump return_bio_station
@@ -206,7 +206,7 @@ label use_incubator:
 
 
 label use_qpcr:
-    """QuantStudio: preps the plate, then runs quantification once it's loaded."""
+    # QuantStudio: preps the plate, then runs quantification once it's loaded.
     $ open_machine()
     if not tasks["DNA extraction"]:
         $ try_complete_machine_step(False, warn_msg="DNA extraction is not finished yet — you can still prepare a QuantStudio plate.")
@@ -233,7 +233,7 @@ label use_qpcr:
 
 
 label use_thermal_cycler:
-    """Thermal Cycler: runs PCR amplification once quantification is done."""
+    # Thermal Cycler: runs PCR amplification once quantification is done.
     $ open_machine()
     if not tasks["DNA quantification"]:
         $ custom_notify("Run the QuantStudio sample first — quantification isn't done yet.", False)
@@ -353,7 +353,7 @@ label incubator_question:
 
 
 label incubator_dual_load:
-    """Steps 4 & 10: load both the sample and negative-control tube first, then pick the settings once for both."""
+    $ custom_notify("You can place both tubes in the thermomixer, then set the temperature and time once for both.", True)
     if extraction_machine_equipped is not None:
         $ _loaded_name = extraction_machine_equipped_name
         $ incubator_dual_load_add()
@@ -473,7 +473,7 @@ label centrifuge_apply:
 
 
 label ethanol_pour_start:
-    """Pour mini-game: drag to the target volume before it actually gets added."""
+    # Pour mini-game: drag to the target volume before it actually gets added.
     $ open_machine()
     if extraction_expected_tool() != "ethanol":
         $ custom_notify("Not the right step for ethanol yet. Check the notebook.", False)
@@ -514,7 +514,7 @@ label new_tube:
 
 
 label lysate_transfer_start:
-    """Pipette mini-game for transferring 700 µL lysate onto the QIAamp column."""
+    # Pipette mini-game for transferring 700 µL lysate onto the QIAamp column.
     $ open_machine()
     if extraction_machine_equipped is None:
         $ custom_notify("Open Evidence and Use your processed tube (or Negative Control) first, then use the Column.", False)
@@ -531,7 +531,7 @@ label lysate_transfer_start:
 
 
 label aw1_pour_start:
-    """Pipette mini-game for adding 500 µL Buffer AW1 to the new collection tube."""
+    # Pipette mini-game for adding 500 µL Buffer AW1 to the new collection tube.
     $ open_machine()
     if extraction_machine_equipped is None:
         $ custom_notify("Open Evidence and Use your processed tube (or Negative Control) first, then use the Column.", False)
