@@ -10,6 +10,7 @@ init python:
         return "fail"
 
 label laboratory:
+    hide screen hallway
     scene lab
     show screen lab
     if snipped == False:

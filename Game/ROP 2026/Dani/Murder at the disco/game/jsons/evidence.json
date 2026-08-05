@@ -29,10 +29,12 @@
     },
     {
         "name": "Splatter",
+        "description": "A swab from the large blood splatter on the floor.",
         "image_name": "inventory-splatter"
     },
     {
         "name": "Splatter 2",
+        "description": "A swab from the small blood stain on the bathroom wall.",
         "image_name": "inventory-splatter"
     },
     {

@@ -1,0 +1,78 @@
+[
+    {
+        "specialty": "Forensic Toxicology",
+        "evidence": [
+            {
+                "name": "Forensic Toxicology Report",
+                "image": "tox_report",
+                "description": "Report of the post mortem and ante mortem blood of the victim created by the Forensic Toxicologist using the LCMS and Solid Phase Extraction for analysis . The ante mortem blood sample contains a high level of Fentanyl, high enough to indicate an overdose and low levels of caffeine and THC, which are unlikely to have been the cause of death. The post-mortem blood sample contains slightly higher levels of these substances.",
+                "truth_base": [
+                    "High levels of Fentanyl (player needs to mention for both blood samples)",
+		            "Low levels of THC and caffeine (player needs to mention for both blood samples)",
+                    "Is an analysis of both post mortem and ante mortem blood (player should mention both post mortem and ant mortem being tested)",
+                    "Used LCMS and Solid Phase Extraction for analysis"
+                ]
+            }
+        ]
+    },
+    {
+        "specialty": "Medical Records",
+        "evidence": [
+            {
+                "name": "Hospital Report",
+                "image": "hospital_report",
+                "description": "Report of the medical findings and past medical history of the patient created by the Doctor. The hospital report details the hospital's findings towards the deceased, Alastor Brahe, an otherwise healthy young male, including past medical history and the resulting medical opinion. The initial screening described the deceased as a 25 year old Caucasian Male who collapsed and lost consciousness in his home during a party. He was brought to the hospital and had his blood drawn. He suddenly went into respiratory depression and lost consciousness once more. Doctors were not able to revive him. The findings are as follows: High levels of Fentanyl and low levels of THC in the blood, the urine has low pH with Fentanyl and THC detected. The patient's symptoms at the time were: Severe difficulty breathing, loss of consciousness, dizziness, confusion, and fatigue. The deceased Past medical history described no smoking, occasional recreational drug usage, and no alcohol usage. Deceased suffered from severe chronic pain from previous chemotherapy treatments as he has kidney cancer as a child but it was successfully treated with low risk of remission. The deceased was taking Fentanyl by buccal as 20mcg tablets, the dose was 1 tablet by mouth 2 times a day as needed prescribed for 30 days. It's been 29 days since the medication was prescribed, so 2 pills should remain in the pill bottle. The medical opinion in the report was that Alastor died from overdosing on their Fentanyl medication.",
+                "truth_base": [
+                    "died from overdosing on Fentanyl",
+                    "prescribed Fentanyl",
+                    "suffered from severe chronic pain",
+		            "occasional recreational drug usage, no history of smoking or alcohol usage",
+		            "low levels of THC and high levels of Fentanyl in the blood",
+		            "low pH in the urine",
+                    "relatively healthy, young male"
+                ]
+            }
+        ]
+    },
+    {
+        "specialty": "Forensic Identification",
+        "evidence": [
+            {
+                "name": "Pill Bottle Fingerprint",
+                "image": "inventory-sbprint1s",
+                "description": "Fingerprint processed and analysed by Forensic Identification Officer that was found on the pill bottle. It was processed with black fingerprint powder, and analysed in th lab with CSIPix following the ACE-V method. Based on analysis, this Fingerprint has a whorl pattern and belongs to the deceased, Alastor Brahe.",
+                "truth_base": [
+                    "Processed with black fingerprint powder",
+                    "Analyzed with CSIPix",
+                    "Followed ACE-V method",
+		            "Whorl pattern",
+                    "Belongs to Alastor Brahe (also accept, belongs to the deceased)"
+                ]
+            },
+            {
+                "name": "Plastic Bag Fingerprint",
+                "image": "inventory-sbprint2s",
+                "description": "Fingerprint processed and analysed by Forensic Identification Officer that was found on the plastic bag. It was processed with black fingerprint powder, and analysed in th lab with CSIPix following the ACE-V method. Based on analysis, this Fingerprint has a loop pattern and belongs to one of the house party attendees.",
+                "truth_base": [
+                    "Processed with black fingerprint powder",
+                    "Analyzed with CSIPix",
+                    "Followed ACE-V method",
+		            "Loop pattern",
+                    "Belongs to a house party attendee (also accept, a friend of Alastor's or a friend of the deceased)"
+                ]
+            },
+            {
+                "name": "Grapefruit Juice Bottle Fingerprint",
+                "image": "inventory-sbprint1s-grape",
+                "description": " Fingerprint processed and analysed by Forensic Identification Officer that was found on the grapefruit juice bottle. It was processed with black fingerprint powder, and analysed in th lab with CSIPix following the ACE-V method. Based on analysis, this Fingerprint has a loop pattern and belongs to the deceased, Alastor Brahe.",
+                "truth_base": [
+                    "Processed with black fingerprint powder",
+                    "Analyzed with CSIPix",
+                    "Followed ACE-V method",
+		            "Loop pattern",
+                    "Belongs to Alastor Brahe (also accept, belongs to the deceased)"
+                ]
+            }
+        ]
+    }
+]

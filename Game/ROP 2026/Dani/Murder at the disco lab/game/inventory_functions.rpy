@@ -80,3 +80,12 @@ init python:
     def use_te():
         renpy.jump("te_use_label")
         renpy.restart_interaction()
+    
+    def use_floor():
+        renpy.jump("floor_use_label")
+        renpy.restart_interaction()
+
+    def use_wall():
+        renpy.jump("wall_use_label")
+        renpy.restart_interaction()
+        

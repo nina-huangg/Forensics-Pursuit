@@ -2,7 +2,8 @@ screen hallway():
     imagebutton:
         idle "laboratory_idle.jpg"
         hover "laboratory_hover.jpg"
-        action Jump("laboratory")
+        if wall_done == False or floor_done == False:
+            action Jump("laboratory")
         xpos 600
         ypos 450
     
@@ -12,14 +13,6 @@ screen hallway():
             color "#fff"
             size 24
 
-    imagebutton:
-        idle "data_analysis_lab_idle"
-        hover "data_analysis_lab_hover"
-        action Jump('data_analysis_lab')
-        xpos 1200
-        ypos 450
-    
-#    imagebutton:
 #        idle "monitor idle.png"
 #        hover "monitor hover.png"
 #        action Jump("monitor")
