@@ -1,0 +1,46 @@
+[
+    {
+        "name": "Bagged Paint Transfer",
+        "image_name": "inventory-evidence_bag"
+    },
+    {
+        "name": "Bagged Tire Track Impression",
+        "image_name": "inventory-evidence_bag"
+    },
+    {
+        "name": "Fingerprint 1",
+        "image_name": "inventory-fingerprint_1",
+        "usable": true,
+        "action": "use_fingerprint_1"
+    },
+    {
+        "name": "Fingerprint 2",
+        "image_name": "inventory-fingerprint_2",
+        "usable": true,
+        "action": "use_fingerprint_2"   
+    },
+    {
+        "name": "Known Paint Sample",
+        "image_name": "inventory-known_paint",
+        "usable": true,
+        "action": "use_known_paint_sample"
+    },
+    {
+        "name": "Unknown Paint Sample 1",
+        "image_name": "inventory-unknown1_paint",
+        "usable": true,
+        "action": "use_unknown_paint_sample_1"
+    },
+    {
+        "name": "Unknown Paint Sample 2",
+        "image_name": "inventory-unknown2_paint",
+        "usable": true,
+        "action": "use_unknown_paint_sample_2"
+    },
+    {
+        "name": "Unknown Paint Sample 3",
+        "image_name": "inventory-unknown3_paint",
+        "usable": true,
+        "action": "use_unknown_paint_sample_3"
+    }
+]
