@@ -1,1 +1,1 @@
-Post your game code here!
+In this hit-and-run forensic simulation, a car has hit a motorcyclist and driven off! The player collects and examines evidence to determine which suspect vehicle may have been involved. The scenario introduces paint chip and tire-tread analysis, emphasizing the comparison of known and unknown samples. Players learn how multiple types of evidence can be combined to support an investigative conclusion. 
