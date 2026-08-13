@@ -628,6 +628,7 @@ label final_paint_check_choice:
     n "You have chosen a sample you find consistent with evidence using the stereomicroscope and FTIR machine."
     $ identified_sample = paint_ftir
     $ tasks["Analyze remaining samples via FTIR"] = True
+    hide screen ftir_display
     jump ftir_station
 
 label final_paint_check_start_over:
@@ -705,6 +706,7 @@ label wait_screen:
     jump bio_station
 
 label finish_lab:
+    hide screen inventory
     with Dissolve(1.0)
     scene hallway
     show nina talk at right
