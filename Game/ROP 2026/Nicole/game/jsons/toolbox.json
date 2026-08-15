@@ -1,0 +1,83 @@
+[
+    {
+        "name": "Backing Card",
+        "image_name": "toolbox-backing_card",
+        "usable": true,
+        "action": "use_backing_card"
+    },
+    {
+        "name": "Evidence Bag",
+        "image_name": "toolbox-evidence_bag",
+	"usable": true,
+        "action": "use_evidence_bag"
+
+    },
+    {
+        "name": "Magnetic Powder",
+        "image_name": "toolbox-magnetic_powder",
+	    "usable": true,
+        "action": "can_magnetic_powder"
+    },
+    {
+        "name": "gloves",
+		"usable": true,
+"action": "use_glove",
+        "image_name": "inventory_gloves"
+    },
+    {
+        "name": "Scalebar",
+        "image_name": "toolbox-scalebar",
+	"usable": true,
+	"action": "use_scale_bar"
+    },
+    {
+        "name": "Tamper Evident Tape",
+        "image_name": "toolbox-tamper_evident_tape",
+	"usable": true,
+	"action": "use_tamper_tape"
+    },
+    {
+        "name": "Tape",
+        "image_name": "toolbox-tape",
+	"usable": true,
+	"action": "use_tape"
+    },
+    {
+        "name": "Tube",
+        "image_name": "toolbox-tube",
+	"usable": true
+    },
+    {
+        "name": "UV Light",
+        "image_name": "toolbox-uv_light",
+	    "usable": true,
+        "action": "use_uv_light"
+    },{
+        "name": "100% Methanol",
+        "image_name": "methanol",
+        "usable": true,
+        "action": "use_Methanol"
+    },{
+        "name": "Water",
+        "image_name": "water",
+        "usable": true,
+        "action": "use_water"
+    }
+,{
+        "name": "1% Formic acid",
+        "image_name": "1_formic",
+        "usable": true,
+        "action": "use_step3"
+    },{
+        "name": "0.1% Formic acid",
+        "image_name": "01_formic",
+        "usable": true,
+        "action": "use_01formic"
+    },{
+        "name": "Methanol and 5% Ammonium Hydroxide",
+        "image_name": "5_amm",
+        "usable": true,
+        "action": "use_5amm"
+    }
+
+]
