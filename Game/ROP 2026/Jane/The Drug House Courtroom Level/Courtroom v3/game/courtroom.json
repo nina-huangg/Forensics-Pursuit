@@ -1,0 +1,54 @@
+[
+    {
+        "specialty": "chemistry",
+        "evidence": [
+            {
+                "name": "Presumptive Colormetric Field Test Results",
+                "image": "drug_presumptive_report",
+                "description": "Three suspected drug exhibits recovered from the residence were tested using Scott Reagent field test kits. A small amount from each exhibit was placed into a test pouch, the internal ampoules were broken in sequence, and the resulting colour changes were compared to the interpretation chart printed on the front of the test kit. Each exhibit produced the expected reaction sequence of blue after the first ampoule, pink after the second ampoule, and a final two-layer result consisting of a pink upper layer and blue lower layer after the third ampoule. A parallel Marquis reagent test showed no reaction, which is expected for cocaine and does not contradict the Scott result. These field results are presumptive only and require lab confirmation. These field test results are presumptive only, meaning they indicate the possible presence of cocaine but cannot identify the compound with certainty. Laboratory analysis using Gas Chromatography–Mass Spectrometry (GC-MS) is required to identify the compound.",
+                "truth_base": [
+                    "one field test with the scott reagent showed a color change indicating a possible positive result for cocaine (player may describe this as a reagent turning blue-pink, a positive reaction, or similar; exact scott reagent name not required)",
+                    "a field test with the marquis reagent showed no reaction, and the player understands this does not contradict the first test but is actually expected for cocaine (any phrasing conveying that a lack of color change is still consistent with cocaine is acceptable; exact marquis reagent name not required)",
+                    "the player conveys that these on-scene tests are only preliminary/ presumptive and cannot identify the compound with certainty, requiring laboratory analysis using Gas Chromatography–Mass Spectrometry/GC-MS (words like 'not conclusive', 'needs to be confirmed', or 'just a screening test' all count)"
+                ]
+            },
+            {
+                "name": "GC-MS Confirmatory Analysis Report",
+                "image": "drug_ident_report",
+                "description": "After extraction and purification, all three samples were run through the GC-MS. Each sample's retention time and mass spectrum matched a certified cocaine reference standard tested under the same conditions. The net weight (total mass without the packaging), gross weight (total mass with the original packaging) and small representative sample taken out for analysis were recorded for each sample.",
+                "truth_base": [
+                    "the sample was purified in a liquid form before running it through the instrument (any mention of an extraction, purification, or preparation step counts, exact technique name like 'solid phase extraction' not required)",
+                    "the timing or pattern of the sample's peak on the chromatogram lined up with a known cocaine reference sample tested the same way (player may describe this loosely as 'it matched the reference' or 'came out at the same time/spot')",
+                    "the chemical spectrum produced by the sample matched the reference standard's spectrum (any phrasing indicating the two spectra looked the same or matched is sufficient; mass spectrum and chromatogram wording is not necessary)",
+                    "the player mentions that both the small representative sample weight and the weight of the whole sealed and then unsealed bags were measured and recorded (does not need to use the terms 'net' or 'gross' or 'representative', just needs to convey three separate weighings happened)",
+                    "the player conveys that the GC-MS laboratory findings identified cocaine as the primary compound present in all three exhibits and supported the earlier presumptive field test results (any phrasing indicating that the GC-MS identified cocaine in all three exhibits and verified or supported the earlier Scott Reagent field test results is acceptable; exact terminology such as 'primary compound', 'GC-MS', or 'Scott Reagent' is not required)"
+                ]
+            }
+        ]
+    },
+    {
+        "specialty": "identification",
+        "evidence": [
+            {
+                "name": "Cyanoacrylate Fuming of Firearm",
+                "image": "firearm_fumed",
+                "description": "A firearm recovered from the scene was processed for latent fingerprints using cyanoacrylate (superglue) fuming, which develops prints into a visible ridge pattern on non-porous surfaces like metal. This method preserves the print's detail for photography and comparison without disturbing it.",
+                "truth_base": [
+                    "a fuming/vapor-based method involving glue was used to develop the print (does not need the exact term 'cyanoacrylate', 'superglue fuming' or a general description of a chamber/vapor process is enough)",
+                    "the player mentions that this method works well on surfaces like metal, which is why it suited a firearm (any comparison to it being unsuitable for something like paper/porous material also counts)",
+                    "the process makes the print visible without damaging or smudging the ridge pattern, so it can be photographed/compared afterward (phrasing like 'it doesn't destroy the print' or 'preserves the detail' is sufficient)"
+                ]
+            },
+            {
+                "name": "Fingerprint Identification Report",
+                "image": "firearm_fingerprint_report",
+                "description": "The developed print was photographed and imported into CSIpix, comparison software that searched the print against the AFIS database and returned a candidate match with a score of 70. That candidate was then manually confirmed by an examiner performing a ridge-by-ridge comparison, since CSIpix only narrows down likely candidates rather than making the final call.",
+                "truth_base": [
+                    "the developed print was run through comparison software that searched a fingerprint database for possible matches (does not need the terms 'CSIpix' or 'AFIS' specifically, describing a database search or computer comparison system is enough)",
+                    "the player conveys that the automated system only narrows things down to likely candidates or gives a score, rather than making a final call by itself (any phrasing like 'it just suggests matches' or 'gives a shortlist' counts)",
+                    "a human examiner still had to manually review and compare the print point-by-point to actually confirm the identification (phrasing like 'a person had to check it themselves' or 'manually verified' is sufficient, exact terminology not required)"
+                ]
+            }
+        ]
+    }
+]
