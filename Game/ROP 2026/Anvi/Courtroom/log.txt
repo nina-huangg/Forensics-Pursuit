@@ -1,0 +1,47 @@
+2026-08-16 04:46:40 UTC
+Windows-11-10.0.26200-SP0
+Ren'Py 8.5.2.26010301
+
+Court Room Scene
+1.0
+Built at 2025-05-07 19:30:19 UTC
+
+Early init took 67 ms
+Loading error handling took 25 ms
+Loading script took 363 ms
+Loading save slot metadata took 27 ms
+Loading persistent took 0 ms
+Set script version to: (8, 3, 3)
+ - Init at game/a_script.rpy:1 took 514 ms.
+Running init code took 570 ms
+Loading analysis data took 5 ms
+Analyze and compile ATL took 1 ms
+Reloading save slot metadata took 6 ms
+Dump and make backups took 46 ms
+Cleaning cache took 0 ms
+Making clean stores took 0 ms
+Initial gc took 42 ms
+DPI scale factor: 1.500000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: b"Couldn't load nvlib." (can be ignored)
+Creating interface object took 2 ms
+Init translation took 1 ms
+Cleaning stores took 0 ms
+Load screen analysis took 1 ms
+Analyze screens took 12 ms
+Save screen analysis took 16 ms
+Save pyanalysis took 0 ms
+Save bytecode took 41 ms
+Running _start took 1 ms
+Interface start took 1490 ms
+
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 1920, 1080)
+swap interval: 1 frames
+Windowed mode.
+Vendor: 'Intel'
+Renderer: 'Intel(R) UHD Graphics'
+Version: '4.6.0 - Build 30.0.101.1122'
+Display Info: <Info({'bitsize': 32, 'bytesize': 4, 'masks': (16711680, 65280, 255, 0), 'shifts': (16, 8, 0, 0), 'losses': (0, 0, 0, 8), 'current_w': 1920, 'current_h': 1080, 'refresh_rate': 60, 'hw': False, 'wm': True, 'video_mem': 268435456, 'blit_hw': False, 'blit_hw_CC': False, 'blit_hw_A': False, 'blit_sw': False, 'blit_sw_CC': False, 'blit_sw_A': False})>
+Screen sizes: virtual=(1920, 1080) physical=(1731, 974) drawable=(1731, 974)
+Maximum texture size: 4096x4096

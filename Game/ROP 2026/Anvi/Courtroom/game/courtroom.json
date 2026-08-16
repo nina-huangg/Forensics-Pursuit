@@ -1,0 +1,33 @@
+[
+    {
+        "specialty": "Forensic Chemistry",
+        "evidence": [
+            {
+                "name": "Paint Chip Analysis Results",
+                "image": "paint",
+                "description": "This result summarizes the paint comparison between the questioned paint chip and the known vehicle paint samples. The analysis includes visual color comparison, microscopic layer sequence comparison, and FTIR analysis of the individual paint layers. Although the samples appear similar in exterior color, only Sample 2 has the same layer sequence and FTIR results as the evidence sample.",
+                "truth_base": [
+                    "Physical appearance alone is not enough to identify the source vehicle",
+                    "Sample 2 has FTIR results consistent with the evidence sample",
+                    "Samples 1 and 3 show differences from the evidence sample",
+                    "Paint analysis supports Sample 2 as consistent with the evidence sample"
+                ]
+            }
+        ]
+    },
+    {
+        "specialty": "Forensic Identification",
+        "evidence": [
+            {
+                "name": "Tire Tread Analysis Result",
+                "image": "tiretracks",
+                "description": "The evidence tire tread impression was recovered from the collision scene. Using the ACE-V method, the evidence impression was examined and compared with tire tread samples collected from the suspected vehicles. Samples 1 and 3 were excluded as possible sources of the evidence impression. Sample 2 was found to be associated with the evidence impression based on the comparison.",
+                "truth_base": [
+                    "The tire tread impression was compared with the suspect vehicle tires",
+                    "Tire tread comparison followed ACE-V method",
+                    "Sample 2 / Suspect Vehicle 2 is associated with the scene tread impression"
+                ]
+            }
+        ]
+    }
+]
