@@ -15,8 +15,6 @@
 
     tools = load_items("jsons/toolbox.json")
 
-    toolbox.add_to_inventory(tools["Backing Card"])
-    toolbox.add_to_inventory(tools["Scalebar"])
     toolbox.add_to_inventory(tools["Tape"])
     toolbox.add_to_inventory(tools["Tamper Evident Tape"])
     toolbox.add_to_inventory(tools["Gel Lifter"])
@@ -71,21 +69,21 @@
         return True
 
 
-define n = Character(name=("Nina"), image="nina")
+define n = Character(name=("Nina"), image="nina_normal")
 image bg motorcycle = Transform("motorcycle", xysize=(1920, 1080))
 
 label start:
     scene bg motorcycle
-    show nina normal1
+    show nina normal
     n "Hello detective. I'm Detective Nina."
     n "Late last night, a serious hit and run occurred on this roadway."
-    show nina thinknote1
+    show nina think
     n "A motorcyclist was struck from behind and left critically injured."
     n "The driver fled the scene before emergency services arrived."
     show nina talk
     n "Our job is to collect and preserve the evidence left behind."
     n "If we're lucky, we'll be able to identify the vehicle that caused the collision."
-    show nina normal1
+    show nina normal
     n "I can already see several pieces of evidence at the scene."
     n "Let's get to work."
     hide nina
@@ -96,12 +94,12 @@ label start:
 label game:
     hide screen closeup
     if analyzed["tiretracks"] and analyzed["paint"]:
-        show nina normal1
+        show nina normal
         n "Excellent work, detective."
         n "We've collected all available evidence from the crash scene."
-        show nina thinknote1
-        n "The lab should be able to analyze` tire impressions and taillight fragments."
-        show nina normal1
+        show nina think
+        n "The lab should be able to analyze the tire impressions and paint fragments."
+        show nina normal
         n "Let's head back and begin the analysis."
         jump lab_start
 
@@ -118,13 +116,13 @@ label closeup:
 # tool use labels
 ##################################################
 
-label backing_card_use_label:
-    n "I don't think that tool belongs here."
-    jump game
+# label backing_card_use_label:
+#     n "I don't think that tool belongs here."
+#     jump game
 
-label scalebar_use_label:
-    n "You don't need a scale here."
-    jump game
+# label scalebar_use_label:
+#     n "You don't need a scale here."
+#     jump game
 
 label tape_use_label:
     n "I don't think that tool belongs here."
@@ -137,24 +135,39 @@ label magnetic_powder_use_label:
 label druggist_paper_use_label:
     if analyzing["paint"] and paint_step == 0:
         call screen druggist_paper_use
+    if analyzing["paint"] and paint_step > 0:
+        n "You have already completed this step."
+        jump paint
     else:
         n "You don't need that right now."
 
         jump game
 
 label druggist_paper_correct_choice:
-    "You carefully collect the paint chip fragments."
+    if analyzing["paint"] and paint_step == 0:
+        "You carefully collect the paint chip fragments."
 
-    "The fragments are placed onto a clean sheet of paper and folded."
-    $ paint_step += 1
-    jump paint
+        "The fragments are placed onto a clean sheet of paper and folded."
+        $ paint_step += 1
+        jump paint
+    if analyzing["paint"] and paint_step > 0:
+        n "You have already completed this step."
+        jump paint
+    else:
+        n "You don't need that right now."
+        jump game
 
 label envelope_use_label:
     if analyzing["paint"] and paint_step == 1:
-        
         "You place the folded paint chip fragments into an envelope."
         # $ call screen fold_to_envelope
         $ paint_step += 1
+        jump paint
+    if analyzing["paint"] and paint_step == 0:
+        n "You need to collect the paint chip fragments first somehow..."
+        jump paint
+    if analyzing["paint"] and paint_step > 1:
+        n "You have already completed this step."
         jump paint
 
     if analyzing["tiretracks"] and track_step_gel == 3:
@@ -163,31 +176,48 @@ label envelope_use_label:
         $ toolbox.delete_from_inventory(tools["Gel Lifter Cover"])
         $ track_step_gel += 1
         jump tiretracks
-
+    if analyzing["tiretracks"] and track_step_gel == 2:
+        n "You need to lift the tire impression first..."
+        jump tiretracks
+    if analyzing["tiretracks"] and track_step_gel > 3:
+        n "You have already completed this step."
+        jump tiretracks
+        
     else:
         n "You don't need that right now."
         jump game
 
 label evidence_bag_use_label:
     if analyzing["paint"] and paint_step == 2:
-
         "You bag the folded paint chips."
         call screen envelope_to_bag
         $ paint_step += 1
         jump paint
+    if analyzing["paint"] and paint_step > 2:
+        n "You have already completed this step."
+        jump paint
+    if analyzing["paint"] and paint_step == 1:
+        n "You need another type of packaging before bagging..."
+        jump paint
+
     if analyzing["tiretracks"] and track_step_gel == 4:
-        
         "You bag the lifted tire impression."
         call screen envelope_to_bag
         $ track_step_gel += 1
         jump tiretracks
+    if analyzing["tiretracks"] and track_step_gel > 4:
+        n "You have already completed this step."
+        jump tiretracks
+    if analyzing["tiretracks"] and track_step_gel == 3:
+        n "You need another type of packaging before bagging..."
+        jump tiretracks
+
     else:
         n "You don't need that right now."
         jump game
 
 label tamper_evident_tape_use_label:
     if analyzing["paint"] and paint_step == 3:
-
         "You tape the bag with the folded paint chips."
         call screen bag_to_tape
         $ paint_step += 1 # paint step 3
@@ -196,6 +226,9 @@ label tamper_evident_tape_use_label:
         $ analyzing["paint"] = False
         $ evidence.add_to_inventory(evids["Bagged Paint Transfer"])
         jump game
+    if analyzing["paint"] and paint_step == 2:
+        n "You need another layer of packaging before taping..."
+        jump paint
 
     if analyzing["tiretracks"] and track_step_gel == 5:
         "You tape the bag with the lifted tire impression."
@@ -206,6 +239,9 @@ label tamper_evident_tape_use_label:
         $ analyzing["tiretracks"] = False
         $ evidence.add_to_inventory(evids["Bagged Tire Track Impression"])
         jump game
+    if analyzing["tiretracks"] and track_step_gel == 4:
+        n "You need another layer of packaging before taping..."
+        jump tiretracks
     else:
         n "You don't need that right now."
         jump game
@@ -216,6 +252,12 @@ label gel_lifter_use_label:
         $ toolbox.add_to_inventory(tools["Gel Lifter Cover"])
         $ track_step_gel += 1
         jump tiretracks
+    if analyzing["tiretracks"] and track_step_gel == 1:
+        n "You have already applied the gel lifter. What should you do to get a clear impression?"
+        jump tiretracks
+    if analyzing["tiretracks"] and track_step_gel > 1:
+        n "You have already completed this step."
+        jump tiretracks
     else:
         n "You don't need that right now."
         jump game
@@ -225,26 +267,29 @@ label roller_use_label:
         "You carefully roll the gel lifter over the tire impressions."
         $ track_step_gel += 1
         jump tiretracks
+    if analyzing["tiretracks"] and track_step_gel == 2:
+        n "You have already rolled the gel lifter. What should you do to pick up the impression?"
+        jump tiretracks
+    if analyzing["tiretracks"] and track_step_gel > 2:
+        n "You have already completed this step."
+        jump tiretracks
     else:
         n "You don't need that right now."
         jump game
 
 label gel_lifter_cover_use_label:
     if analyzing["tiretracks"] and track_step_gel == 2:
-        "You carefully lift the gel lifter cover and store it for later analysis."
+        "You carefully lift the gel lifter impression with the cover."
         $ track_step_gel += 1
         jump tiretracks
     if analyzing["tiretracks"] and track_step_gel == 1:
-        "You need to do something before you can lift the cover..."
+        "You need to do something before you can lift the impression with the cover..."
+        jump tiretracks
+    if analyzing["tiretracks"] and track_step_gel > 2:
+        n "You have already completed this step."
         jump tiretracks
     else:
         n "You don't need that right now."
-        jump game
-
-label label_use_label:
-
-        n "That won't help here."
-
         jump game
 
 #######################################################################
@@ -253,7 +298,7 @@ label label_use_label:
 define n = Character(name=("Nina"), image="nina")
 
 default current_cursor = ''
-default imported_print = ''
+default imported_track = ''
 default show_case_files = False
 default show_toolbox = False
 default location = "bio_station"
@@ -309,7 +354,7 @@ default paint_ftir = {
     }
 
 default fingerprint_tasks = {
-        "fingerprint_1_analyzed": False,
+        "track_analyzed": False,
     }
 
 init -5 python:
@@ -456,8 +501,6 @@ init -5 python:
 #################################### START #############################################
 label lab_start:
     python:
-        toolbox.delete_from_inventory(tools["Backing Card"])
-        toolbox.delete_from_inventory(tools["Scalebar"])
         toolbox.delete_from_inventory(tools["Tape"])
         toolbox.delete_from_inventory(tools["Tamper Evident Tape"])
         toolbox.delete_from_inventory(tools["Gel Lifter"])
@@ -473,7 +516,7 @@ label lab_start:
         evidence.add_to_inventory(evids["Unknown Paint Sample 1"])
         evidence.add_to_inventory(evids["Unknown Paint Sample 2"])
         evidence.add_to_inventory(evids["Unknown Paint Sample 3"])
-        evidence.add_to_inventory(evids["Fingerprint 1"])
+        evidence.add_to_inventory(evids["Tire Track Impression"])
 
     $current_scene = "scene1" # keeps track of current scene
 
@@ -507,14 +550,9 @@ label lab_hallway_intro:
 #     $ renpy.set_mouse_pos(1695, 504)
 #     return
 
-label fingerprint_1_use_label:
+label tire_track_impression_use_label:
     if location == "afis" and pressed == "import":
-        $ imported_print = "print_1"
-        jump import_print
-
-label fingerprint_2_use_label:
-    if location == "afis" and pressed == "import":
-        $ imported_print = "print_2"
+        $ imported_track = "track_2"
         jump import_print
 
 label bio_station:
@@ -709,8 +747,26 @@ label finish_lab:
     hide screen inventory
     with Dissolve(1.0)
     scene hallway
-    show nina talk at right
+    show nina talk
     n "Great job, you've finished all the tasks!"
+    if identified_sample == "unknown2_paint":
+        n "The tire track and paint analysis found the most similar vehicle to be a silver 2006 Dodge Durango SLT."
+        if identified_directly:
+            show nina think
+            n "However, you directly identified the paint sample without using the FTIR machine, even after a warning."
+            show nina talk
+            n "This might cause some trouble... but either way, you've finished processing the evidence."
+        else:
+            n "You've finished processing the evidence with no major mistakes, so the court should be able to use your analysis. Congratulations!"
+    else:
+        n "The tire track analysis found the most similar vehicle to be a silver 2006 Dodge Durango SLT."
+        show nina think
+        n "However, your paint analysis actually found a contradicting result."
+        if identified_directly:
+            show nina write
+            n "Additionally, you directly identified the paint sample without using the FTIR machine, even after a warning."
+        show nina talk
+        n "This might cause some trouble... but either way, you've finished processing the evidence."
     jump end_game
 
 label end_game:

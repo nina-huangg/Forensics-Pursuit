@@ -599,8 +599,8 @@ screen data_analysis_lab_screen:
     hbox:
         xpos 0.25 yalign 0.25
         imagebutton:
-            idle "afis_software_idle"
-            hover "afis_software_hover"
+            idle "csipix_software_idle"
+            hover "csipix_software_hover"
             action Jump("computer")
         key "K_LEFT" action Jump("bio_station")#"chem_station")
 

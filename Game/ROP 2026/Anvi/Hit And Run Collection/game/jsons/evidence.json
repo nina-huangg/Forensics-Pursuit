@@ -8,16 +8,10 @@
         "image_name": "inventory-evidence_bag"
     },
     {
-        "name": "Fingerprint 1",
-        "image_name": "inventory-fingerprint_1",
+        "name": "Tire Track Impression",
+        "image_name": "inventory-evidence_bag",
         "usable": true,
-        "action": "use_fingerprint_1"
-    },
-    {
-        "name": "Fingerprint 2",
-        "image_name": "inventory-fingerprint_2",
-        "usable": true,
-        "action": "use_fingerprint_2"   
+        "action": "use_tire_track_impression"
     },
     {
         "name": "Known Paint Sample",

@@ -67,8 +67,8 @@ init -100 python:
         renpy.jump("envelope_use_label")
         renpy.restart_interaction()
         
-    def use_fingerprint_1():
-        renpy.jump("fingerprint_1_use_label")
+    def use_tire_track_impression():
+        renpy.jump("tire_track_impression_use_label")
         renpy.restart_interaction()
 
     def use_fingerprint_2():

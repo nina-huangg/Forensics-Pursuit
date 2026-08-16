@@ -1,3 +1,5 @@
+.env
+
 # Directories that Ren'Py changes files in.
 /game/saves
 /game/cache
