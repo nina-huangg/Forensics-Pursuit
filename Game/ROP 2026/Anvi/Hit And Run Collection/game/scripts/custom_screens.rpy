@@ -499,7 +499,7 @@ screen stereomicroscope_unknown_check():
 
             text "Comparing this sample to the known, what conclusion can you draw?" size 30 color "#FFF"
 
-            textbutton "Exclude - does not match known sample at all":
+            textbutton "Exclude":
                 background Solid("#13121250")
                 padding (10, 5)
                 action Function(check_exclude_button)
@@ -510,7 +510,7 @@ screen stereomicroscope_unknown_check():
                 #     )
                 # ]
 
-            textbutton "Cannot exclude - may match known sample":
+            textbutton "Cannot exclude":
                 background Solid("#13121250")
                 padding (10, 5)
                 action [
@@ -518,7 +518,7 @@ screen stereomicroscope_unknown_check():
                     Jump("stereomicroscope_check_cannot_exclude"),
                 ]
 
-            textbutton "Identification - matches known sample":
+            textbutton "Identification":
                 background Solid("#13121250") # white at 30% opacity
                 padding (10, 5)
                 action Function(check_identification_button)
