@@ -664,7 +664,7 @@ label stereomicroscope_check_identification:
     
 label final_paint_check_choice:
     n "You have chosen a sample you find consistent with evidence using the stereomicroscope and FTIR machine."
-    $ identified_sample = paint_ftir
+    $ identified_sample = paint_sample
     $ tasks["Analyze remaining samples via FTIR"] = True
     hide screen ftir_display
     jump ftir_station
