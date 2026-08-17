@@ -1,0 +1,69 @@
+[
+    {
+        "name": "Camera",
+        "image_name": "toolbox-camera",
+        "usable": true,
+        "action": "use_camera"
+    },
+    {
+        "name": "Collection Materials",
+        "image_name": "toolbox-evidence_bag",
+        "usable": "True",
+        "action": "collect_evidence"
+    },
+    {
+        "name": "Swab Pack",
+        "image_name": "toolbox-swab_pack",
+        "usable": true,
+        "action": "use_swab_pack"
+    },
+    {
+        "name": "Kastle-Meyer Reagents",
+        "image_name": "kastlemeyer",
+        "usable": true,
+        "action": "begin_Kastle_Meyer"
+    },
+    {  
+        "name": "Black Granular Powder",
+        "image_name": "toolbox-black-granular-powder",
+        "usable": true,
+        "action": "use_black_granular_powder"
+    },
+    {  
+        "name": "White Granular Powder",
+        "image_name": "toolbox-white_granular_powder",
+        "usable": true,
+        "action": "use_white_granular_powder"
+    },
+    {
+        "name": "Backing Card",
+        "image_name": "toolbox-backing_card",
+        "usable": true,
+        "action": "use_backing_card"
+    },
+    {
+        "name": "Scalebar",
+        "image_name": "toolbox-scalebar",
+        "usable": true,
+        "action": "use_scalebar"
+    },
+    {
+        "name": "Tape",
+        "image_name": "toolbox-tape",
+        "usable": true,
+        "action": "use_tape"
+    },
+    {
+        "name": "Backing Card and Tape",
+        "image_name": "toolbox-backing_card_and_tape",
+        "usable": true,
+        "action": "use_backing_card_and_tape"
+    },
+    {
+        "name": "Hungarian Red",
+        "image_name": "toolbox-hungarian_red",
+        "usable": true,
+        "action": "use_hungarian_red"
+    }
+    
+]

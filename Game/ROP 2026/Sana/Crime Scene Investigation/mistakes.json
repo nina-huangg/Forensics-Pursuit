@@ -1,0 +1,87 @@
+[
+    {
+        "name": "No Photo Scene",
+        "image_name": "toolbox-camera",
+        "description": "You forgot to take pictues before investigating. Your credibility is completely ruined!"
+    },
+    {
+        "name": "No Gloves",
+        "image_name": "nitrile_gloves",
+        "description": "You did not wear gloves. How many of your own fingerprints have you collected?"
+    },
+    {
+        "name": "Dirty Gloves",
+        "image_name": "nitrile_gloves",
+        "description": "You did not change your gloves and contaminated the crime scene. Contrary to popular belief, these things don't magically clean themselves!"
+    },
+    {
+        "name": "No Evidence Bag",
+        "image_name": "toolbox-evidence_bag",
+        "description": "You forgot to bag and tape evidence. You might as well have sent the evidence over with pigeon carrier!"
+    },
+    {
+        "name": "Wrong Swab Type Wet",
+        "image_name": "toolbox-swab_pack",
+        "description": "You used the wrong type of swab for blood collection. Save the dilution for the lab!"
+    },
+    {
+        "name": "Wrong Swab Type",
+        "image_name": "toolbox-swab_pack",
+        "description": "You used the wrong type of swab for blood collection."
+    },
+    {
+        "name": "Wrong Blood Test Order",
+        "image_name": "kastlemeyer",
+        "description": "You mixed up the steps of the Kastle-Meyer test. How'd you manage that?"
+    },
+    {
+        "name": "False Positive Collected",
+        "image_name": "toolbox-swab_pack",
+        "description": "You did not ignore a false positive."
+    },
+    {
+        "name": "No Presuptive Test",
+        "image_name": "kastlemeyer",
+        "description": "You failed to run a presumptive test. For all you know, it could be ketchup!"
+    }, 
+    {
+        "name": "Test Swab Collected",
+        "image_name": "toolbox-swab_pack",
+        "description": "You collected the test swab. If only there was a way to collect a fresh sample for testing."
+    },  
+    {
+        "name": "Wrong Colour Dust",
+        "image_name": "toolbox-white_granular_powder",
+        "description": "You used the wrong colour of powder. You might have more sucess collecting the print if you can actually see it!"
+    },  
+    {
+        "name": "No Picture Dusted Fingerprint",
+        "image_name": "toolbox-black-granular-powder",
+        "description": "You did not take a picture of the dusted fingerprint. Let's hope you make no mistakes when lifting it!"
+    },  
+    {
+        "name": "No Scale Bar",
+        "image_name": "toolbox-scalebar",
+        "description": "You did not use a scalebar when collecting the fingerprint. Who needs chain of custody anyway?"
+    },  
+    {
+        "name": "No Picture Scale Bar",
+        "image_name": "toolbox-scalebar",
+        "description": "You did not take a picture of the fingerprint with the scale bar."
+    },
+    {
+        "name": "Missing Evidence",
+        "image_name": "toolbox-evidence_bag",
+        "description": "You failed to collect a piece of evidence. Don't push yourself too hard; it's not like anybody's future is on the line"
+    },
+    {
+        "name": "Incomplete Fingerprint Development",
+        "image_name": "toolbox-hungarian_red",
+        "description": "You did not refine the bloody fingerprint."
+    },
+    {
+        "name": "No Developed Fingerprint Photograph",
+        "image_name": "toolbox-camera",
+        "description": "You did not photograph the developed fingerprint." 
+    } 
+]
