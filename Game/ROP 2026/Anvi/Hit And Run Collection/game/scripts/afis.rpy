@@ -151,10 +151,10 @@ init python:
 
     print_1_question = MCQ(
         question = "What kind of conclusion can you formulate when visually comparing these tire tracks?",
-        choices = [("An elimination", False), ("An association", False), ("An individualization", True)],
-        responses = [["An elimination (or exclusion) is when the class, wear, and/or individual characteristics do not sufficiently match between the collected impression and the known shoe/tire.", "These tracks are too similar for an elimination.", "Give it another go!"],
-                    ["An association (likelihood) can be drawn when the class, wear, and some individual characteristics agree between the collected impression and the known shoe/tire, but are not sufficient to be certain of a match.", "Results can range from likely to could have, to similar but lacking sufficient detail to be conclusive.", "Do you think this is the most accurate conclusion? Try again!"],
-                    ["Good job! An individualization is when the class, wear, and individual characteristics of the collected impression and the known shoe or tire sufficiently match with no unexplainable differences.", "Let's finish the rest of the comparison."]]
+        choices = [("An elimination", False), ("An association", True), ("An individualization", False)],
+        responses = [["An elimination (or exclusion) is when the class, wear, and/or individual characteristics do not sufficiently agree between the collected impression and the known shoe/tire.", "These tracks are too similar for an elimination.", "Give it another go!"],
+                    ["Good job! An association can be drawn when the class, wear, and some individual characteristics agree between the collected impression and the known shoe/tire.", "But there are differences that prevent us from being certain that they agree overall. Results can range from likely to similar but lacking sufficient detail to be conclusive.", "Let's finish the rest of the comparison."],
+                    ["An individualization is when the class, wear, and individual characteristics of the collected impression and the known shoe or tire sufficiently agree with no unexplainable differences.", "Do you think we can be completely certain of agreement, or should we be more conservative? Try again!"]]
     )
 
     # print_2_question = MCQ(
