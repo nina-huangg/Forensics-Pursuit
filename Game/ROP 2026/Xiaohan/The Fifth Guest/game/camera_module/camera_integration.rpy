@@ -147,6 +147,17 @@ init -4 python:
             renpy.restart_interaction()
             return
 
+        # Dev mode: grant the evidence without opening the viewfinder. Placed
+        # after the attachment and already-collected checks so those still hold.
+        if store.dev_mode:
+            cc = store.camera_config
+            if cc is not None and cc.on_photo_taken is not None:
+                cc.on_photo_taken(location_id)
+            renpy.notify("Dev: collected {} without photographing.".format(item_name or location_id))
+            reset_tool()
+            renpy.restart_interaction()
+            return
+
         store.current_photo_location = location_id
         # Unequip happens inside camera_open_viewfinder as well
         camera_open_viewfinder()

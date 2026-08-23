@@ -149,6 +149,53 @@ init -5 python:
         store.held_evidence = None
         prepare_lab_toolbox()
 
+    def reset_courtroom_state():
+        """Clear one trial's worth of state so a replay starts from a blank transcript."""
+        store.context_history = []
+        store.unintelligible_count = 0
+        store.mentioned_truths = set()
+        store.voir_dire_question_count = 0
+        store.voir_dire_mentioned = set()
+        store.voir_dire_retries = 0
+        store.qualification_score = 0
+        store.first_question_generated = False
+        store.answered_first_question = False
+        store.reminder_pressed = False
+        store.switch_cases = False
+        store.tutorial_skipped = False
+        store.ai_question = ""
+        store.user_answer = ""
+        store.responses = []
+        store.eval_comments = ""
+        store.score = 0
+        store.evidences.reset_inventory()
+
+        # Carry the name entered at the crime scene into the witness stand, so a
+        # continuous playthrough does not ask for it twice.
+        collected_name = getattr(store, "player_name", "") or ""
+        if collected_name and collected_name != "Player":
+            store.player_fname = collected_name
+        else:
+            store.player_fname = ""
+        store.player_lname = ""
+        store.player_prefix = ""
+
+    def initialize_courtroom_route():
+        reset_collection_state()
+        store.game_route = "courtroom_only"
+        reset_courtroom_state()
+
+    def enter_courtroom_ui():
+        """Point the shared say/input/inventory screens at their courtroom look."""
+        store.courtroom_ui_active = True
+        store.dialogue_boxes_visible = True
+        store.selected_inventory = store.evidences
+
+    def exit_courtroom_ui():
+        store.courtroom_ui_active = False
+        store.dialogue_boxes_visible = True
+        store.selected_inventory = store.toolbox
+
     LAB_REQUIRED_PHYSICAL_EVIDENCE = (
         # "Gel-Lifted Shoeprint",  # Temporarily disabled with shoeprint scene.
         "Tube with Swab (Lamp)",
@@ -914,12 +961,13 @@ init -5 python:
             desc = (
                 "A fingerprint recovered from the study lamp.\n"
                 "Case: 2026-10A\n"
-                "Date: Today\n"
+                "Date: {}\n"
                 "Officer: Detective\n"
                 "Location: Study Lamp\n"
                 "Method: Tape lift (Roller: {}).\n"
                 "Development: {}."
             ).format(
+                store.CASE_DATE,
                 "Yes" if store.fingerprint_roller_used else "No",
                 development_labels.get(store.fingerprint_powder, "Unknown")
             )

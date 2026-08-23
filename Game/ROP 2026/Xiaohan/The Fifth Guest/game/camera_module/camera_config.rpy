@@ -128,6 +128,18 @@ init python:
             store.photos_taken_locations.append(loc)
 
         score_data = calculate_photo_score(cs.photo_data[-1])
+
+        # Dev mode: every shot is a perfect shot. This also clears the >=90
+        # fingerprint gate below, so no separate bypass is needed.
+        if store.dev_mode and score_data:
+            for _cat in ("composition", "exposure", "sharpness", "completeness"):
+                if _cat in score_data and isinstance(score_data[_cat], dict):
+                    score_data[_cat]["score"] = score_data[_cat].get("max", 0)
+                    score_data[_cat]["feedback"] = "Developer mode: auto-scored."
+            score_data["total"] = 100
+            score_data["grade"] = "A+"
+            score_data.pop("requires_retake", None)
+
         store.last_photo_score = score_data
         store.pending_photo_location = loc
         store.pending_photo_accepted = False

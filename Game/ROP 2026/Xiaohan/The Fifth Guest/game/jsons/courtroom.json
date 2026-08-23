@@ -1,0 +1,67 @@
+[
+    {
+        "specialty": "Forensic Biology",
+        "evidence": [
+            {
+                "name": "DNA profile from blood swab",
+                "image": "inventory-splatter",
+                "description": "Bloodstain was located and collected during the scene examination. A presumptive blood test was performed before collecting the stain with a swab. In the laboratory, DNA was extracted from the swab, quantified, amplified, and analyzed using capillary electrophoresis to generate an STR DNA profile. The resulting profile was compared with known reference profiles.",
+                "truth_base": [
+                    "{victim} cannot be excluded as a contributor to the DNA profile obtained from the blood swab",
+                    "DNA was extracted from the blood swab",
+                    "DNA extraction, quantification, amplification, and capillary electrophoresis were performed (do not need to mention all, but must mention at least two)",
+                    "A positive presumptive blood test indicates the possible presence of blood but is not confirmatory"
+                ]
+            },
+            {
+                "name": "DNA profile from under-nail swab",
+                "image": "inventory-swab",
+                "description": "Biological material was recovered from beneath the victim's fingernails during the post-mortem examination and submitted as a swab for DNA analysis. In the laboratory, DNA was extracted, quantified, amplified, and analyzed by capillary electrophoresis. The resulting STR profile was interpreted and compared with known reference profiles. Statistical weight was assigned to the observed association using a Random Match Probability.",
+                "truth_base": [
+                    "The Random Match Probability was calculated to determine the statistical weight of the DNA association",
+                    "The most conservative RMP was reported",
+                    "The RMP is 1 in 269 septillion",
+                    "{suspect} cannot be excluded as a contributor to the DNA profile obtained from the under-nail swab (may not be same exact word, but must mention {suspect} cannot be excluded)"
+                ]
+            },
+            {
+                "name": "DNA profile from positive control",
+                "image": "no_swab_filled",
+                "description": "A positive control was included during STR amplification and capillary electrophoresis to verify that the DNA amplification and detection process was functioning properly. The resulting DNA profile was compared with the expected profile of the positive control.",
+                "truth_base": [
+                    "The positive control was amplified and analyzed alongside the evidence samples",
+                    "The expected positive-control result indicates that the amplification and detection process was functioning properly (may not be the same exact word, but must mention process was functioning properly)",
+                    "A positive control contains known DNA and produced the expected DNA profile"
+                ]
+            },
+            {
+                "name": "DNA profile from negative control",
+                "image": "toolbox-tube",
+                "description": "A negative control was included during the DNA analysis to monitor for contamination introduced during sample preparation or amplification. It was processed alongside the evidence samples and analyzed by capillary electrophoresis.",
+                "truth_base": [
+                    "A negative control was included in the DNA analysis",
+                    "The negative control was processed alongside the evidence samples",
+                    "The negative control should not contain DNA",
+                    "No DNA profile or reportable alleles were detected in the negative control",
+                    "The absence of detected DNA in the negative control indicates that no detectable contamination was observed in that control (may not be same exact word, but must mention no contamination)"
+                ]
+            }
+        ]
+    },
+    {
+        "specialty": "Forensic Identification",
+        "evidence": [
+            {
+                "name": "Fingerprint Analysis Result",
+                "image": "inventory-fingerprint-photo",
+                "description": "A latent bloody fingerprint was located during the scene examination and collected for further analysis. In the laboratory, the recovered impression was examined and compared with a known fingerprint using its friction ridge characteristics to assess whether the impressions were consistent with originating from the same source.",
+                "truth_base": [
+                    "A latent fingerprint was recovered from the lamp at the scene",
+                    "The recovered fingerprint was compared with known fingerprints from four individuals",
+                    "The examination involved comparing friction ridge detail between the recovered and known impressions",
+                    "The recovered fingerprint was identified as {suspect}"
+                ]
+            }
+        ]
+    }
+]

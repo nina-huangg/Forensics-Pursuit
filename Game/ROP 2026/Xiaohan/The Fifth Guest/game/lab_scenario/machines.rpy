@@ -19,11 +19,11 @@ label use_genetic_analyzer:
 label wait_screen:
     # Generic wait (e.g. PCR). Machine-specific waits use machine_wait + return to that machine.
     if tasks["DNA extraction"]:
-        call machine_wait("Running PCR...", None)
+        call machine_wait("Running PCR...", None) from _call_machine_wait
     elif extraction_complete():
-        call machine_wait("Extraction complete...", None)
+        call machine_wait("Extraction complete...", None) from _call_machine_wait_1
     else:
-        call machine_wait("Waiting for the run to finish...", None)
+        call machine_wait("Waiting for the run to finish...", None) from _call_machine_wait_2
     jump return_bio_station
 
 
@@ -36,7 +36,10 @@ label machine_wait(message="Waiting...", bg=None):
     show expression Solid("#00000099") as machine_wait_dim
     with dissolve
     show text "{color=#FFFFFF}[message]{/color}" at truecenter, lab_wait_wobble with dissolve
-    pause 2.0
+    if dev_mode:
+        pause 0.1
+    else:
+        pause 2.0
     hide text with dissolve
     hide machine_wait_dim
     return
@@ -67,7 +70,7 @@ label spinner_run:
 
     $ _r = try_extraction_tool("spinner")
     if _r in ("ok", "wait_tube"):
-        call machine_wait("Mini centrifuge spinning...", "backgrounds/use_spinner.png")
+        call machine_wait("Mini centrifuge spinning...", "backgrounds/use_spinner.png") from _call_machine_wait_3
     if _r == "ok":
         jump return_bio_station
     # Still need the other tube — stay on the zoomed mini centrifuge.
@@ -133,7 +136,7 @@ label vortex_apply:
     show screen open_inv
     $ _r = try_extraction_tool("vortex")
     if _r in ("ok", "wait_tube"):
-        call machine_wait("Pulse-vortexing...", "backgrounds/vortex_swab.png")
+        call machine_wait("Pulse-vortexing...", "backgrounds/vortex_swab.png") from _call_machine_wait_4
     if _r == "ok":
         jump return_bio_station
     # One tube done — stay zoomed so the player can equip the next tube.
@@ -266,12 +269,23 @@ label use_thermal_cycler:
 
 label cem:
     scene computer_screen_interface
-    pause 1.0
+    if dev_mode:
+        pause 0.1
+    else:
+        pause 1.0
     scene cem_interface
-    call screen cem_screen
+    # The run finishes on its own -- no click needed to bring Nina in.
+    if dev_mode:
+        pause 0.1
+    else:
+        pause 1.5
+    jump cem_finish
 
 
 label cem_finish:
+    # Defensive: cem_screen is no longer shown, but if it ever is again it is
+    # modal at zorder 110 and would cover the dialogue below.
+    $ renpy.hide_screen("cem_screen")
     $ hide_notebook()
     scene cem_screen_idle
     with vpunch
@@ -348,7 +362,7 @@ label incubator_question:
             "Incubate at room temperature (proceed)":
                 $ _r = try_extraction_tool("wait")
                 if _r in ("ok", "wait_tube"):
-                    call machine_wait("Room-temperature incubation...", "backgrounds/use_incubator.png")
+                    call machine_wait("Room-temperature incubation...", "backgrounds/use_incubator.png") from _call_machine_wait_5
                 if _r == "ok":
                     jump return_bio_station
                 jump use_incubator
@@ -388,7 +402,7 @@ label incubator_dual_load:
                 jump incubator_dual_load
             "56°C, 900 rpm, 1 hour":
                 $ incubator_dual_complete()
-                call machine_wait("Incubating both tubes at 56°C...", "backgrounds/use_incubator.png")
+                call machine_wait("Incubating both tubes at 56°C...", "backgrounds/use_incubator.png") from _call_machine_wait_6
                 jump return_bio_station
             "95°C, no shaking, 5 minutes":
                 "That is a PCR denaturation setting. Use 56°C at 900 rpm for 1 hour."
@@ -403,7 +417,7 @@ label incubator_dual_load:
                 jump incubator_dual_load
             "70°C, 900 rpm, 10 minutes":
                 $ incubator_dual_complete()
-                call machine_wait("Incubating both tubes at 70°C...", "backgrounds/use_incubator.png")
+                call machine_wait("Incubating both tubes at 70°C...", "backgrounds/use_incubator.png") from _call_machine_wait_7
                 jump return_bio_station
             "70°C, no shaking, 1 minute":
                 "Use shaking at 900 rpm for 10 minutes."
@@ -472,7 +486,7 @@ label centrifuge_run:
 label centrifuge_apply:
     $ _r = try_extraction_tool("centrifuge")
     if _r in ("ok", "wait_tube"):
-        call machine_wait("Benchtop centrifuge running...", "backgrounds/use_centrifuge.png")
+        call machine_wait("Benchtop centrifuge running...", "backgrounds/use_centrifuge.png") from _call_machine_wait_8
     if _r == "ok":
         jump return_bio_station
     # Stay on centrifuge if another tube is still needed for this step.
@@ -483,7 +497,10 @@ label ethanol_pour_start:
     # Pour mini-game: drag to the target volume before it actually gets added.
     $ open_machine()
     if extraction_expected_tool() != "ethanol":
-        $ custom_notify("Not the right step for ethanol yet. Check the notebook.", False)
+        if extraction_current() and extraction_current()[0] == "ethanol_new_tube":
+            $ custom_notify("Place the column in a new collection tube first (Prep bench), then come back for ethanol.", False)
+        else:
+            $ custom_notify("Not the right step for ethanol yet. Check the notebook.", False)
         $ record_lab_mistake()
         jump return_bio_station
     if extraction_machine_equipped is None:
@@ -515,6 +532,8 @@ label new_tube:
     if _key == "add_aw1":
         jump aw1_pour_start
     $ _r = try_extraction_tool("column")
+    if _r == "ok" and _key == "ethanol_new_tube":
+        $ custom_notify("Next: add 700 µL ethanol with the pour mini-game.", True)
     if _r == "wait_tube":
         $ custom_notify("Equip the other processed tube from Evidence, then use Column / Collection Tube again.", True)
     jump return_bio_station

@@ -1,8 +1,8 @@
 define s = Character(name=("Nina"), image="nina")
 
-# TODO: replace with the actual case names once confirmed.
-define suspect_name = "the suspect"
-define victim_name = "the victim"
+# Case names live in courtroom_scenario/courtroom_data.rpy (CASE_VICTIM / CASE_SUSPECT).
+define suspect_name = CASE_SUSPECT
+define victim_name = CASE_VICTIM
 
 default current_cursor = ""
 default imported_print = ""
@@ -17,12 +17,14 @@ default swab_is_vortexed_2 = False
 default swab_is_incubated_0 = False
 default ethanol_added = False
 default ethanol_pour_amount = 0
+default pour_hold_ticks = 0
 default lysate_transfer_amount = 0
 default aw1_pour_amount = 0
 default ate_pour_amount = 0
 default incubator_loaded_tubes = []
 default profile_answers = {}
 default profile_locus_index = 0
+default profile_visited = []
 default prep_view = 1
 default tube_transfered = False
 default lab_gameplay_initialized = False
@@ -76,7 +78,8 @@ define dna_extraction_steps = [
     ("centrifuge_aw1", "Benchtop centrifuge 8000 rpm / 1 min (balance with NC)."),
     ("add_aw2", "New collection tube + 700 µL Buffer AW2."),
     ("centrifuge_aw2", "Benchtop centrifuge 8000 rpm / 1 min (balance with NC)."),
-    ("add_ethanol_700", "New collection tube + 700 µL ethanol."),
+    ("ethanol_new_tube", "Place column in a new collection tube."),
+    ("add_ethanol_700", "Add 700 µL ethanol (pour mini-game)."),
     ("centrifuge_ethanol", "Benchtop centrifuge 8000 rpm / 1 min (balance with NC)."),
     ("new_collection_tube", "Place column in a new collection tube."),
     ("centrifuge_14000_3", "Benchtop centrifuge 14000 rpm / 3 min (balance with NC)."),
@@ -328,6 +331,8 @@ label bio_station:
     $ analysis_track = "blood"
     if extraction_complete():
         $ tasks["DNA extraction"] = True
+    if all(tasks.values()):
+        jump finish_lab
     show screen open_inv
     show screen notebook
     scene expression "backgrounds/station1.png"
@@ -342,6 +347,8 @@ label bio_station_2:
     $ analysis_track = "blood"
     if extraction_complete():
         $ tasks["DNA extraction"] = True
+    if all(tasks.values()):
+        jump finish_lab
     show screen open_inv
     show screen notebook
     scene expression "backgrounds/station2.png"
@@ -376,12 +383,24 @@ label impression_station:
 
 label finish_lab:
     $ hide_lab_overlays()
+    $ renpy.hide_screen("open_inv")
+    $ renpy.hide_screen("notebook")
     with Dissolve(1.0)
     scene hallway
     show nina talk at right
     with hpunch
     s "Great job, you've finished all the available lab tasks!"
-    jump end_game
+    s "The analysis is done, but the case isn't. You'll be called to testify about your findings as an expert witness."
+    hide nina
+    $ reset_courtroom_state()
+
+    # Without an API key there is no examination to play; end here instead.
+    if not courtroom_api_key_available():
+        call screen courtroom_api_key_missing
+        if not courtroom_api_key_available():
+            jump end_game
+
+    jump courtroom_transition_loading
 
 
 label end_game:

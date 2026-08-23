@@ -115,6 +115,19 @@ screen say(who, what):
         # shifts the center of nina_dialogue to the 1/2 of the screen horizontally.
         # If xalign = 0.3, it would shift the center of nina_dialogue to 1/3 of the screen horizontally
         # yalign shifts the center of the image vertically, similar to xalign.
+    elif courtroom_ui_active and who in ("Lex Machina", "Steve", "Judge"):
+        # The courtroom scenario ships its own per-speaker dialogue boxes.
+        # dialogue_boxes_visible hides them while the case-file inventory is open.
+        if dialogue_boxes_visible:
+            if who == "Lex Machina":
+                add "lex_dialogue" at Transform(xzoom=0.6, yzoom=0.55, xalign=0.5, yalign=0.99)
+            elif who == "Steve":
+                add "steve_dialogue" at Transform(xzoom=0.6, yzoom=0.55, xalign=0.5, yalign=0.9999)
+            else:
+                add "judge_dialogue" at Transform(xzoom=0.6, yzoom=0.55, xalign=0.5, yalign=0.99)
+    elif courtroom_ui_active and who is None and what:
+        if dialogue_boxes_visible:
+            add "narration_box" at Transform(xzoom=0.6, yzoom=0.3, xalign=0.5, yalign=0.99)
     else:
         window:
             id "window"
@@ -133,6 +146,10 @@ screen say(who, what):
     window:
         background None
 
+        # Fades the courtroom's dialogue text out with its box while the case-file
+        # inventory is open. Always fully opaque outside the courtroom.
+        at Transform(alpha=(0.0 if (courtroom_ui_active and not dialogue_boxes_visible) else 1.0))
+
         # Everything below manipulates the actual dialogue text being shown, NOT the
         # dialogue boxes themselves
         if who == "Nina":
@@ -142,6 +159,16 @@ screen say(who, what):
                 # ypos shifts the top-leftmost point of the image vertically, similar to xpos.
 
                 xsize 930
+        elif courtroom_ui_active and who in ("Lex Machina", "Steve", "Judge"):
+            text what id "what":
+                xpos 0.32
+                ypos 0.01
+                xsize 930
+        elif courtroom_ui_active and who is None:
+            text what id "what":
+                xpos 0.2
+                ypos 0.25
+                xsize 1000
 
     ## Nina's dialogue box has a circular portrait slot filled by her side image.
     ## Fall back to "side nina talk" when no matching side image is active (e.g. after hide).
@@ -151,6 +178,12 @@ screen say(who, what):
             add "side nina talk" xalign 0.205 yalign 0.85 zoom 0.78
         else:
             add _nina_side xalign 0.205 yalign 0.85 zoom 0.78
+    elif courtroom_ui_active and dialogue_boxes_visible and not renpy.variant("small"):
+        ## The courtroom boxes have their own portrait slots, at their own offsets.
+        if who == "Steve":
+            add SideImage() xalign 0.165 yalign 0.86
+        elif who == "Lex Machina" or who == "Judge":
+            add SideImage() xalign 0.174 yalign 0.83
     elif not renpy.variant("small"):
         add SideImage() xalign 0.205 yalign 0.85 zoom 0.78
         # This is responsible for the side sprite image positioning.
@@ -215,16 +248,45 @@ style say_dialogue:
 screen input(prompt):
     style_prefix "input"
 
-    window:
+    if courtroom_ui_active:
+        ## Testimony answers can run long, so the courtroom uses its own box with a
+        ## scrolling viewport instead of the fixed-height default window.
+        add "answer_dialogue_box" at Transform(xzoom=0.65, yzoom=0.35, xalign=0.5, yalign=0.97)
 
-        vbox:
-            xanchor gui.dialogue_text_xalign
-            xpos gui.dialogue_xpos
-            xsize gui.dialogue_width
-            ypos gui.dialogue_ypos
+        window:
+            id "window"
+            background None
+            xmargin 300
+            top_margin 15
+            has viewport:
+                yinitial 1000   # Auto-scroll to the newest line, up to 1000px
+                draggable True
+                mousewheel True
+                scrollbars "vertical"
+                ymaximum style.say_window.yminimum - 100 xfill True yfill True
 
-            text prompt style "input_prompt"
-            input id "input"
+            vbox:
+                xanchor gui.dialogue_text_xalign
+                xpos gui.dialogue_xpos
+                xsize gui.dialogue_width
+                ypos gui.dialogue_ypos
+
+                text prompt style "input_prompt"
+                input id "input":
+                    # Dark ink: the answer box is mid-tone teal and Lex's pale
+                    # sprite shows through it, so light text disappears.
+                    color "#07202b"
+    else:
+        window:
+
+            vbox:
+                xanchor gui.dialogue_text_xalign
+                xpos gui.dialogue_xpos
+                xsize gui.dialogue_width
+                ypos gui.dialogue_ypos
+
+                text prompt style "input_prompt"
+                input id "input"
 
 style input_prompt is default
 
@@ -289,8 +351,11 @@ screen quick_menu():
 
             textbutton _("Back") action Rollback()
             textbutton _("History") action ShowMenu('history')
-            textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Auto") action Preference("auto-forward", "toggle")
+            # Skipping is a developer tool here: students should not be able to
+            # jump past the teaching content.
+            if dev_mode:
+                textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
+                textbutton _("Auto") action Preference("auto-forward", "toggle")
             textbutton _("Save") action ShowMenu('save')
             textbutton _("Q.Save") action QuickSave()
             textbutton _("Q.Load") action QuickLoad()
@@ -1572,8 +1637,11 @@ screen quick_menu():
             style_prefix "quick"
 
             textbutton _("Back") action Rollback()
-            textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Auto") action Preference("auto-forward", "toggle")
+            # Skipping is a developer tool here: students should not be able to
+            # jump past the teaching content.
+            if dev_mode:
+                textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
+                textbutton _("Auto") action Preference("auto-forward", "toggle")
             textbutton _("Menu") action ShowMenu()
 
 

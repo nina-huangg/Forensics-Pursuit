@@ -42,12 +42,15 @@ screen notebook_screen():
                         spacing 10
                         text "[index]. [task]":
                             style "lab_todo_text"
-                        textbutton "Skip":
-                            text_style "lab_page_button"
-                            action [
-                                Function(skip_dna_extraction),
-                                Jump("extraction_finished"),
-                            ]
+                        # Testing shortcut: completes the whole extraction at
+                        # once, so it is developer-only (Ctrl+Shift+D).
+                        if dev_mode:
+                            textbutton "Skip":
+                                text_style "lab_page_button"
+                                action [
+                                    Function(skip_dna_extraction),
+                                    Jump("extraction_finished"),
+                                ]
                 else:
                     text "[index]. [task]":
                         style ("lab_todo_complete" if tasks[task] else "lab_todo_text")
@@ -337,7 +340,15 @@ screen swab_screen():
                     Show("lab_notify", message="Equip your sample tube or Negative Control from Evidence first.", correct=False),
                 ),
                 [
-                    Show("lab_notify", message="Not the ethanol step yet. Check the notebook.", correct=False),
+                    Show(
+                        "lab_notify",
+                        message=(
+                            "Place the column in a new collection tube first, then add ethanol."
+                            if extraction_current() is not None and extraction_current()[0] == "ethanol_new_tube"
+                            else "Not the ethanol step yet. Check the notebook."
+                        ),
+                        correct=False,
+                    ),
                     Function(record_lab_mistake),
                 ],
             )
@@ -361,7 +372,11 @@ screen swab_screen():
                     Function(record_lab_mistake),
                 ],
             )
-            tooltip "Buffer AW1"
+            tooltip (
+                "New collection tube"
+                if extraction_current() is not None and extraction_current()[0] in ("ethanol_new_tube", "new_collection_tube", "column_to_labeled_tube")
+                else "Buffer AW1"
+            )
 
         button:
             xpos 783
@@ -381,7 +396,11 @@ screen swab_screen():
                     Function(record_lab_mistake),
                 ],
             )
-            tooltip "Buffer AW2"
+            tooltip (
+                "New collection tube"
+                if extraction_current() is not None and extraction_current()[0] in ("ethanol_new_tube", "new_collection_tube", "column_to_labeled_tube")
+                else "Buffer AW2"
+            )
 
         button:
             xpos 1055
@@ -747,16 +766,18 @@ screen ethanol_pour():
         padding (20, 12)
         vbox:
             spacing 6
-            text "Pour the ethanol. Target: exactly [_target] µL":
+            text ("Pour 700 µL ethanol into the new collection tube. Target: exactly [_target] µL" if _key == "add_ethanol_700" else "Pour the ethanol. Target: exactly [_target] µL"):
                 size 24
                 bold True
                 color "#ffffff"
-            text "Drag the slider below to pour, or press → to add 1 µL per press — it only moves forward, so overshoot means Reset and start again. Hit the exact volume, then click Pour.":
+            text "Drag the slider below to pour, tap → for 1 µL, or hold → to pour continuously — it only moves forward, so overshoot means Reset and start again. Ease off as you near the mark, then click Pour.":
                 size 17
                 color "#c5d0d8"
                 xmaximum 860
 
     key "K_RIGHT" action Function(pour_increment, "ethanol_pour_amount", _max, 1)
+    # Holding the key pours continuously; see pour_hold_tick in styles.rpy.
+    timer 0.06 repeat True action Function(pour_hold_tick, "ethanol_pour_amount", _max, _target)
 
     # Tube outline with a rising liquid level tied to the poured amount.
     frame:
@@ -827,6 +848,15 @@ screen ethanol_pour():
         ypos 890
         action SetVariable("ethanol_pour_amount", 0)
 
+    # Dev only: drop straight onto the target volume.
+    if dev_mode:
+        textbutton "Fill (dev)":
+            style "lab_close_button"
+            text_style "lab_close_button_text"
+            xpos 1460
+            ypos 960
+            action SetVariable("ethanol_pour_amount", _target)
+
     textbutton "Close":
         style "lab_close_button"
         text_style "lab_close_button_text"
@@ -862,12 +892,14 @@ screen lysate_transfer():
                 size 24
                 bold True
                 color "#ffffff"
-            text "Drag the slider below to transfer, or press → to add 1 µL per press — it only moves forward, so overshoot means Reset and start again. Hit the exact volume, then click Transfer.":
+            text "Drag the slider below to transfer, tap → for 1 µL, or hold → to transfer continuously — it only moves forward, so overshoot means Reset and start again. Ease off as you near the mark, then click Transfer.":
                 size 17
                 color "#c5d0d8"
                 xmaximum 860
 
     key "K_RIGHT" action Function(pour_increment, "lysate_transfer_amount", _max, 1)
+    # Holding the key pours continuously; see pour_hold_tick in styles.rpy.
+    timer 0.06 repeat True action Function(pour_hold_tick, "lysate_transfer_amount", _max, _target)
 
     # QIAamp column outline with rising lysate level tied to the transferred amount.
     frame:
@@ -938,6 +970,15 @@ screen lysate_transfer():
         ypos 890
         action SetVariable("lysate_transfer_amount", 0)
 
+    # Dev only: drop straight onto the target volume.
+    if dev_mode:
+        textbutton "Fill (dev)":
+            style "lab_close_button"
+            text_style "lab_close_button_text"
+            xpos 1460
+            ypos 960
+            action SetVariable("lysate_transfer_amount", _target)
+
     textbutton "Close":
         style "lab_close_button"
         text_style "lab_close_button_text"
@@ -973,12 +1014,14 @@ screen aw1_pour():
                 size 24
                 bold True
                 color "#ffffff"
-            text "Drag the slider below to pour, or press → to add 1 µL per press — it only moves forward, so overshoot means Reset and start again. Hit the exact volume, then click Add.":
+            text "Drag the slider below to pour, tap → for 1 µL, or hold → to pour continuously — it only moves forward, so overshoot means Reset and start again. Ease off as you near the mark, then click Add.":
                 size 17
                 color "#c5d0d8"
                 xmaximum 860
 
     key "K_RIGHT" action Function(pour_increment, "aw1_pour_amount", _max, 1)
+    # Holding the key pours continuously; see pour_hold_tick in styles.rpy.
+    timer 0.06 repeat True action Function(pour_hold_tick, "aw1_pour_amount", _max, _target)
 
     # Collection tube outline with rising Buffer AW1 level tied to the poured amount.
     frame:
@@ -1049,6 +1092,15 @@ screen aw1_pour():
         ypos 890
         action SetVariable("aw1_pour_amount", 0)
 
+    # Dev only: drop straight onto the target volume.
+    if dev_mode:
+        textbutton "Fill (dev)":
+            style "lab_close_button"
+            text_style "lab_close_button_text"
+            xpos 1460
+            ypos 960
+            action SetVariable("aw1_pour_amount", _target)
+
     textbutton "Close":
         style "lab_close_button"
         text_style "lab_close_button_text"
@@ -1085,12 +1137,14 @@ screen ate_pour():
                 size 24
                 bold True
                 color "#ffffff"
-            text "Unlike the other reagents, the protocol allows a range here — drag the slider, or press → to add 1 µL per press, anywhere between [_min_target] and [_max_target] µL, then click Apply.":
+            text "Unlike the other reagents, the protocol allows a range here — drag the slider, tap → for 1 µL, or hold → to pour continuously, anywhere between [_min_target] and [_max_target] µL, then click Apply.":
                 size 17
                 color "#c5d0d8"
                 xmaximum 860
 
     key "K_RIGHT" action Function(pour_increment, "ate_pour_amount", _max, 1)
+    # Holding the key pours continuously; see pour_hold_tick in styles.rpy.
+    timer 0.06 repeat True action Function(pour_hold_tick, "ate_pour_amount", _max, _min_target)
 
     # Tube outline with a rising ATE level tied to the applied amount.
     frame:
@@ -1165,6 +1219,15 @@ screen ate_pour():
         ypos 890
         action SetVariable("ate_pour_amount", 0)
 
+    # Dev only: drop straight onto the target volume.
+    if dev_mode:
+        textbutton "Fill (dev)":
+            style "lab_close_button"
+            text_style "lab_close_button_text"
+            xpos 1460
+            ypos 960
+            action SetVariable("ate_pour_amount", _min_target)
+
     textbutton "Close":
         style "lab_close_button"
         text_style "lab_close_button_text"
@@ -1173,6 +1236,8 @@ screen ate_pour():
         action Return("cancel")
 
 
+# UNUSED: the CE run now advances to cem_finish on a timer instead of waiting
+# for a click. Kept in case the click-to-continue gate is ever wanted back.
 screen cem_screen():
     zorder 110
     modal True
@@ -1205,15 +1270,55 @@ init -3 python:
             self.d[self.key] = s
             renpy.restart_interaction()
 
+    def dev_fill_profile_answers():
+        """Dev only: fill the worksheet from the answer key already in PROFILE_ANSWERS."""
+        for marker, a1, a2 in PROFILE_ANSWERS:
+            store.profile_answers[marker] = "{}, {}".format(a1, a2)
+            if marker not in store.profile_visited:
+                store.profile_visited.append(marker)
+        renpy.restart_interaction()
+
     def profile_answers_reset():
         store.profile_answers = {}
         store.profile_locus_index = 0
+        store.profile_visited = []
+
+    def profile_locus_state(marker):
+        """'' = nothing typed, 'ok' = matches, 'bad' = filled but does not match."""
+        raw = store.profile_answers.get(marker, "")
+        if not raw.strip():
+            return ""
+        for m, a1, a2 in PROFILE_ANSWERS:
+            if m == marker:
+                parts = [p.strip().upper() for p in raw.replace("/", ",").split(",") if p.strip()]
+                return "ok" if sorted(parts) == sorted([a1.upper(), a2.upper()]) else "bad"
+        return ""
+
+    def profile_entered_count():
+        return sum(1 for m, a1, a2 in PROFILE_ANSWERS if store.profile_answers.get(m, "").strip())
+
+    def profile_flagged_count():
+        return sum(1 for m, a1, a2 in PROFILE_ANSWERS if profile_locus_state(m) == "bad")
+
+    def profile_leave_locus():
+        """A locus is only marked once the player moves off it, so feedback
+        never fires halfway through typing."""
+        marker = PROFILE_ANSWERS[store.profile_locus_index][0]
+        if marker not in store.profile_visited:
+            store.profile_visited.append(marker)
+
+    def profile_go_to(index):
+        profile_leave_locus()
+        store.profile_locus_index = index
+        renpy.restart_interaction()
 
     def profile_go_next():
+        profile_leave_locus()
         store.profile_locus_index = min(store.profile_locus_index + 1, len(PROFILE_ANSWERS) - 1)
         renpy.restart_interaction()
 
     def profile_go_previous():
+        profile_leave_locus()
         store.profile_locus_index = max(store.profile_locus_index - 1, 0)
         renpy.restart_interaction()
 
@@ -1301,7 +1406,7 @@ screen profile_input_screen():
                 ysize _table_row_h
                 background Solid("#00000000")
                 hover_background Solid("#ffe08033")
-                action SetVariable("profile_locus_index", _row_i)
+                action Function(profile_go_to, _row_i)
                 tooltip "Enter [_row_marker]"
 
                 text "[profile_answers.get(_row_marker, '')]":
@@ -1311,11 +1416,30 @@ screen profile_input_screen():
                     size 26
                     color "#1a1a1a"
 
+            # Rows the player has moved on from show whether the call matched.
+            $ _row_state = profile_locus_state(_row_marker)
+            if _row_state == "ok":
+                text "✓":
+                    xpos _table_x + 915
+                    ypos _table_y + (_row_i + 1) * _table_row_h + 6
+                    size 32
+                    bold True
+                    color "#2ecc71"
+            elif _row_state == "bad":
+                text "✗":
+                    xpos _table_x + 915
+                    ypos _table_y + (_row_i + 1) * _table_row_h + 6
+                    size 32
+                    bold True
+                    color "#e6a23c"
+
     frame:
         xpos 1050
-        ypos 450
+        ypos 360
         xsize 800
-        ysize 320
+        # The dev fill button adds a row, so the panel needs the extra height
+        # only when it is present.
+        ysize (545 if dev_mode else 470)
         background "#17354aee"
         padding (24, 20)
 
@@ -1338,6 +1462,27 @@ screen profile_input_screen():
                 color "#c5d0d8"
                 xmaximum 750
 
+            $ _entered = profile_entered_count()
+            $ _flagged = profile_flagged_count()
+            $ _cur_state = profile_locus_state(_marker)
+
+            text "[_entered] of [len(PROFILE_ANSWERS)] loci called.":
+                size 18
+                color "#8fa6b4"
+
+            # Only warn once the player has left the locus, so the message does
+            # not flicker while a genotype is still being typed.
+            if _cur_state == "bad" and _marker in profile_visited:
+                text "This call does not match [_marker]. Read the two tallest peaks in this locus's window.":
+                    size 17
+                    color "#e6a23c"
+                    xmaximum 750
+            elif _flagged:
+                text "[_flagged] locus/loci marked ✗ - revisit those rows before submitting.":
+                    size 17
+                    color "#e6a23c"
+                    xmaximum 750
+
             null height 6
 
             hbox:
@@ -1355,6 +1500,13 @@ screen profile_input_screen():
 
             null height 6
 
+            if dev_mode:
+                textbutton "Fill all (dev)":
+                    style "lab_close_button"
+                    text_style "lab_close_button_text"
+                    xfill True
+                    action Function(dev_fill_profile_answers)
+
             textbutton "Submit Profile":
                 background "#2ecc71"
                 hover_background "#27ae60"
@@ -1369,6 +1521,36 @@ screen profile_input_screen():
                 text_style "lab_close_button_text"
                 xfill True
                 action Return("cancel")
+
+    # Nina's brief stays on screen for the whole task rather than scrolling past
+    # in a dialogue box before the table opens.
+    frame:
+        xpos 1050
+        ypos (925 if dev_mode else 850)
+        xsize 800
+        background "#17354aee"
+        padding (20, 16)
+
+        hbox:
+            spacing 18
+
+            add "side nina talk":
+                zoom 0.42
+                yalign 0.5
+
+            vbox:
+                spacing 6
+                yalign 0.5
+
+                text "Nina":
+                    size 20
+                    bold True
+                    color "#7ec8e3"
+
+                text "Read the electropherogram above and enter the two alleles you see at each locus. Work down the table -- I'll mark anything that doesn't match once you move on.":
+                    size 17
+                    color "#e2edf3"
+                    xmaximum 580
 
     key "K_RIGHT" action Function(profile_go_next)
     key "K_LEFT" action Function(profile_go_previous)

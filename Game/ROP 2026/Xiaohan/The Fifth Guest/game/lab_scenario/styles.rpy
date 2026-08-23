@@ -38,6 +38,50 @@ init -4 python:
         setattr(store, name, min(current + step, max_value))
         renpy.restart_interaction()
 
+    def pour_hold_tick(name, max_value, target=None):
+        """Continuous pouring while the right arrow is held down.
+
+        Driven by a repeating timer on each pour screen. Three things shape it:
+        a short grace period so a quick tap is still worth exactly 1 uL (the key
+        binding covers that), a ramp so a 700 uL target is not 700 keypresses,
+        and deceleration near the target so the player can actually stop on it.
+        The bar is forward-only, so overshooting means starting over.
+        """
+        try:
+            import pygame_sdl2 as _pygame
+            held = _pygame.key.get_pressed()[_pygame.K_RIGHT]
+        except Exception:
+            # If the key state cannot be read, fall back to tap-only pouring.
+            return
+
+        if not held:
+            store.pour_hold_ticks = 0
+            return
+
+        store.pour_hold_ticks += 1
+        ticks = store.pour_hold_ticks
+
+        if ticks <= 4:
+            return                      # grace, so a tap is not double-counted
+
+        remaining = None
+        if target is not None:
+            remaining = target - getattr(store, name)
+
+        if remaining is not None and remaining <= 20:
+            step = 1                    # crawl onto the mark
+        elif remaining is not None and remaining <= 80:
+            step = 5                    # ease off on approach
+        elif ticks <= 20:
+            step = 1                    # slow start for small volumes
+        elif ticks <= 40:
+            step = 5
+        else:
+            step = 10                   # bulk pouring
+
+        pour_increment(name, max_value, step)
+
+
     style.strikethrough_text = Style(style.default)
     style.strikethrough_text.strikethrough = True
     style.strikethrough_text.color = "#888"

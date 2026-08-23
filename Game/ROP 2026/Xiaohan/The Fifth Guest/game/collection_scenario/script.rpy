@@ -141,10 +141,10 @@ screen game_mode_selection():
     hbox:
         xalign 0.5
         yalign 0.62
-        spacing 75
+        spacing 45
 
         button:
-            xysize (650, 390)
+            xysize (560, 390)
             padding (45, 40)
             background Solid("#172c3ed9")
             hover_background Solid("#245273ee")
@@ -176,7 +176,7 @@ screen game_mode_selection():
                     bold True
 
         button:
-            xysize (650, 390)
+            xysize (560, 390)
             padding (45, 40)
             background Solid("#30243ed9")
             hover_background Solid("#60447bee")
@@ -207,6 +207,38 @@ screen game_mode_selection():
                     color "#d2a8ff"
                     bold True
 
+        button:
+            xysize (560, 390)
+            padding (45, 40)
+            background Solid("#3e2a24d9")
+            hover_background Solid("#7b5044ee")
+            action Return("courtroom")
+
+            vbox:
+                xalign 0.5
+                yalign 0.5
+                spacing 30
+
+                text "COURTROOM":
+                    xalign 0.5
+                    text_align 0.5
+                    size 42
+                    color "#ffffff"
+                    bold True
+
+                text "Skip to the trial.\nTake the stand as an expert witness and be examined by Lex Machina.":
+                    xalign 0.5
+                    text_align 0.5
+                    size 25
+                    color "#f5e6dc"
+                    line_spacing 8
+
+                text "GO DIRECTLY TO COURT":
+                    xalign 0.5
+                    size 23
+                    color "#ffc48f"
+                    bold True
+
 
 screen scene_back_arrow(current_screen, destination):
     zorder 90
@@ -225,6 +257,8 @@ label start:
 
     if _return == "lab":
         jump standalone_lab_start
+    elif _return == "courtroom":
+        jump standalone_courtroom_start
     else:
         jump evidence_collection_start
 
@@ -252,6 +286,19 @@ label evidence_collection_start:
 label standalone_lab_start:
     $ initialize_standalone_lab_route()
     jump lab_transition_loading
+
+
+label standalone_courtroom_start:
+    $ initialize_courtroom_route()
+
+    # Lex's examination is generated live, so without an API key there is nothing
+    # to play. Say so plainly instead of letting error strings become dialogue.
+    if not courtroom_api_key_available():
+        call screen courtroom_api_key_missing
+        if not courtroom_api_key_available():
+            jump start
+
+    jump courtroom_transition_loading
 
 label study_bg:
     scene study-bg
@@ -579,19 +626,19 @@ screen backing_card_form_screen():
                 spacing 10
                 xfill True
                 
-                textbutton "Case 2026-10A, Date: Today, Location: Study Lamp" action [Function(submit_backing_card, True)]:
+                textbutton "Case 2026-10A, Date: [CASE_DATE], Location: Study Lamp" action [Function(submit_backing_card, True)]:
                     xfill True
                     padding (12, 10)
                     background "#2c3e50"
                     hover_background "#34495e"
                     
-                textbutton "Case 2026-10A, Date: Today, Location: Front Door" action [Function(submit_backing_card, False)]:
+                textbutton "Case 2026-10A, Date: [CASE_DATE], Location: Front Door" action [Function(submit_backing_card, False)]:
                     xfill True
                     padding (12, 10)
                     background "#2c3e50"
                     hover_background "#34495e"
                     
-                textbutton "Case 9999-99X, Date: Today, Location: Study Lamp" action [Function(submit_backing_card, False)]:
+                textbutton "Case 9999-99X, Date: [CASE_DATE], Location: Study Lamp" action [Function(submit_backing_card, False)]:
                     xfill True
                     padding (12, 10)
                     background "#2c3e50"

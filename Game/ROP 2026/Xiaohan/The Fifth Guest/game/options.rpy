@@ -44,6 +44,13 @@ define build.name = "inventorytest"
 init 1200 python:
     config.keymap["skip"] = []
 
+    # Wheel-up is bound to rollback by default, so an accidental scroll rewinds
+    # the scene. Filter the mouse entries out rather than replacing the list, so
+    # Page Up and the other defaults survive a Ren'Py update.
+    config.keymap["rollback"] = [
+        k for k in config.keymap["rollback"] if not k.startswith("mousedown_")
+    ]
+
 
 ## Sounds and music ############################################################
 

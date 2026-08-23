@@ -169,6 +169,15 @@ init -10 python:
                 store.check_lab_transition()
 
 
+        def get_item_by_name(self, name: str) -> Optional[Item]:
+            """Return the first inventory item with the given name, if one exists."""
+            for item in self._inventory:
+                if item is not None and item.name == name:
+                    return item
+
+            return None
+
+
         def delete_from_inventory(self, item: Item) -> None:
             if item in self._inventory:
                 self._inventory.remove(item)
@@ -203,6 +212,19 @@ init -10 python:
             if self.start_index + 5 < len(self._inventory):
                 self.start_index += 5
                 self.refresh_visible_inventory()
+
+
+    def inventory_hover_enter(item_name, slot_index):
+        """Remember which slot is hovered so the name badge can be drawn at the
+        panel level, where it is not constrained to the 130px tile width."""
+        store.hovered_item_name = item_name
+        store.hovered_item_slot = slot_index
+
+    def inventory_hover_exit(item_name):
+        # Ren'Py does not guarantee unhovered fires before the next hovered, so
+        # only clear if this slot is still the one being reported.
+        if store.hovered_item_name == item_name:
+            store.hovered_item_name = ""
 
 
     def view_item(name, image_name, description) -> None:
@@ -286,7 +308,7 @@ screen inventory():
     on "hide" action [SetVariable("inventory_open", False), Show("open_inv")]
     on "replaced" action [SetVariable("inventory_open", False), Show("open_inv")]
 
-    $ inventory = selected_inventory
+    $ inventory = evidences if courtroom_ui_active else selected_inventory
 
     # Click outside the inventory panel → warn player to close it first.
     button:
@@ -318,21 +340,23 @@ screen inventory():
             xysize (340, 1080)
             action NullAction()
 
-        hbox:
-            xoffset 10
-            yoffset 17
+        # The courtroom has a single case-file list, so it has nothing to tab between.
+        if not courtroom_ui_active:
+            hbox:
+                xoffset 10
+                yoffset 17
 
-            imagebutton:
-                auto "tool-inventory-icon-%s" at Transform(zoom=0.85)
-                insensitive "tool-inventory-icon-hover"
-                sensitive (inventory != toolbox)
-                action SetVariable("selected_inventory", toolbox)
+                imagebutton:
+                    auto "tool-inventory-icon-%s" at Transform(zoom=0.85)
+                    insensitive "tool-inventory-icon-hover"
+                    sensitive (inventory != toolbox)
+                    action SetVariable("selected_inventory", toolbox)
 
-            imagebutton:
-                auto "inventory-icon-%s" at Transform(zoom=0.85)
-                insensitive "inventory-icon-hover"
-                sensitive (inventory != evidence)
-                action SetVariable("selected_inventory", evidence)
+                imagebutton:
+                    auto "inventory-icon-%s" at Transform(zoom=0.85)
+                    insensitive "inventory-icon-hover"
+                    sensitive (inventory != evidence)
+                    action SetVariable("selected_inventory", evidence)
 
 
         add Transform("inventory-bg", xzoom=0.83, yzoom=0.95, yoffset=40)
@@ -354,10 +378,10 @@ screen inventory():
 
         imagebutton:
             auto "close-inv-%s" at Transform(rotate=1, xoffset=49, yoffset=350)
-            action [Hide("inventory"), Show("open_inv")]
+            action [SetVariable("dialogue_boxes_visible", True), Hide("inventory"), Show("open_inv")]
 
         # Photo album access from Evidence tab (Item/Inventory compatible)
-        if inventory == evidence and camera_has_photos():
+        if not courtroom_ui_active and inventory == evidence and camera_has_photos():
             textbutton "Photo Album":
                 xpos 230
                 ypos 55
@@ -390,10 +414,22 @@ screen inventory():
             yoffset 160
 
             for i, item in enumerate(inventory.visible_inventory):
-                use inventory_slot(item)
+                use inventory_slot(item, slot_index=i)
+
+    # Name badge for the hovered tile. Drawn here rather than inside the slot so
+    # it gets the full screen width and long names stay on one line.
+    if hovered_item_name:
+        frame:
+            xpos 205
+            ypos 160 + hovered_item_slot * 160 + 42
+            background Frame("gui/notify.png", gui.notify_frame_borders, tile=gui.frame_tile)
+            padding gui.notify_frame_borders.padding
+            text "[hovered_item_name]":
+                style "notify_text"
+                xmaximum 420
 
 
-screen inventory_slot(item=None):
+screen inventory_slot(item=None, slot_index=0):
     # This screen is used by the inventory screen to create slots for
     # each item. You never need to call this explicitly.
 
@@ -418,8 +454,14 @@ screen inventory_slot(item=None):
 
         mousearea:
             area (0, 0, 130, 130)
-            hovered SetLocalVariable("show_overlay", True)
-            unhovered SetLocalVariable("show_overlay", False)
+            hovered [
+                SetLocalVariable("show_overlay", True),
+                Function(inventory_hover_enter, name, slot_index),
+            ]
+            unhovered [
+                SetLocalVariable("show_overlay", False),
+                Function(inventory_hover_exit, name),
+            ]
 
         add "inventory-slot"
 
@@ -577,7 +619,7 @@ screen open_inv():
     ):
         imagebutton:
             auto "open-inv-%s" at Transform(yalign=0.53)
-            action [Show("inventory"), Hide("open_inv")]
+            action [SetVariable("dialogue_boxes_visible", False), Show("inventory"), Hide("open_inv")]
 
         if getattr(store, "held_evidence", None) is not None:
             frame:
@@ -597,6 +639,14 @@ screen open_inv():
 
 default selected_inventory = toolbox
 default inventory_open = False
+
+# Set while the courtroom scenario owns the shared say/input/inventory screens.
+default hovered_item_name = ""
+default hovered_item_slot = 0
+
+default courtroom_ui_active = False
+# Lowered while the inventory covers the courtroom's dialogue box.
+default dialogue_boxes_visible = True
 
 screen blood_test_screen(location="lamp"):
     modal True
