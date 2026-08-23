@@ -1,0 +1,29 @@
+[   
+    {
+        "name": "Starting Tube",
+        "image_name": "balance_tube_idle",
+        "usable": true,
+        "action": "use_sample"
+
+    },
+    {
+        "name": "Tube1",
+        "image_name": "balance_tube_idle"
+    },
+    {
+        "name": "Tube2",
+        "image_name": "balance_tube_idle"    
+    },
+    {
+        "name": "Tube3",
+        "image_name": "balance_tube_idle"    
+    },
+    {
+        "name": "Tube4",
+        "image_name": "balance_tube_idle"    
+    },
+    {
+        "name": "Tube5",
+        "image_name": "balance_tube_idle"    
+    }
+]

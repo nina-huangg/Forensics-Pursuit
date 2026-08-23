@@ -1,0 +1,33 @@
+2026-08-05 16:46:05 UTC
+Windows-11-10.0.26200-SP0
+Ren'Py 8.5.3.26051504
+
+Court Room Scene
+1.0
+Built at 2025-05-07 19:30:19 UTC
+
+Early init took 57 ms
+Loading error handling took 65 ms
+Loading script took 887 ms
+Loading save slot metadata took 37 ms
+Loading persistent took 1 ms
+Set script version to: (8, 3, 3)
+Running init code took 177 ms
+Loading analysis data took 0 ms
+Analyze and compile ATL took 5 ms
+Reloading save slot metadata took 15 ms
+Dump and make backups took 73 ms
+Cleaning cache took 0 ms
+Making clean stores took 0 ms
+Initial gc took 53 ms
+DPI scale factor: 1.750000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: b"Couldn't load nvlib." (can be ignored)
+Creating interface object took 3 ms
+Init translation took 0 ms
+Cleaning stores took 0 ms
+Load screen analysis took 0 ms
+Analyze screens took 37 ms
+Save screen analysis took 15 ms
+Save pyanalysis took 6 ms
+Save bytecode took 0 ms

@@ -1,0 +1,42 @@
+[
+    {
+        "specialty": "biology",
+        "evidence": [
+            {
+                "name": "DNA Analysis",
+                "image": "splatter",
+                "description": "DNA analysis on dry blood stains found on a pillow next to Mary Sullivan's corpse. This helps confirm that the injury occurred in the vicinity of where the blood was found. The analysis also ruled out the presence of any foreign blood from other individuals at the scene, supporting the conclusion that Mary Sullivan was the primary victim of the attack.",
+                "truth_base": [
+                    "DNA analysis method",
+                    "Mary's blood was the source of the bloodstains",
+                    "analysis ruled out the presence of any foreign DNA, meaning Mary was primary victim"
+                ]
+            }
+        ]
+    },
+    {
+        "specialty": "identification",
+        "evidence": [
+            {
+                "name": "Statue Fingerprint",
+                "image": "splatter",
+                "description": "DNA analysis on blood stains found on Ana's clothing and nearby surfaces confirmed that Ana's blood was the source of the bloodstains. This helps confirm that the injury occurred in the vicinity of where the blood was found. The analysis also ruled out the presence of any foreign blood from other individuals at the scene, supporting the conclusion that Ana was the primary victim of the attack.",
+                "truth_base": [
+                    "DNA analysis method",
+                    "Ana’s blood was the source of the bloodstains",
+                    "analysis ruled out the presence of any foreign DNA, meaning Ana was primary victim"
+                ]
+            },
+            {
+                "name": "Bloody Fingerprint",
+                "image": "splatter",
+                "description": "DNA analysis on blood stains found on Ana's clothing and nearby surfaces confirmed that Ana's blood was the source of the bloodstains. This helps confirm that the injury occurred in the vicinity of where the blood was found. The analysis also ruled out the presence of any foreign blood from other individuals at the scene, supporting the conclusion that Ana was the primary victim of the attack.",
+                "truth_base": [
+                    "DNA analysis method",
+                    "Ana’s blood was the source of the bloodstains",
+                    "analysis ruled out the presence of any foreign DNA, meaning Ana was primary victim"
+                ]
+            }
+        ]
+    }
+]

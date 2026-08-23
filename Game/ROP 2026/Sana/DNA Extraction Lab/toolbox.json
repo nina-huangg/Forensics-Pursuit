@@ -1,0 +1,60 @@
+[
+    {
+        "name": "2ml Tube",
+        "image_name": "balance_tube_idle",
+        "description": "Prepare a new 2ml tube for the lab procedure",
+        "usable": true,
+        "action": "use_2mlTube"
+
+    },
+    {
+        "name": "Spin Column",
+        "image_name": "spin_column",
+        "description": "Add a spin column to the currently selected tube",
+        "usable": true,
+        "action": "use_spinColumn"
+
+    },
+    {
+        "name": "Buffer AL",
+        "image_name": "buffer al",
+        "usable": true,
+        "action": "use_bufferAL"
+
+    },
+    {
+        "name": "Protease K",
+        "image_name": "pro_k",
+        "usable": true,
+        "action": "use_proteaseK"
+
+    },
+    {
+        "name": "Ethanol",
+        "image_name": "96% ethanol",
+        "usable": true,
+        "action": "use_ethanol"
+
+    },
+    {
+        "name": "Buffer AW1",
+        "image_name": "buffer aw 1",
+        "usable": true,
+        "action": "use_bufferAW1"
+
+    },
+    {
+        "name": "Buffer AW2",
+        "image_name": "buffer aw 2",
+        "usable": true,
+        "action": "use_bufferAW2"
+
+    },
+    {
+        "name": "Buffer ATE",
+        "image_name": "bufferate",
+        "usable": true,
+        "action": "use_bufferAE"
+
+    }
+]
