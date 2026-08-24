@@ -313,44 +313,38 @@ screen courtroom_api_key_missing():
                     color "#8fd3ff"
                     bold True
 
-                text "1.  Get a free key at https://aistudio.google.com/\n2.  Paste it below\n3.  It is remembered in this browser -- you only need to do this once":
+                text "1.  Get a free key at https://aistudio.google.com/\n2.  Type it into the box below\n3.  It is remembered in this browser -- you only need to do this once":
                     size 25
                     color "#dceaf2"
                     line_spacing 10
 
-                hbox:
-                    xfill True
-                    spacing 12
-
-                    frame:
-                        xfill True
-                        background "#0d1a24"
-                        padding (16, 12)
-                        input:
-                            value _web_key_input
-                            length 200
-                            color "#ffffff"
-                            size 26
-                            xfill True
-                            # Kept on even though pygame.scrap (what this relies
-                            # on) is not available on web -- harmless, and it is
-                            # what makes Ctrl+V work on the desktop build.
-                            copypaste True
-
-                    textbutton "Paste":
-                        text_size 24
-                        text_color "#ffffff"
-                        background "#245273"
-                        hover_background "#2f6c98"
-                        padding (22, 14)
-                        # Ctrl+V can't reach the clipboard on web (see
-                        # web_paste_from_clipboard); this button uses the
-                        # browser's Clipboard API directly instead.
-                        action Function(web_paste_from_clipboard)
-
-                text "If Paste doesn't work, try right-click > Paste in the box, or type the key.":
+                # itch.io embeds every HTML5 game in an iframe on html.itch.zone
+                # that does not grant clipboard-read permission -- confirmed via
+                # a real click here returning the browser's own rejection, with
+                # no permission prompt ever shown (a Permissions Policy block,
+                # not a user decision). Ctrl+V, right-click paste (Ren'Py's own
+                # right-click opens its save menu instead), and a direct
+                # Clipboard API call have all been tried and none can reach the
+                # clipboard from inside that iframe. Typing is the only path
+                # that works in this deployment; copypaste stays on below since
+                # it is harmless and helps if this build is ever played outside
+                # an iframe (desktop, or self-hosted web).
+                text "itch.io does not allow this page to read your clipboard, so paste will not work here -- please type the key (about 40 characters).":
                     size 18
-                    color "#8fa6b4"
+                    color "#e0a45c"
+                    line_spacing 6
+
+                frame:
+                    xfill True
+                    background "#0d1a24"
+                    padding (16, 12)
+                    input:
+                        value _web_key_input
+                        length 200
+                        color "#ffffff"
+                        size 26
+                        xfill True
+                        copypaste True
 
                 hbox:
                     xalign 0.5
